@@ -1,0 +1,60 @@
+﻿@model Referee.Models.Game
+<div class="wrapper">
+    <fieldset>
+    <legend>Game</legend>
+
+    <div class="display-label">Venue</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Venue)
+    </div>
+
+    <div class="display-label">DateAndTime</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DateAndTime)
+    </div>
+
+    <div class="display-label">Score</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Score)
+    </div>
+
+    <div class="display-label">Published</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Published)
+    </div>
+
+    <div class="display-label">HostTeamId</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.HostTeamId)
+    </div>
+
+    <div class="display-label">GuestTeamId</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.GuestTeamId)
+    </div>
+
+    <div class="display-label">HostTeam</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.HostTeam)
+    </div>
+
+    <div class="display-label">GuestTeam</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.GuestTeam)
+    </div>
+
+    <div class="display-label">Season</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Season.Name)
+    </div>
+
+    <div class="display-label">League</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LeagueName)
+    </div>
+</fieldset>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>

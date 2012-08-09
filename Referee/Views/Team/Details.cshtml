@@ -1,0 +1,70 @@
+﻿@model Referee.Models.Team
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Team</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Gender</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Gender)
+    </div>
+
+    <div class="display-label">Venue</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Venue)
+    </div>
+
+    <div class="display-label">Longitude</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Longitude)
+    </div>
+
+    <div class="display-label">Latitude</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Latitude)
+    </div>
+
+    <div class="display-label">ClubId</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ClubId)
+    </div>
+
+    <div class="display-label">Coach</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Coach)
+    </div>
+
+    <div class="display-label">CoachPhone</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CoachPhone)
+    </div>
+
+    <div class="display-label">CoachPhoneVisible</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CoachPhoneVisible)
+    </div>
+
+    <div class="display-label">CoachMailAdress</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CoachMailAdress)
+    </div>
+
+    <div class="display-label">CoachMailAdressVisible</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CoachMailAdressVisible)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

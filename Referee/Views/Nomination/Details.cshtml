@@ -1,0 +1,70 @@
+﻿@model Referee.Models.Nomination
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Nomination</legend>
+
+    <div class="display-label">Added</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Added)
+    </div>
+
+    <div class="display-label">Note</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Note)
+    </div>
+
+    <div class="display-label">Published</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Published)
+    </div>
+
+    <div class="display-label">PublishDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PublishDate)
+    </div>
+
+    <div class="display-label">Confirmed</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Confirmed)
+    </div>
+
+    <div class="display-label">ConfirmationDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ConfirmationDate)
+    </div>
+
+    <div class="display-label">Emailed</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Emailed)
+    </div>
+
+    <div class="display-label">EmailDate</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.EmailDate)
+    </div>
+
+    <div class="display-label">HashConfirmation</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.HashConfirmation)
+    </div>
+
+    <div class="display-label">GameId</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.GameId)
+    </div>
+
+    <div class="display-label">Tournament</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Tournament.Name)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

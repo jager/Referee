@@ -1,0 +1,30 @@
+﻿@model Referee.Models.Availability
+
+<fieldset>
+    <legend>Availability</legend>
+
+    <div class="display-label">DateStart</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DateStart)
+    </div>
+
+    <div class="display-label">DateEnd</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DateEnd)
+    </div>
+
+    <div class="display-label">Created</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Created)
+    </div>
+
+    <div class="display-label">Valid</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Valid)
+    </div>
+
+    <div class="display-label">RefereeId</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RefereeId)
+    </div>
+</fieldset>

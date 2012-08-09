@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Referee.Models.Team>
+<div class="wrapper">
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <div class="widget">
+        <div class="whead">
+            <h6>Lista drużyn</h6>
+            <div class="clear"></div>
+        </div>
+    <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
+        <thead>
+            <tr>
+                <th>
+                    Nazwa drużyny
+                </th>
+                <th>
+                    Płeć
+                </th>
+                <th>
+                    Adres hali
+                </th>
+                <th>
+                    Trener
+                </th>
+                <th>
+                    Tel. kontaktowy
+                </th>
+                <th>
+                    Adres mailowy kontaktowy
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Venue)
+            </td>   
+            <td>
+                @Html.DisplayFor(modelItem => item.Coach)
+            </td>
+            <td>
+                @{
+                    if ( item.CoachPhoneVisible == true && item.CoachPhone != null )
+                    {
+                        Html.DisplayFor(modelItem => item.CoachPhone);
+                    }
+                  }
+            </td>
+            <td>
+                @{
+                    if (item.CoachMailAdressVisible == true && item.CoachMailAdress != null)
+                    {
+                        Html.DisplayFor(modelItem => item.CoachMailAdress);
+                    }
+                  }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            </td>
+        </tr>
+    }
+        </tbody>
+    </table>
+    </div>
+</div>

@@ -1,0 +1,109 @@
+﻿@model Referee.Models.Nomination
+
+@using Referee.ViewModels
+           
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+@Html.Partial("_ContentTop", ViewData)
+
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+
+
+<div class="wrapper">
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    var Event = (Event)ViewBag.Event;
+    if (((Event)ViewBag.Event).Type == "game")
+    {
+        @Html.Hidden("GameId", Event.Ident, new { id = "EventIdent" } )
+        @Html.Hidden("Type", "Game", new { id = "EventType" })
+    }
+    else
+    {
+        @Html.Hidden("Type", "Tournamet", new { id = "EventType" })
+        @Html.Hidden("TournamentId", Event.Ident, new { id = "EventIdent" })
+    }
+    <fieldset>
+        <div class="widget fluid" id="refereeNominations">
+            <div class="whead">
+                <h6>Utwórz obsadę</h6>
+                <div class="clear"></div>
+            </div>
+            <div class="formRow">
+                <div class="grid3">
+                    Obsada dla @((((Event)ViewBag.Event).Type == "game") ? "meczu" : "turnieju")
+                </div>
+                <div class="grid9">
+                    <ul>
+                        <li>
+                            @(((Event)ViewBag.Event).Name)
+                        </li>
+                        <li>
+                            @(((Event)ViewBag.Event).Venue)
+                        </li>
+                        <li>
+                            @(((Event)ViewBag.Event).Date)
+                        </li>
+                        <li>
+                            @(((Event)ViewBag.Event).Time)
+                        </li>
+                    </ul>
+                </div>
+                <div class="clear"></div>
+            </div>
+            
+                
+                @{ Html.RenderAction("CreateRefereeData"); }
+                 
+            <div class="formRow" id="NotePosition">
+                <div class="grid12">
+                    <a href="/Nomination/CreateRefereeData" id="addItem" class="buttonS bBlue">Dodaj sędziego</a>
+                </div>
+                <div class="clear"></div>
+            </div>     
+            <div class="formRow" >
+                <div class="grid3">
+                    @Html.LabelFor(model => model.Note)
+                </div>
+                <div class="grid9">
+                    @Html.EditorFor(model => model.Note)
+                    @Html.ValidationMessageFor(model => model.Note)
+                </div>
+                <div class="clear"></div>
+            </div>
+        
+
+            <div class="formRow">
+                <div class="grid3">
+                    @Html.LabelFor(model => model.Published)
+                </div>
+                <div class="grid9">
+                    @Html.EditorFor(model => model.Published)
+                    @Html.ValidationMessageFor(model => model.Published)
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="formRow" id="submitFormRow">
+                <input type="submit" value="Dodaj nominacje" class="buttonS bGreen" />
+            </div>
+        </div>
+    </fieldset>
+}   
+</div>
+<script type="text/javascript">
+    $("#addItem").click(function () {
+        $.ajax({
+            url: this.href,
+            cache: false,
+            success: function (html) { $("#NotePosition").before(html); }
+        });
+        return false;
+    });
+
+    $("a.deleteRow").live("click", function () {
+        $(this).parents("div.formRow:first").remove();
+        return false;
+    });
+</script>

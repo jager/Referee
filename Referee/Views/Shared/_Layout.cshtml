@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    @Html.Partial("_Header")
+</head>
+<body>
+    <!-- Top line begins -->
+    <div id="top">
+        <div class="wrapper">
+            <a href="/" title="" class="logo"><img src="@Url.Content("~/Content/themes/aquincum/images/logo.png")" alt="" /></a>
+        
+            <!-- Right top nav -->
+            <div class="topNav">
+            <ul class="userNav">
+                <li><a title="" class="search"></a></li>
+                <li><a href="#" title="" class="screen"></a></li>
+                <li><a href="#" title="" class="settings"></a></li>
+                <li><a href="#" title="" class="logout"></a></li>
+                <li class="showTabletP"><a href="#" title="" class="sidebar"></a></li>
+            </ul>
+            <a title="" class="iButton"></a>
+            <a title="" class="iTop"></a>
+            <div class="topSearch">
+                <div class="topDropArrow"></div>
+                <form action="">
+                    <input type="text" placeholder="search..." name="topSearch" />
+                    <input type="submit" value="" />
+                </form>
+            </div>
+        </div>
+
+            <div class="clear"></div>
+        </div>
+    </div>
+    <!-- Top line ends -->
+
+
+    <!-- Sidebar begins -->
+    <div id="sidebar">
+        <div class="mainNav">
+            @Html.Partial("_UserNavItem")
+        
+            <!-- Main nav -->
+            @Html.Partial("_MainNavigation")
+            
+        </div>
+    </div>
+    <!-- Sidebar ends -->
+
+    <!-- Content begins -->
+    <div id="content">
+        <!-- Main content -->
+            @RenderBody()
+        <!-- Main content ends -->    
+    </div>
+    <!-- Content ends -->
+</body>
+</html>

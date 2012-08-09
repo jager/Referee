@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Referee.Models.Availability>
+
+<table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
+    <tr>
+        <td>
+            Początek
+        </td>
+        <td>
+            Koniec
+        </td>
+        <td>
+            Dodano
+        </td>
+        <td>
+            Potwierdzona
+        </td>
+        <td></td>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateStart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateEnd)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Created)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Valid)
+        </td>
+        <td>            
+            @Html.ActionLink("Usuń", "Delete", new { id=item.Id }, new { @class = "tablectrl_small bDefault tipS deleteConfirm" } )
+        </td>
+    </tr>
+}
+@if (Model.Count() == 0)
+{
+    <tr>
+        <td colspan="5">Brak zapisanych terminów tego sedziego</td>
+    </tr>
+}
+    <tr>
+        <td colspan="5">
+            @Html.ActionLink("Dodaj", "Create", new { RefereeId = (string)ViewBag.RefereeId }, new { @class = "buttonS bGreen" })
+        </td>
+    </tr>
+</table>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".deleteConfirm").bind("click", function () {
+            if (confirm("Na pewno chcesz usunąć ten termin?")) {
+                var href = $(this).attr("href");
+                $.post(href, function (data) { $("#openableDialogContener").html(data); });
+            }
+            return false;
+        });
+    });
+</script>

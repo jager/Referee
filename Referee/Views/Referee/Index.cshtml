@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Referee.Models.RefereeEntity>
+@using Referee.Helpers           
+@using Referee.Lib           
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+
+
+@Html.Partial("_ContentTop", ViewData)
+
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+
+<div class="wrapper">
+
+    <div class="widget">
+        <div class="whead">
+            <h6>Lista sędziów</h6>
+            <div class="clear"></div>
+        </div>
+
+    <table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
+        <thead>
+            <tr>
+                <td></td>
+                <td>
+                    Nazwisko, Imię
+                </td>           
+                <td>
+                    Adres mailowy
+                </td>
+                <td>
+                    Telefon
+                </td>
+                <td>
+                    Telefon komórkowy
+                </td>
+            
+                <td>
+                    Klasa sędziowska
+                </td>
+                <td>
+                    Uprawnienia
+                </td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+    
+    
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                <a class="lightbox" title="" href="#">
+                    @if (String.IsNullOrEmpty(item.Photo))
+                    {
+                        <img width="45px" height="46px" src="@Url.Content("~/Content/themes/aquincum/images/userLogin2.png")" alt="" />
+                    }
+                    else
+                    {
+                        <img width="45px" height="46px" src="@Url.Content(FileUploader.GetUserPhotoPath(String.Format("{0}{1}",item.DestinationFolder, item.Photo)))" alt="" />            
+                    }
+                </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName),
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mailadr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mobile)
+            </td>        
+            <td>
+                @Html.DisplayFor(modelItem => item.RefClass.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Authorization.Name)
+            </td>
+            <td>
+                @Html.AuthLink("Edytuj", "Edit", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj dane sędziego" })
+                @Html.AuthLink("Pokaż", "Details", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż sędziego" })
+                @Html.AuthLink("Usuń", "Delete", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń sędziego" })
+            </td>
+        </tr>
+    }
+            </tbody>
+        </table>
+        <div id="openableDialogContener" class="dialog" title=""></div>
+    </div>
+</div>

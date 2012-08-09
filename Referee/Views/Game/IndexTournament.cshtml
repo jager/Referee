@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Referee.Models.Tournament>
+@using Referee.Helpers 
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>       
+
+@{ 
+    ViewData["PageTitle"] = ((Referee.Models.League)ViewBag.DefaultLeague).Name;
+    ViewData["IconName"] = "icon-user-2";
+}
+
+@Html.Partial("_ContentTop", ViewData)
+
+@Html.Partial("_BarLeagues", (IEnumerable<Referee.Models.League>)ViewBag.ListOfLeagues)
+ 
+<div class="wrapper">       
+    <p>
+        @Html.AuthLink("Dodaj nowy turniej", "Create", "Tournament", new { LeagueId = ((Referee.Models.League)ViewBag.DefaultLeague).Id}, new { })
+    </p>
+
+    <table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
+        <thead>
+            <tr>
+                <td>
+                    Turniej
+                </td>
+                <td>
+                    Wynik
+                </td>
+                <td>
+                    Data
+                </td>
+                <td>
+                    Godzina
+                </td>                            
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+
+    @foreach (var item in Model)
+    {
+        
+        ///TODO zrobić rozróżnianie czy wyświetlać mecz jak user jest niezalogowany w zależności od parametru published
+        ///if (item.Published && !User.Identity.IsAuthenticated)
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Venue)
+                </td>
+                <td>
+                    @item.StartDate.ToShortDateString()
+                    @if (item.StartDate != item.EndDate)
+                    {
+                        <span> - </span>@item.EndDate.ToShortDateString()
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.AuthLink("Edytuj", "Edit", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj turniej" })
+                    @Html.AuthLink("Pokaż szczegóły", "Details", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły turnieju" })
+                    @Html.AuthLink("Usuń", "Delete", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń turniej" })
+                </td>
+            </tr>
+    }
+
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="10">Brak turnieji w tej lidze.</td>
+            </tr>
+
+        }
+        </tbody>
+    </table>
+    <div id="openableDialogContener" class="dialog" title=""></div>
+</div>

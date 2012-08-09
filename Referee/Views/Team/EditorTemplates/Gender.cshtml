@@ -1,0 +1,5 @@
+﻿<select name="Gender">
+    <option value="">--wybierz--</option>
+    <option @(((string)ViewBag.Gender) == "Kobiety" ? "selected='selected'" : "") value="Kobiety">Kobiety</option>
+    <option @(((string)ViewBag.Gender) == "Mężczyźni" ? "selected='selected'" : "") value="Mężczyźni">Mężczyźni</option>
+</select>

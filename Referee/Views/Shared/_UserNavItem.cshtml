@@ -1,0 +1,36 @@
+﻿@if (1==1 || Request.IsAuthenticated)
+{
+<div class="user">
+    <a title="" class="leftUserDrop">
+        <img width="70px" height="72px" src="@Url.Content("~/Content/themes/aquincum/images/userLogin2.png")" alt="" />
+        <span><strong>3</strong></span>
+    </a>
+    <span>@Html.DisplayText("Lolek")</span>
+    <ul class="leftUser">
+        <li><a href="/RefEntity/Profile" title="" class="sProfile">Mój profil</a></li>
+        <li><a href="/RefEntity/NewNominations" title="" class="sMessages">Nowe nominacje</a></li>
+        <li><a href="/RefEntityt/Nominations" title="" class="sSettings">Nominacje</a></li>
+        <li><a href="/RefEntity/Availability" title="" class="sLogout">Niedyspozycyjność</a></li>
+        <li><a href="/Account/LogOff" title="" class="sLogout">Wyloguj</a></li>
+    </ul>
+</div>
+
+<!-- Responsive nav -->
+<div class="altNav">
+    <div class="userSearch">
+        <form action="">
+            <input type="text" placeholder="search..." name="userSearch" />
+            <input type="submit" value="" />
+        </form>
+    </div>
+            
+    <!-- User nav -->
+    <ul class="userNav">
+        <li><a href="/RefEntity/Profile" title="" class="profile">Mój profil</a></li>
+        <li><a href="/RefEntity/NewNominations" title="" class="messages">Nowe nominacje</a></li>
+        <li><a href="/RefEntityt/Nominations" title="" class="settings">Nominacje</a></li>
+        <li><a href="/RefEntity/Availability" title="" class="logout">Niedyspozycyjność</a></li>
+        <li><a href="/Account/LogOff" title="" class="logout">Wyloguj</a></li>
+    </ul>
+</div>
+}

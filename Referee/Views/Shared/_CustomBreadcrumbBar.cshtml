@@ -1,0 +1,32 @@
+﻿@using Referee.Helpers  
+<div class="breadLine">
+    <div class="bc">        
+        <ul id="breadcrumbs" class="breadcrumbs">
+        @if (ViewData["breadcrumbs"] != null && ((List<BreadcrumbHelper>)ViewData["breadcrumbs"]).Count() > 0)
+        {
+            var breadCrumbs = (List<BreadcrumbHelper>)ViewData["breadcrumbs"];
+            foreach (var bc in breadCrumbs)
+            {
+                string cl = "";
+                if (bc == breadCrumbs.Last())
+                {
+                    cl = "current";
+                }
+                <li class="@cl"><a href="@bc.Href">@bc.Text</a></li>   
+            }            
+        }
+        </ul>
+    </div>
+    <div class="breadLinks">        
+        @if (ViewData["breadlinks"] != null && ((List<BreadcrumbHelper>)ViewData["breadlinks"]).Count() > 0)
+        {
+            var breadCrumbs = (List<BreadcrumbHelper>)ViewData["breadlinks"];
+            <ul>            
+            @foreach (var bc in breadCrumbs)
+            {                
+                <li><a href="@bc.Href">@bc.Text</a></li>   
+            }   
+            </ul>         
+        }        
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Referee.Models.Club>
+@using Referee.Helpers
+@Html.Partial("_ContentTop", ViewData)
+
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+<div class="wrapper">
+
+    <div class="widget">
+        <div class="whead">
+            <h6>Lista klubów</h6>
+            <div class="clear"></div>
+        </div>
+        <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
+        <thead>
+            <tr>
+                <th>
+                    Nazwa klubu
+                </th>
+                <th>
+                    Nr telefonu
+                </th>
+                <th>
+                    Adres mailowy
+                </th>
+                <th>
+                    Kod Pocztowy
+                </th>
+                <th>
+                    Miasto
+                </th>
+                <th>
+                    Ullica,nr domu, nr mieszkania
+                </th>
+                <th>
+                    Strona www
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mailadr)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Zip)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WebSite)
+                </td>
+                <td class="tableActs" align="center">                
+                    @Html.ActionLink("Pokaż drużyny", "Details", "Club", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż drużyny tego klubu" })
+                    @Html.AuthLink("Edytuj", "Edit", "Club", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Zmień dane klubu" })
+                    @Html.AuthLink("Usuń", "Delete", "Club", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń klub z systemu" })
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+        <div id="openableDialogContener" class="dialog" title=""></div>
+    </div>
+</div>

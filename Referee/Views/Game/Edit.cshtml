@@ -1,0 +1,80 @@
+﻿@model Referee.Models.Game
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<div class="wrapper"> 
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.LeagueId);
+    @Html.HiddenFor(model => model.SeasonId);
+    @Html.HiddenFor(model => model.Id);
+    <fieldset>
+        <div class="widget fluid">
+            <div class="whead"><h6>Dodaj nowy mecz</h6><div class="clear"></div></div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.HostTeamId)
+                    </div>
+                    <div class="grid9">
+                        @Html.DropDownListFor(model => model.HostTeamId, (SelectList)ViewBag.HostTeamsId)
+                        @Html.ValidationMessageFor(model => model.HostTeamId)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.GuestTeamId)
+                    </div>
+                    <div class="grid5">
+                        @Html.DropDownListFor(model => model.GuestTeamId, (SelectList)ViewBag.GuestTeamsId)
+                        @Html.ValidationMessageFor(model => model.GuestTeamId)
+                    </div>
+                    <div class="grid4">
+                        @Html.TextBoxFor(model => model.GuestTeam)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3"><label>Data i godzina:</label></div>
+                    <div class="grid2">
+                        <input type="text" name="dtDate" class="datepicker" value="@((string)ViewBag.dtDate)" />
+                    </div>
+                    <div class="grid2 noSearch">
+                        <input type="text" class="timepicker" name="dtTime" size="10" value="@((string)ViewBag.dtTime)" />
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.Published)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.Published)
+                        @Html.ValidationMessageFor(model => model.Published)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.Score)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.Score)
+                        @Html.ValidationMessageFor(model => model.Score)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                <div class="grid3"></div>
+                <div class="grid9">
+                    <input class="buttonS bGreen" type="submit" value="Zapisz mecz" />                                    
+                    @Html.ActionLink("Anuluj", "Index", "Game", new { LeagueId = (int)ViewBag.LeagueId }, new { @class = "buttonS bRed" })                 
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </fieldset>
+}
+</div>

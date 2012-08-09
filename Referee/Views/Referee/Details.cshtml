@@ -1,0 +1,97 @@
+﻿@model Referee.Models.RefereeEntity
+@using Referee.Helpers           
+@using Referee.Lib    
+
+@Html.Partial("_ContentTop", ViewData)
+
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+<div class="wrapper">
+    <div class="fluid">
+        <div class="widget grid12">
+            <div class="whead">
+                <h6>@Html.DisplayFor(model => model.LastName), @Html.DisplayFor(model => model.FirstName)</h6>
+                <div class="titleOpt">
+                    <a href="#" data-toggle="dropdown"><span class="icos-cog3"></span><span class="clear"></span></a>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a href="/referee/edit/@Html.DisplayFor(model => model.Id)" class=""><span class="icos-pencil"></span>Edytuj</a></li>
+                        <li><a href="/referee/delete/@Html.DisplayFor(model => model.Id)" class="openableDialogContenerButton"><span class="icos-trash"></span>Usuń dane</a></li>                    
+                        <li><a href="/avail/index/@Html.DisplayFor(model => model.Id)" class="openableDialogContenerButton"><span class="icos-chart"></span>Pokaż niedyspozycyjności</a></li>
+                        <li><a href="#" class=""><span class="icos-uc"></span>Pokaż kary</a></li>
+                    </ul>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="grid2">
+                <ul class="updates">
+                    <li>
+                        @if (String.IsNullOrEmpty(Model.Photo))
+                        {
+                            <img width="108px" height="110px" src="@Url.Content("~/Content/themes/aquincum/images/userLogin2.png")" alt="" />
+                        }
+                        else
+                        {
+                            <img width="108px" height="110px" src="@Url.Content(FileUploader.GetUserPhotoPath(String.Format("{0}{1}",Model.DestinationFolder, Model.Photo)))?id=@DateTime.Now.Millisecond.ToString()" alt="" />            
+                        }
+                    </li>                    
+                </ul>
+            </div>
+            <div class="grid3">
+                <ul class="updates">
+                    <li>
+                        <a href="#">@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</a>
+                        <span>
+                            @Html.DisplayFor(model => model.Zip) @Html.DisplayFor(model => model.City), @Html.DisplayFor(model => model.Address)
+                        </span>
+                    </li>
+                    <li>
+                        <span>
+                            Data urodzenia: @Model.DOB.ToShortDateString()
+                        </span>
+                        <span>
+                            Data ukończenia kursu: @Model.DateOfEnrollment
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="grid3">
+                <ul class="updates">
+                    <li>
+                        <a href="#">@Html.DisplayFor(model => model.Mailadr)</a>
+                        <span>
+                            Nr telefonu: @Html.DisplayFor(model => model.Phone)<br />
+                            Nr telefonu komórkowego: @Html.DisplayFor(model => model.Mobile)
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="grid2">
+                <ul class="updates">
+                    <li>                        
+                        <span>
+                            Klasa sędziowska: @Html.DisplayFor(model => model.RefClass.Name)<br />
+                            Poziom uprawnień: @Html.DisplayFor(model => model.Authorization.Name)
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+            <div class="grid6">
+                        @using (Html.BeginForm("ChangePhoto", "Referee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.HiddenFor(model => model.Id)
+                            <div class="formRow">                                
+                                <div class="grid6">
+                                    <input type="file" class="fileInput" id="fileInput" name="Photo" />
+                                </div>
+                                <div class="grid3"><input class="buttonS bGreen" type="submit" value="Zmień zdjęcie" /></div>
+                                <div class="clear"></div>
+                            </div>
+                        }
+                    </div>
+                    <div class="clear"></div>
+        </div>
+        <div id="openableDialogContener" class="dialog" title=""></div>
+    </div>
+</div>

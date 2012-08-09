@@ -1,0 +1,4 @@
+﻿<select name="Type" id="TournamentTypeSelector">
+    <option @((ViewBag.TournamentType != null && ViewBag.TournamentType == "Random") ? "selected='selected'" : "") value="Random">Dowolny</option>
+    <option @((ViewBag.TournamentType != null && ViewBag.TournamentType == "Random") ? "selected='selected'" : "")value="League">Ligowy</option>
+</select>

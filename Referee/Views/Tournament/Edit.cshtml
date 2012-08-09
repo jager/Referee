@@ -1,0 +1,131 @@
+﻿@model Referee.Models.Tournament
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+@Html.Partial("_ContentTop", ViewData)
+
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id);
+    <div class="widget fluid">
+        <div class="whead"><h6>Dodaj nowy turniej</h6><div class="clear"></div></div>
+        <div class="formRow">
+            <div class="grid3">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            <div class="grid9">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="formRow">
+            <div class="grid3">
+                @Html.LabelFor(model => model.Venue)
+            </div>
+            <div class="grid9">
+                @Html.EditorFor(model => model.Venue)
+                @Html.ValidationMessageFor(model => model.Venue)
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="formRow">
+            <div class="grid3">
+                @Html.LabelFor(model => model.Organizer)
+            </div>
+            <div class="grid9">
+                @Html.EditorFor(model => model.Organizer)
+                @Html.ValidationMessageFor(model => model.Organizer)
+            </div>
+            <div class="clear"></div>
+        </div>
+
+
+
+        
+
+        <div class="formRow">
+            <div class="grid3">
+                Data turnieju
+            </div>
+            <div class="grid9">
+                <ul class="datesRange">
+                    <li><input type="text" id="fromDate" value="@((string)ViewBag.StartDate)" name="StartDate" placeholder="Od"/></li>
+                    <li class="sep">-</li>
+                    <li><input type="text" id="toDate" value="@((string)ViewBag.EndDate)" name="EndDate" placeholder="Do"/></li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+
+
+
+        <div class="formRow">
+            <div class="grid3">
+                @Html.LabelFor(model => model.StartTime)
+            </div>
+            <div class="grid9">
+                @{
+                    string StartTimeValue = !String.IsNullOrEmpty((string)ViewBag.StartTime) ? ViewBag.StartTime : "08:00";
+                }
+                @Html.TextBox("StartTime", StartTimeValue, new { @class = "timepicker" })
+                @Html.ValidationMessageFor(model => model.StartTime)
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="formRow">
+            <div class="grid3">
+                @Html.LabelFor(model => model.Type)
+            </div>
+            <div class="grid9">
+                @Html.EditorFor(model => model.Type, "LeagueTypeEditor")
+                @Html.ValidationMessageFor(model => model.Type)
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="formRow">
+            <div class="grid3">
+                @Html.LabelFor(model => model.LeagueId, "League")
+            </div>
+            <div class="grid9">
+                @Html.DropDownList("LeagueId", String.Empty)
+                @Html.ValidationMessageFor(model => model.LeagueId)
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="formRow">
+            <div class="grid3">
+                @Html.LabelFor(model => model.TeamsEnrolled)
+            </div>
+            <div class="grid9">
+                @Html.EditorFor(model => model.TeamsEnrolled)
+                @Html.ValidationMessageFor(model => model.TeamsEnrolled)
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="formRow">
+            <div class="grid3">
+                @Html.LabelFor(model => model.Note)
+            </div>
+            <div class="grid9">
+                @Html.EditorFor(model => model.Note)
+                @Html.ValidationMessageFor(model => model.Note)
+            </div>
+            <div class="clear"></div>
+        </div>       
+        <div class="formRow">
+            <div class="grid3"></div>
+            <div class="grid9">
+                <input class="buttonS bGreen" type="submit" value="Zapisz" /> 
+                @Html.ActionLink("Anuluj", "Index", new {}, new { @class = "buttonS bRed" })              
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+}

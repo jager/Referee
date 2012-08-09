@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Referee.Models.Nomination>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            Added
+        </th>
+        <th>
+            Note
+        </th>
+        <th>
+            Published
+        </th>
+        <th>
+            PublishDate
+        </th>
+        <th>
+            Confirmed
+        </th>
+        <th>
+            ConfirmationDate
+        </th>
+        <th>
+            Emailed
+        </th>
+        <th>
+            EmailDate
+        </th>
+        <th>
+            HashConfirmation
+        </th>
+        <th>
+            GameId
+        </th>
+        <th>
+            Tournament
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Added)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Note)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Published)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PublishDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Confirmed)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ConfirmationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Emailed)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmailDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HashConfirmation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GameId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tournament.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

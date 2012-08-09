@@ -1,0 +1,27 @@
+﻿@model Referee.Models.Team
+
+@using (Html.BeginForm()) {
+    @Html.HiddenFor(model => model.ClubId);
+<fieldset>
+    <div class="widget fluid">
+        <div class="whead"><h6>Czy na pewno chcesz usunąć drużynę?</h6><div class="clear"></div></div>
+        <div class="formRow">
+            <div class="grid12">
+                <strong>
+                    @Html.DisplayFor(model => model.Name)
+                </strong>
+                
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="formRow">
+            <div class="grid3"></div>
+            <div class="grid9">
+                <input class="buttonS bGreen" id="deleteTeam" type="submit" value="Usuń" /> 
+                @Html.ActionLink("Anuluj", "Details", "Club", new { @ClubId = Model.ClubId }, new { @class = "buttonS bRed" })               
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</fieldset>
+}

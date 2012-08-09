@@ -1,0 +1,116 @@
+﻿@model Referee.Models.Availability
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<div class="wrapper">
+@using (Html.BeginForm("create", "avail"))
+{
+    @Html.Hidden("Created", DateTime.Now.ToString())
+    @Html.Hidden("Valid", true)
+    @Html.Hidden("RefereeId", (string)ViewBag.RefereeId)
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <div class="widget fluid">
+            
+            <div class="whead">
+                <h6>Dodaj termin</h6>
+                <div class="clear"></div>
+            </div>
+            <div class="formRow">
+                        <div class="grid1"><label>OD:</label></div>
+                        <div class="grid2">
+                            <input type="text" name="dtStartDate" class="datepicker" />
+                        </div>
+                        <div class="grid2 noSearch">
+                            <input type="text" class="timepicker" name="dtStartTime" size="10" value="08:00" />
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="formRow">
+                        <div class="grid1"><label>DO:</label></div>
+                        <div class="grid2">
+                            <input type="text" name="dtEndDate" class="datepicker" />
+                        </div>
+                        <div class="grid2 noSearch">
+                            <input type="text" class="timepicker" name="dtEndTime" size="10" value="20:00" />
+                        </div>
+                        <div class="clear"></div>
+                    </div>     
+            
+            <!--
+            <ul class="tabs">
+                <li><a href="#tabb1">Dodaj termin</a></li>
+                <li><a href="#tabb2">Dodaj okres</a></li>
+            </ul>
+
+            <div class="tab_container">
+                <div id="tabb1" class="tab_content">
+                       
+                </div>
+                <div id="tabb2" class="tab_content">
+                    <div class="formRow">
+                        <div class="grid2"><label>Dni tygodnia:</label></div>
+                        <div class="grid10">
+                            <input type="checkbox" name="day[]" value="1" />Pon
+                            <input type="checkbox" name="day[]" value="2" />Wto
+                            <input type="checkbox" name="day[]" value="3" />Śro
+                            <input type="checkbox" name="day[]" value="4" />Czw
+                            <input type="checkbox" name="day[]" value="5" />Pią
+                            <input type="checkbox" name="day[]" value="6" />Sob
+                            <input type="checkbox" name="day[]" value="0" />Nie
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="formRow">
+                        <div class="grid2"><label>Miesiąc:</label></div>
+                        <div class="grid10">
+                            <select name="month">
+                                <option value="">wybierz miesiąc</option>
+                                <option value="1">Styczeń</option>
+                                <option value="2">Luty</option>
+                                <option value="3">Marzec</option>
+                                <option value="4">Kwiecień</option>
+                                <option value="5">Maj</option>
+                                <option value="6">Czerwiec</option>
+                                <option value="7">Lipiec</option>
+                                <option value="8">Sierpień</option>
+                                <option value="9">Wrzesień</option>
+                                <option value="10">Październik</option>
+                                <option value="11">Listopad</option>
+                                <option value="12">Grudzień</option>
+                            </select>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="formRow">
+                        <div class="grid2"><label>Godziny:</label></div>
+                        <div class="grid10">
+                            <ul class="timeRange">
+                                <li><input type="text" class="timepicker" size="10" name="hourFrom" value="08:00" /></li>
+                                <li class="sep">-</li>
+                                <li><input type="text" class="timepicker" size="10" name="hourTo" value="20:00" /></li>
+                            </ul>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>	
+
+            
+        
+            
+            -->
+            <div class="formRow">
+                <div class="grid3"></div>
+                <div class="grid9">
+                    <input class="buttonS bGreen" type="submit" value="Dodaj termin" />                
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </fieldset>
+}
+</div>
