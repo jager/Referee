@@ -33,7 +33,25 @@ namespace Referee.Controllers
         public ViewResult Index()
         {
             var Nominations = Unit.NominationRepository.Get();
-            return View(Nominations);
+            List<NominationDetails> NominationEvents = new List<NominationDetails>();
+            foreach (Nomination _nomination in Nominations)
+            {
+                Event _event = new Event();
+                if (_nomination.GameId != null)
+                {
+                    _event.Parse(_nomination.Game, "game");
+                }
+                else if (_nomination.TournamentId != null)
+                {
+                    _event.Parse(_nomination.Tournament, "tournament");
+                }
+                else
+                {
+                    throw new Exception("Brak typu nominacji");
+                }
+                NominationEvents.Add(new NominationDetails {  Event = _event, Nomination = _nomination, NominatedReferees = _nomination.Nominateds } );
+            }
+            return View(NominationEvents);
         }
 
         //

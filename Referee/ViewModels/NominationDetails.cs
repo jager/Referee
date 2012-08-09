@@ -8,7 +8,7 @@ namespace Referee.ViewModels
 {
     public class NominationDetails
     {
-        public Game Game { get; set; }
+        public Event Event { get; set; }
         public Nomination Nomination { get; set; }
         public ICollection<Nominated> NominatedReferees { get; set; }
     }
