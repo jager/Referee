@@ -13,6 +13,7 @@ using Referee.Lib.Security;
 using System.Drawing;
 using Referee.Lib.Photo;
 using Referee.Helpers;
+using Referee.Repositories;
 
 namespace Referee.Controllers
 { 
@@ -61,7 +62,8 @@ namespace Referee.Controllers
                 new BreadcrumbHelper { Href = "/Referee", Text = "Listuj sędziów" },
                 new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego" }
             };
-            
+            GamesNominatedRepository GNRepository = new GamesNominatedRepository(id);
+            ViewBag.Games = GNRepository.Get();            
             return View(refereeentity);
         }
 

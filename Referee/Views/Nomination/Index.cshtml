@@ -1,70 +1,111 @@
 ﻿@model IEnumerable<Referee.ViewModels.NominationDetails>
+@using Referee.Helpers
+@Html.Partial("_ContentTop", ViewData)
 
-<table>
-    <thead>
-        <tr>
-        <td>
-            Mecz/Turniej
-        </td>
-        <td>
-            Data
-        </td>
-        <td>
-            Godzina
-        </td>
-        <td>
-            Obsada sędziowska
-        </td>
-        <td>
-            Confirmed
-        </td>
-        <td>
-            ConfirmationDate
-        </td>
-        <td>
-            Emailed
-        </td>
-        <td>
-            EmailDate
-        </td>        
-        <td></td>
-    </tr>
-    </thead>
-    <tbody>
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+<div class="wrapper">
+    <div class="widget">
+    <div class="whead">
+        <h6>Lista klubów</h6>
+        <div class="clear"></div>
+    </div>
+    <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
+        <thead>
+            <tr>
+                <td>
+                    Mecz/Turniej
+                </td>
+                <td>
+                    Data
+                </td>
+                <td>
+                    Godzina
+                </td>
+                <td>
+                    Obsada sędziowska
+                </td>
+                <td>
+                    Opublikowana
+                </td>
+                <td>
+                    Wysłano powiadomienie
+                </td>
+                <td>
+                    Potwierdzona
+                </td>                      
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Event.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Event.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Event.Time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NominatedReferees)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Confirmed)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ConfirmationDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Emailed)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EmailDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+@foreach (var item in Model)
+{
+    if (1==1 || item.Nomination.Published)
+    {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Event.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Event.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Event.Time)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NominatedReferees)
+                    @if (item.NominatedReferees.Count() > 0)
+                    {
+                        foreach (var referee in item.NominatedReferees)
+                        {
+                            <span><b>@referee.Function.Name:</b>@referee.Referee.FullName</span>
+                        }
+                    }        
+                </td>
+                <td>
+                    @if (item.Nomination.Published)
+                    {
+                        <span class="fileSuccess"></span>
+                        @Html.DisplayFor(modelItem => item.Nomination.PublishDate)
+                    }
+                    else
+                    {
+                        <span class="fileError"></span>
+                    }
+                </td>
+                <td>
+                    @if (item.Nomination.Emailed)
+                    {
+                        <span class="fileSuccess"></span>
+                        @Html.DisplayFor(modelItem => item.Nomination.EmailDate)
+                    }
+                    else
+                    {
+                        <span class="fileError"></span>
+                    }
+                </td>
+                <td>
+                    @if (item.Nomination.Confirmed)
+                    {
+                        <span class="fileSuccess"></span>
+                        @Html.DisplayFor(modelItem => item.Nomination.ConfirmationDate)
+                    }
+                    else
+                    {
+                        <span class="fileError"></span>
+                    }        
+                </td>    
+                <td class="tableActs" align="center">
+                    @Html.AuthLink("Pokaż szczegóły", "Details", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" })
+                    @Html.AuthLink("Edytuj", "Edit", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Zmień obsadę" })
+                    @Html.AuthLink("Usuń", "Delete", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń obsadę" })
+                </td>
+            </tr>
+    }
 }
-    </tbody>
-
-</table>
+        </tbody>
+    </table>
+    <div id="openableDialogContener" class="dialog" title=""></div>
+    </div>
+</div>

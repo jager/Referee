@@ -8,7 +8,7 @@ namespace Referee.DAL
 {
     public class UOW : IDisposable
     {
-        RefereeContext db = new RefereeContext();
+        protected RefereeContext db = new RefereeContext();
         private bool disposed;
 
 
