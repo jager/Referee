@@ -1,5 +1,22 @@
 ﻿@model Referee.Models.Game
 
+@{ 
+    ViewData["PageTitle"] = "Edytuj mecz";
+    ViewData["IconName"] = "icon-user-2";
+}
+
+@Html.Partial("_ContentTop", ViewData)
+
+<div class="breadLine">
+    <div class="bc">
+            <ul id="breadcrumbs" class="breadcrumbs">
+                <li><a href="/">Pulpit</a></li>
+                <li><a href="/game?LeagueId=@ViewBag.LeagueId">Terminarz</a></li>
+                <li class="current"><a href="#" title="">Edytuj mecz</a></li>
+            </ul>
+        </div>
+</div>
+
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
@@ -12,7 +29,7 @@
     @Html.HiddenFor(model => model.Id);
     <fieldset>
         <div class="widget fluid">
-            <div class="whead"><h6>Dodaj nowy mecz</h6><div class="clear"></div></div>
+            <div class="whead"><h6>Edytuj mecz</h6><div class="clear"></div></div>
                 <div class="formRow">
                     <div class="grid3">
                         @Html.LabelFor(model => model.HostTeamId)

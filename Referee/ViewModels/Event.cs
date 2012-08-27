@@ -30,6 +30,10 @@ namespace Referee.ViewModels
                 {
                     this.Date = dtStart.ToShortDateString();
                 }
+                else
+                {
+                    this.Date = String.Format("{0} - {1}", dtStart.ToShortDateString(), dtEnd.ToShortDateString());
+                }
                 this.Time = ((Tournament)NewEvent).StartTime;
             }
             else if (Type == "game")

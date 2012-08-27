@@ -73,11 +73,24 @@ namespace Referee.Controllers
         [HttpPost]
         public ActionResult Create(Tournament tournament)
         {
+            tournament.SeasonId = CurrentSeason.Id;
+            if (tournament.Type == "League")
+            {
+                var league = Unit.LeagueRepository.GetById(tournament.LeagueId);
+                tournament.LeagueName = league.Name;
+            }
             if (ModelState.IsValid)
             {
                 Unit.TournamentRepository.Insert(tournament);
                 Unit.Save();
-                return RedirectToAction("Index");  
+                if (tournament.Type == "League")
+                {
+                    return RedirectToAction("IndexTournament", "Game", new { LeagueId = tournament.LeagueId });
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                } 
             }
             ViewBag.LeagueId = new SelectList(Unit.LeagueRepository.Get(filter: l => l.Type == "Tournament"), "Id", "Name", tournament.LeagueId);
             return View(tournament);
@@ -103,6 +116,7 @@ namespace Referee.Controllers
             ViewBag.StartTime = tournament.StartTime;
             ViewBag.StartDate = tournament.StartDate.ToShortDateString();
             ViewBag.EndDate = tournament.EndDate.ToShortDateString();
+            ViewBag.TournamentType = tournament.Type;
             return View(tournament);
         }
 
@@ -112,11 +126,28 @@ namespace Referee.Controllers
         [HttpPost]
         public ActionResult Edit(Tournament tournament)
         {
+            if (tournament.Type == "League")
+            {
+                var league = Unit.LeagueRepository.GetById(tournament.LeagueId);
+                tournament.LeagueName = league.Name;
+            }
+            else
+            {
+                tournament.LeagueName = "";
+                tournament.LeagueId = 0;
+            }
             if (ModelState.IsValid)
             {
                 Unit.TournamentRepository.Update(tournament);
                 Unit.Save();
-                return RedirectToAction("Index");
+                if (tournament.Type == "League")
+                {
+                    return RedirectToAction("IndexTournament", "Game", new { LeagueId = tournament.LeagueId });
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
             ViewBag.LeagueId = new SelectList(Unit.LeagueRepository.Get(filter: l => l.Type == "Tournament"), "Id", "Name", tournament.LeagueId);
             ViewBag.StartTime = tournament.StartTime;

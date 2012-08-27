@@ -1,70 +1,200 @@
 ﻿@model Referee.Models.Nomination
 
-@{
-    ViewBag.Title = "Details";
-}
+@using Referee.ViewModels
+           
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+@Html.Partial("_ContentTop", ViewData)
 
-<h2>Details</h2>
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
 
-<fieldset>
-    <legend>Nomination</legend>
 
-    <div class="display-label">Added</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Added)
-    </div>
+<div class="wrapper">
+@using (Html.BeginForm())
+{
+  
+        <div class="widget fluid" id="refereeNominations">
+            <div class="whead">
+                <h6>Obsada</h6>
+                <div class="clear"></div>
+            </div>
+            <div class="formRow">
+                <div class="grid3">
+                    Obsada dla @((((Event)ViewBag.Event).Type == "game") ? "meczu" : "turnieju")
+                </div>
+                <div class="grid9">
+                <ul>
+                    <li>
+                        @(((Event)ViewBag.Event).Name)
+                    </li>
+                    <li>
+                        @(((Event)ViewBag.Event).Venue)
+                    </li>
+                    <li>
+                        @(((Event)ViewBag.Event).Date)
+                    </li>
+                    <li>
+                        @(((Event)ViewBag.Event).Time)
+                    </li>
+                </ul>
+                </div>
+                <div class="clear"></div> 
+            </div>
+            @if (Model.Nominateds.Count() > 0)
+            {
+                foreach (var NominatedReferee in Model.Nominateds)
+                {
+                    <div class="formRow BoxReferee" id="BoxReferee_@(NominatedReferee.Id)" >
+                        <div class="grid3">
+                            Sędzia: @NominatedReferee.Function.Name
+                        </div>
+                        <div class="grid9">
+                            @NominatedReferee.Referee.FullName
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                }
+            }
+            <div class="formRow" id="NotePosition">
+            </div> 
+            @Html.HiddenFor(model => model.Id)
+            <div class="formRow" id="BoxNote" >
+                <div class="grid3">
+                    @Html.LabelFor(model => model.Note)
+                </div>
+                <div class="grid6" id="NoteBox">
+                    @Html.DisplayFor(model => model.Note)
+                </div>
+                <div class="grid3" id="NoteButtons">
+                    <a href="#" id="changeNote" class="buttonS bGreen">Zmień</a>
+                </div>
+                <div class="clear"></div>
+            </div>
+        
 
-    <div class="display-label">Note</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Note)
-    </div>
+            <div class="formRow" id="BoxPublishState">                                           
+                <div class="grid3">
+                    @Html.LabelFor(model => model.Published)
+                </div>
+                <div class="grid6" id="BoxPublish">
+                    @Html.DisplayFor(model => model.Published)
+                </div>
+                <div class="grid3" id="BoxPublishButtons">
+                    <a href="#" id="publish" class="buttonS bGreen">Zmień</a>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+}   
+</div>
+<script type="text/javascript">
+  
+    var noteText = $("#NoteBox").html();
+    var publishState = $("#BoxPublish :checked").length;
+    $("#changeNote").live("click", function () {
+        $("#NoteBox").html("<textarea id=\"noteNew\" name=\"note\">" + noteText + "</textarea>");
+        var buttons = "<a href=\"#\" id=\"saveNote\" class=\"buttonS bGreen\">Zapisz</a>";
+        buttons +=    "<a href=\"#\" id=\"cancelNote\" class=\"buttonS bRed\">Anuluj</a>";
+        $("#NoteButtons").html(buttons);
+        return false;
+    });
 
-    <div class="display-label">Published</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Published)
-    </div>
+    $("a#cancelNote").live("click", function () {
+        var buttons = "<a href=\"#\" id=\"changeNote\" class=\"buttonS bGreen\">Zmień</a>";
+        $("#NoteButtons").html(buttons);
+        $("#NoteBox").html(noteText);
+        return false;
+    });
 
-    <div class="display-label">PublishDate</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.PublishDate)
-    </div>
+    $("a#saveNote").live("click", function () {
+        var noteNew = $("#noteNew").val();
+        $.ajax({
+            url: "/nomination/update",
+            cache: false,
+            data: { what: "note", val: noteNew, nominationId: $("input#Id").val() },
+            success: function (html) {
+                $("#BoxNote").html(html); 
+                noteText = noteNew; 
+                }
+        });
+        return false;
+    });
 
-    <div class="display-label">Confirmed</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Confirmed)
-    </div>
+    $("a#publish").live("click", function () {
+        $("#BoxPublish :checkbox").attr("disabled", false);
+        var buttons = "<a href=\"#\" id=\"savePublish\" class=\"buttonS bGreen\">Zapisz</a>";
+        buttons += "<a href=\"#\" id=\"cancelPublish\" class=\"buttonS bRed\">Anuluj</a>";
+        $("#BoxPublishButtons").html(buttons);
+        return false;
+    });
 
-    <div class="display-label">ConfirmationDate</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.ConfirmationDate)
-    </div>
+    $("a#cancelPublish").live("click", function () {
+        var buttons = "<a href=\"#\" id=\"publish\" class=\"buttonS bGreen\">Zmień</a>";
+        $("#BoxPublishButtons").html(buttons);
+        $("#BoxPublish :checkbox").attr("disabled", true);
+        if (publishState == 1) {
+            $("#BoxPublish :checkbox").attr("checked", true);
+        } else {
+            $("#BoxPublish :checkbox").attr("checked", false);
+        }
+        return false;
+    });
 
-    <div class="display-label">Emailed</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Emailed)
-    </div>
+    $("a#savePublish").live("click", function () {
+        var state = $("#BoxPublish :checked").length;
+        var val = "0";
+        if (state == 1) {
+            val = "1";
+        }
+        $.ajax({
+            url: "/nomination/update",
+            cache: false,
+            data: { what: "publish", val: val, nominationId: $("input#Id").val() },
+            success: function (html) {
+                $("#BoxPublishState").html(html);
+                publishState = state;
+                if (publishState == 1) {
+                    $("#BoxPublish :checkbox").attr("checked", true);
+                } else {
+                    $("#BoxPublish :checkbox").attr("checked", false);
+                }
+            }
+        });
+        return false;
+    });
 
-    <div class="display-label">EmailDate</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.EmailDate)
-    </div>
+    $("#addItem").click(function () {
+        $.ajax({
+            url: this.href,
+            cache: false,
+            success: function (html) { $("#NotePosition").before(html); }
+        });
+        return false;
+    });
 
-    <div class="display-label">HashConfirmation</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.HashConfirmation)
-    </div>
+    $(".changeReferee").live("click", function () {
+        var ID = $(this).parents("div.BoxReferee");
+        $.ajax({
+            url: this.href,
+            cache: false,
+            success: function (html) { ID.html(html); }
+        });
+        return false;
+    });
 
-    <div class="display-label">GameId</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.GameId)
-    </div>
+    $("a.deleteRow").live("click", function () {
+        $(this).parents("div.formRow:first").remove();
+        return false;
+    });
 
-    <div class="display-label">Tournament</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Tournament.Name)
-    </div>
-</fieldset>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+    /*$(".addReferee").live("click", function () {
+        $.ajax({
+            url: this.href,
+            cache: false,
+            type: "POST",
+            data: $("form.AddRefereeFormClass").serialize(),
+            success: function (html) { document.location.href = "/Nomination/Details/"; }
+        });
+        return false;
+    });*/
+</script>

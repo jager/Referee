@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Referee.Models;
-using Referee.DAL;
 using Referee.Controllers.Base;
 using Referee.Lib;
 using Referee.Lib.Security;
-using System.Drawing;
 using Referee.Lib.Photo;
 using Referee.Helpers;
 using Referee.Repositories;
+using Referee.ViewModels;
 
 namespace Referee.Controllers
 { 
@@ -62,8 +59,33 @@ namespace Referee.Controllers
                 new BreadcrumbHelper { Href = "/Referee", Text = "Listuj sędziów" },
                 new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego" }
             };
-            GamesNominatedRepository GNRepository = new GamesNominatedRepository(id);
-            ViewBag.Games = GNRepository.Get();            
+            //GamesNominatedRepository GNRepository = new GamesNominatedRepository(id);
+            var NominatedReferees = Unit.NominatedRepository.Get(filter: n => n.RefereeId == id); //GNRepository.Get();
+            List<int> RefNominationsIDS = new List<int>();
+            foreach (var nominated in NominatedReferees)
+            {
+                RefNominationsIDS.Add(nominated.NominationId);
+            }
+            var Nominations = Unit.NominationRepository.Get(n => n.Published && RefNominationsIDS.Contains(n.Id), n => n.OrderByDescending(o => o.PublishDate));
+            List<NominationDetails> NominationEvents = new List<NominationDetails>();
+            foreach (Nomination _nomination in Nominations)
+            {
+                Event _event = new Event();
+                if (_nomination.GameId != null)
+                {
+                    _event.Parse(_nomination.Game, "game");
+                }
+                else if (_nomination.TournamentId != null)
+                {
+                    _event.Parse(_nomination.Tournament, "tournament");
+                }
+                else
+                {
+                    throw new Exception("Brak typu nominacji");
+                }
+                NominationEvents.Add(new NominationDetails { Event = _event, Nomination = _nomination, NominatedReferees = _nomination.Nominateds });                
+            }
+            ViewBag.Games = NominationEvents;
             return View(refereeentity);
         }
 

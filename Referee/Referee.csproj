@@ -120,8 +120,10 @@
     <Compile Include="Models\Voluntary.cs" />
     <Compile Include="Models\VoluntaryReferee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\GamesNominatedRepository.cs" />
     <Compile Include="ViewModels\ClubDetails.cs" />
     <Compile Include="ViewModels\Event.cs" />
+    <Compile Include="ViewModels\GameNomination.cs" />
     <Compile Include="ViewModels\NominationDetails.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -253,7 +255,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Repositories\" />
     <Folder Include="Scripts\custom\" />
   </ItemGroup>
   <ItemGroup>
@@ -363,6 +364,10 @@
     <Content Include="Views\Nomination\Delete.cshtml" />
     <Content Include="Views\Nomination\CreateRefereeData.cshtml" />
     <Content Include="Views\Nomination\GetCurrentReferees.cshtml" />
+    <Content Include="Views\Nomination\UpdateNote.cshtml" />
+    <Content Include="Views\Nomination\UpdatePublish.cshtml" />
+    <Content Include="Views\Nomination\UpdateRefereeData.cshtml" />
+    <Content Include="Views\Nomination\AddRefereeData.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

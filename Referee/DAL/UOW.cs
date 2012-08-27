@@ -171,6 +171,19 @@ namespace Referee.DAL
             }
         }
 
+        private GenericRepository<Nominated> nominatedRepository;
+        public GenericRepository<Nominated> NominatedRepository
+        {
+            get
+            {
+                if (this.nominatedRepository == null)
+                {
+                    this.nominatedRepository = new GenericRepository<Nominated>(db);
+                }
+                return this.nominatedRepository;
+            }
+        }
+
         private GenericRepository<Function> functionRepository;
         public GenericRepository<Function> FunctionRepository
         {

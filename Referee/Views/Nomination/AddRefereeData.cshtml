@@ -1,38 +1,26 @@
 ﻿@model Referee.Models.Nominated
 @using Referee.Helpers
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-@using (Html.BeginCollectionItem("nominateds"))
+@using (Html.BeginForm("AddRefereeData", "Nomination", FormMethod.Post, new { @class = "AddRefereeFormClass" } ))
 {
-    SelectList Functions = (SelectList)ViewBag.FunctionId;
-    SelectList Referees = (SelectList)ViewBag.RefereeId;
-    if (Model != null)
-    {
-        @Html.HiddenFor(model => model.NominationId)
-        @Html.HiddenFor(model => model.Id)
-        foreach(var item in Functions) 
-        {
-            if (item.Value == Convert.ToString(Model.FunctionId))
-            {
-                item.Selected = true;
-            }
-        }
-    }
+    @Html.Hidden("NominationId", (int)ViewBag.NominationId)
 <div class="formRow selectContainer" id="row">
     <div class="grid3">
             Sędzia: 
         </div>
         <div class="grid3 selectFunctionIdContainer">
-            @Html.DropDownList("FunctionId", Functions, String.Empty, new { @class = "selectReferee" })              
+            @Html.DropDownList("FunctionId", (SelectList)ViewBag.FunctionId, String.Empty, new { @class = "selectReferee" })
         </div>
         <div class="grid3 RefereesSelectBoxContainer" >
-            @Html.DropDownList("RefereeId", Referees, String.Empty, new { @class = "RefereesNominated" })
+            @Html.DropDownList("RefereeId", (SelectList)ViewBag.RefereeId, String.Empty, new { @class = "RefereesNominated" })
         </div>
-            <div class="grid3">
-                <a href="#" class="deleteRow buttonS bRed">Usuń sędziego</a>
-            </div>
+        <div class="grid3">
+            <a href="/Nomination/AddRefereeData" class="addReferee buttonS bGreen">Zapisz</a>
+            <a href="#" class="deleteRow buttonS bRed">Anuluj</a>
+        </div>
         <div class="clear"></div>
     </div>
- }
+}
 <script type="text/javascript">
     var no = $(".selectContainer").length;
     $("#row").attr("id", "row" + no);
@@ -55,4 +43,7 @@
             }
         });
     });
+    if (no > 1) {
+        $("#row" + no + " select").uniform();
+    }
 </script>

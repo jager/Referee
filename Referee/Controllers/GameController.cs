@@ -71,7 +71,7 @@ namespace Referee.Controllers
         //
         // GET: /Game/Details/5
 
-        public ViewResult Details(Guid id)
+        public ViewResult Details(int id)
         {
             return View(Unit.GameRepository.GetById(id));
         }
@@ -169,7 +169,7 @@ namespace Referee.Controllers
         //
         // GET: /Game/Edit/5
  
-        public ActionResult Edit(Guid id)
+        public ActionResult Edit(int id)
         {
             Game game = Unit.GameRepository.GetById(id);
             ViewBag.SeasonId = game.SeasonId;
@@ -215,7 +215,7 @@ namespace Referee.Controllers
         //
         // GET: /Game/Delete/5
  
-        public ActionResult Delete(Guid id)
+        public ActionResult Delete(int id)
         {
             return PartialView(Unit.GameRepository.GetById(id));
         }
@@ -224,7 +224,7 @@ namespace Referee.Controllers
         // POST: /Game/Delete/5
 
         [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(Guid id)
+        public ActionResult DeleteConfirmed(int id)
         {
             Game game = Unit.GameRepository.GetById(id);
             int LeagueId = game.LeagueId;

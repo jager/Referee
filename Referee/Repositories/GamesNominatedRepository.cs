@@ -25,19 +25,40 @@ namespace Referee.Repositories
             this._refId = refereeId;
         }
 
-        public List<GameNomination> Get()
+        public IEnumerable<Nominated> Get()
         {
-            return (from n in db.Nominateds
-                    from nom in db.Nominations
-                    from g in db.Games
-                    where n.NominationId == nom.Id.ToString() &&
-                            nom.GameId == g.Id &&  
-                            n.RefereeId.Equals(RefereeId)
-                    select new GameNomination
+
+
+            //var Nom = (from n in db.Nominateds where n.RefereeId.Equals(RefereeId) select n);
+            /*var query = (from nd in db.Nominateds
+                    from no in db.Nominations.Where(nom => nom.Id == nd.NominationId).DefaultIfEmpty()
+                    from gm in db.Games.Where(g => g.Id ==no.GameId).DefaultIfEmpty()
+                    where nd.RefereeId.Equals(RefereeId)
+                    select new 
                     {
-                        Game = g,
-                        Nomination  = nom
-                    }).ToList<GameNomination>();            
+                        Game = gm,
+                        Nomination = no
+                    }).ToList();   
+            return query;
+            return (from q in query.AsEnumerable()
+                    select new GameNomination { Game = q.Game, Nomination = q.Nomination }).ToList<GameNomination>();
+            IQueryable<Nominated> query = db.Set<Nominated>();
+            query = query.Where(n => n.RefereeId.Equals(RefereeId));
+            return (query.Include("Nomination").Include("Game")).toList();*/
+            ///var RefereeNominations = db.Nominateds;//.Where(n => n.RefereeId.Equals(RefereeId)).Select(n1 => n1.NominationId);
+            ///
+
+            return NominatedRepository.Get();
+
+
+                /*
+
+            if (RefereeNominations.Count() > 0)
+            {
+                return (this.NominationRepository.Get(filter: n => RefereeNominations.Contains(n.Id)));
+            }
+            return new List<Nomination>();
+            */
         }
     }
 }

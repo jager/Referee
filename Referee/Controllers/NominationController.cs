@@ -57,9 +57,19 @@ namespace Referee.Controllers
         //
         // GET: /Nomination/Details/5
 
-        public ViewResult Details(Guid id)
+        public ViewResult Details(int id)
         {
             Nomination nomination = Unit.NominationRepository.GetById(id);
+            Event Event = new Event();
+            if (nomination.GameId != null)
+            {
+                Event.Parse(nomination.Game, "game");
+            }
+            else
+            {
+                Event.Parse(nomination.Tournament, "tournament");
+            }
+            ViewBag.Event = Event;
             return View(nomination);
         }
 
@@ -81,9 +91,14 @@ namespace Referee.Controllers
                 
                 case "game":                    
                 default:
-                    int gameId = EventId;
+                    int gameId = EventId;                    
                     if (gameId > 0)
                     {
+                        var g = Unit.NominationRepository.Get(filter: n => n.GameId == gameId);
+                        if (g.Count() > 0)
+                        {
+                            return RedirectToAction("Edit", new { id = g.FirstOrDefault().Id });
+                        }
                         Event.Parse(Unit.GameRepository.GetById(gameId), Type);
                     }
                     break;
@@ -116,9 +131,50 @@ namespace Referee.Controllers
             }
             ViewData["RefereeId"] = new SelectList(Unit.RefereeRepository.Get(), "Id", "FullName");            
             ViewData["FunctionId"] = new SelectList(Unit.FunctionRepository.Get(), "Id", "Name");
+            
             return PartialView();
         }
 
+        public PartialViewResult Update( string what, string val, int nominationId )
+        {
+            var Nomination = Unit.NominationRepository.GetById(nominationId);
+            var PartialViewTemplate = "UpdateNote";
+            switch (what)
+            { 
+                case "note":
+                    Nomination.Note = val;
+                    PartialViewTemplate = "UpdateNote";
+                    break;
+                case "publish":
+                    if (val == "1")
+                    {
+                        Nomination.Published = true;
+                        Nomination.PublishDate = DateTime.Now;
+                    }
+                    else
+                    {
+                        Nomination.Published = false;
+                    }
+                    PartialViewTemplate = "UpdatePublish";
+                    break;
+                case "referee":
+                    int NominatedId = 0;
+                    Int32.TryParse(val, out NominatedId);
+                    if (NominatedId > 0)
+                    {
+                        var NominatedReferee = Nomination.Nominateds.Where(n => n.Id == NominatedId).FirstOrDefault();
+                        PartialViewTemplate = "UpdateRefereeData";
+                        return PartialView(PartialViewTemplate, NominatedReferee);
+                    }
+                    break;
+                default:
+                   break;
+
+            }            
+            Unit.NominationRepository.Update(Nomination);
+            Unit.Save();
+            return PartialView(PartialViewTemplate, Nomination);
+        }
         /*
         public void GetCurrentRefereesSelectBox(int FunctionId, string Type, int? GameId, int? TournamentId)
         {
@@ -249,7 +305,6 @@ namespace Referee.Controllers
             nomination.PublishDate = DateTime.Now;
             if (ModelState.IsValid)
             {
-                nomination.Id = Guid.NewGuid();
                 nomination.HashConfirmation = nomination.GetCode();
                 Unit.NominationRepository.Insert(nomination);
                 Unit.Save();
@@ -257,14 +312,58 @@ namespace Referee.Controllers
             }
             return View(nomination);
         }
-        /*
+        
         //
         // GET: /Nomination/Edit/5
  
-        public ActionResult Edit(Guid id)
+        public ActionResult Edit(int id)
         {
-            Nomination nomination = db.Nominations.Find(id);
-            ViewBag.TournamentId = new SelectList(db.Tournaments, "Id", "Name", nomination.TournamentId);
+            Nomination nomination = Unit.NominationRepository.GetById(id);
+            string Type = "";
+            if (nomination.GameId != null)
+            {
+                Type = "game";
+            }
+            else if (nomination.TournamentId != null) 
+            {
+                Type = "tournament";
+            }
+
+            Event Event = new Event();
+            switch (Type)
+            {
+                case "tournament":
+                    int TournamentId = (int)nomination.TournamentId;
+                    if (TournamentId > 0)
+                    {
+                        Event.Parse(Unit.TournamentRepository.GetById(TournamentId), Type);
+                    }
+                    break;
+
+                case "game":
+                default:
+                    int gameId = (int)nomination.GameId;
+                    if (gameId > 0)
+                    {
+                        Event.Parse(Unit.GameRepository.GetById(gameId), Type);
+                    }
+                    break;
+            }
+            if (Event.Name == null)
+            {
+                throw new Exception("Unknown event. Could not parse this event from given ident");
+            }
+            ViewData["PageTitle"] = "Edytuj obsadę";
+            ((List<BreadcrumbHelper>)ViewData["breadcrumbs"]).Add(
+                new BreadcrumbHelper { Href = "#", Text = String.Format("Obsada dla {0}", Event.Name) }
+            );
+            ViewData["breadlinks"] = new List<BreadcrumbHelper> 
+            { 
+                new BreadcrumbHelper { Href = "/Nomination", Text = "Pokaż nominacje" }
+            };
+            ViewData["RefereeId"] = new SelectList(Unit.RefereeRepository.Get(), "Id", "FullName");
+            ViewData["FunctionId"] = new SelectList(Unit.FunctionRepository.Get(), "Id", "Name");
+            ViewBag.Event = Event;
             return View(nomination);
         }
 
@@ -272,39 +371,65 @@ namespace Referee.Controllers
         // POST: /Nomination/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(Nomination nomination)
+        public ActionResult Edit(Nomination nomination, FormCollection form)
         {
+            nomination.Emailed = false;
+            nomination.Confirmed = false;
+            nomination.HashConfirmation = nomination.GetCode();
+            if (nomination.Published)
+            {
+                nomination.PublishDate = DateTime.Now;
+            }
             if (ModelState.IsValid)
             {
-                db.Entry(nomination).State = EntityState.Modified;
-                db.SaveChanges();
+                
+                foreach (var n in nomination.Nominateds)
+                {                    
+                    if (n.Id > 0)
+                    {
+                        if (n.FunctionId == 0)
+                        {
+                            Unit.NominatedRepository.Delete(n);
+                            Unit.Save();
+                        }
+                        else
+                        {
+                            Unit.NominatedRepository.Update(n);
+                        }
+                    }
+                    else if (n.FunctionId > 0)
+                    {
+                        n.NominationId = nomination.Id;
+                        Unit.NominatedRepository.Insert(n);
+                    }
+                }
+                Unit.NominationRepository.Update(nomination);
+                Unit.Save();
                 return RedirectToAction("Index");
             }
-            ViewBag.TournamentId = new SelectList(db.Tournaments, "Id", "Name", nomination.TournamentId);
+            //ViewBag.TournamentId = new SelectList(db.Tournaments, "Id", "Name", nomination.TournamentId);
             return View(nomination);
         }
 
         //
         // GET: /Nomination/Delete/5
  
-        public ActionResult Delete(Guid id)
+        public ActionResult Delete(int id)
         {
-            Nomination nomination = db.Nominations.Find(id);
-            return View(nomination);
+            return PartialView(Unit.NominationRepository.GetById(id));
         }
 
         //
         // POST: /Nomination/Delete/5
 
         [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(Guid id)
-        {            
-            Nomination nomination = db.Nominations.Find(id);
-            db.Nominations.Remove(nomination);
-            db.SaveChanges();
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Unit.NominationRepository.Delete(id);
+            Unit.Save();
             return RedirectToAction("Index");
         }
-        */
+        
         protected override void Dispose(bool disposing)
         {
             Unit.Dispose();

@@ -7,7 +7,7 @@
 <div class="wrapper">
     <div class="widget">
     <div class="whead">
-        <h6>Lista klubów</h6>
+        <h6>Obsady sędziowskie</h6>
         <div class="clear"></div>
     </div>
     <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
@@ -23,7 +23,7 @@
                     Godzina
                 </td>
                 <td>
-                    Obsada sędziowska
+                    Pozostali sędziowie
                 </td>
                 <td>
                     Opublikowana
@@ -54,12 +54,11 @@
                     @Html.DisplayFor(modelItem => item.Event.Time)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.NominatedReferees)
                     @if (item.NominatedReferees.Count() > 0)
                     {
                         foreach (var referee in item.NominatedReferees)
                         {
-                            <span><b>@referee.Function.Name:</b>@referee.Referee.FullName</span>
+                            <span><b>@referee.Function.Name: </b>@referee.Referee.FullName</span><br />
                         }
                     }        
                 </td>
@@ -67,7 +66,7 @@
                     @if (item.Nomination.Published)
                     {
                         <span class="fileSuccess"></span>
-                        @Html.DisplayFor(modelItem => item.Nomination.PublishDate)
+                        @item.Nomination.PublishDate
                     }
                     else
                     {
@@ -97,7 +96,7 @@
                     }        
                 </td>    
                 <td class="tableActs" align="center">
-                    @Html.AuthLink("Pokaż szczegóły", "Details", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" })
+                    @Html.AuthLink("Pokaż", "Details", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" })
                     @Html.AuthLink("Edytuj", "Edit", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Zmień obsadę" })
                     @Html.AuthLink("Usuń", "Delete", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń obsadę" })
                 </td>

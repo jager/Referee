@@ -6,10 +6,12 @@
 
 @Html.Partial("_CustomBreadcrumbBar", ViewData)
 
+<div class="wrapper">
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
-    @Html.HiddenFor(model => model.Id);
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.SeasonId)
     <div class="widget fluid">
         <div class="whead"><h6>Dodaj nowy turniej</h6><div class="clear"></div></div>
         <div class="formRow">
@@ -84,7 +86,7 @@
                 @Html.LabelFor(model => model.Type)
             </div>
             <div class="grid9">
-                @Html.EditorFor(model => model.Type, "LeagueTypeEditor")
+                @Html.EditorFor(model => model.Type, "LeagueTypeEditor", new { TournamentType = Model.Type })
                 @Html.ValidationMessageFor(model => model.Type)
             </div>
             <div class="clear"></div>
@@ -129,3 +131,4 @@
         </div>
     </div>
 }
+</div>

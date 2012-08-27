@@ -1,0 +1,11 @@
+﻿@model Referee.Models.Nomination
+<div class="grid3">
+    @Html.LabelFor(model => model.Note)
+</div>
+<div class="grid6" id="NoteBox">
+    @Html.DisplayFor(model => model.Note)
+</div>
+<div class="grid3" id="NoteButtons">
+    <a href="#" id="changeNote" class="buttonS bGreen">Zmień</a>
+</div>
+<div class="clear"></div>

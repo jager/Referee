@@ -6,6 +6,7 @@
 
 @Html.Partial("_CustomBreadcrumbBar", ViewData)
 
+<div class="wrapper">
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
     <div class="widget fluid">
@@ -123,3 +124,4 @@
         </div>
     </div>
 }
+</div>

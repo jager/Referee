@@ -1,73 +1,18 @@
 ﻿@model Referee.Models.Nomination
 
-@{
-    ViewBag.Title = "Delete";
-}
-
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+@using (Html.BeginForm()) {
+  
 <fieldset>
-    <legend>Nomination</legend>
-
-    <div class="display-label">Added</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Added)
-    </div>
-
-    <div class="display-label">Note</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Note)
-    </div>
-
-    <div class="display-label">Published</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Published)
-    </div>
-
-    <div class="display-label">PublishDate</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.PublishDate)
-    </div>
-
-    <div class="display-label">Confirmed</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Confirmed)
-    </div>
-
-    <div class="display-label">ConfirmationDate</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.ConfirmationDate)
-    </div>
-
-    <div class="display-label">Emailed</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Emailed)
-    </div>
-
-    <div class="display-label">EmailDate</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.EmailDate)
-    </div>
-
-    <div class="display-label">HashConfirmation</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.HashConfirmation)
-    </div>
-
-    <div class="display-label">GameId</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.GameId)
-    </div>
-
-    <div class="display-label">Tournament</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Tournament.Name)
+    <div class="widget fluid">
+        <div class="whead"><h6>Czy na pewno chcesz usunąć tą Nominację?</h6><div class="clear"></div></div>
+        <div class="formRow">
+            <div class="grid3"></div>
+            <div class="grid9">
+                <input class="buttonS bGreen" id="deleteTeam" type="submit" value="Usuń" /> 
+                @Html.ActionLink("Anuluj", "Index", "Nomination", new {}, new { @class = "buttonS bRed" })               
+            </div>
+            <div class="clear"></div>
+        </div>
     </div>
 </fieldset>
-@using (Html.BeginForm()) {
-    <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
 }

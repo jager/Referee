@@ -8,8 +8,8 @@ namespace Referee.Models
     public class Nominated
     {
         public int Id { get; set; }
-        public string RefereeId { get; set; }
-        public string NominationId { get; set; }
+        public Guid RefereeId { get; set; }
+        public int NominationId { get; set; }
         public int FunctionId { get; set; }
 
         public virtual RefereeEntity Referee { get; set; }

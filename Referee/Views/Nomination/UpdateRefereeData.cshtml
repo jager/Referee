@@ -3,33 +3,24 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 @using (Html.BeginCollectionItem("nominateds"))
 {
-    SelectList Functions = (SelectList)ViewBag.FunctionId;
-    SelectList Referees = (SelectList)ViewBag.RefereeId;
-    if (Model != null)
-    {
-        @Html.HiddenFor(model => model.NominationId)
-        @Html.HiddenFor(model => model.Id)
-        foreach(var item in Functions) 
-        {
-            if (item.Value == Convert.ToString(Model.FunctionId))
-            {
-                item.Selected = true;
-            }
-        }
-    }
-<div class="formRow selectContainer" id="row">
-    <div class="grid3">
+    @Html.HiddenFor(model => model.Id)
+    <div class="formRow selectContainer" id="row">
+        <div class="grid3">
             Sędzia: 
         </div>
         <div class="grid3 selectFunctionIdContainer">
-            @Html.DropDownList("FunctionId", Functions, String.Empty, new { @class = "selectReferee" })              
+            @Html.DropDownList("FunctionId", (SelectList)ViewBag.FunctionId, String.Empty, new { @class = "selectReferee" })
         </div>
         <div class="grid3 RefereesSelectBoxContainer" >
-            @Html.DropDownList("RefereeId", Referees, String.Empty, new { @class = "RefereesNominated" })
+            @Html.DropDownList("RefereeId", (SelectList)ViewBag.RefereeId, String.Empty, new { @class = "RefereesNominated" })
         </div>
+        @if ((bool)ViewBag.ButtonDeleteVisible)
+        {
             <div class="grid3">
-                <a href="#" class="deleteRow buttonS bRed">Usuń sędziego</a>
+                <a href="#" class="buttonS bGreen">Zapisz</a>
+                <a href="#" id="cancelNote" class="deleteRow buttonS bRed">Anuluj</a>
             </div>
+        }
         <div class="clear"></div>
     </div>
  }
@@ -55,4 +46,7 @@
             }
         });
     });
+    if (no > 1) {
+        $("#row" + no + " select").uniform();
+    }
 </script>

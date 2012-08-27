@@ -11,7 +11,7 @@ namespace Referee.Models
     public class Nomination
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [HiddenInput(DisplayValue=false)]
         [DataType(DataType.DateTime)]
