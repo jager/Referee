@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    @Html.Partial("_Header")
+</head>
+<body>
+    <!-- Top line begins -->
+    <div id="top">
+        <div class="wrapper">
+            <a href="/" title="" class="logo">System obsad MWZPS</a>
+        
+            <!-- Right top nav -->
+            <div class="topNav">
+            <ul class="userNav">
+            
+            </ul>
+            <a title="" class="iButton"></a>
+            <a title="" class="iTop"></a>
+            <div class="topSearch">
+                <div class="topDropArrow"></div>
+                <form action="">
+                    <input type="text" placeholder="search..." name="topSearch" />
+                    <input type="submit" value="" />
+                </form>
+            </div>
+        </div>
+
+            <div class="clear"></div>
+        </div>
+    </div>
+    <!-- Top line ends -->
+
+
+    <!-- Content begins -->
+    <div class="loginWrapper">
+        <!-- Main content -->
+            @RenderBody()
+        <!-- Main content ends -->    
+    </div>
+    <!-- Content ends -->
+</body>
+</html>

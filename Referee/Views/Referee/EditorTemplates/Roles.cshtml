@@ -1,0 +1,15 @@
+﻿@using System.Web.Security;
+
+<select name="Roles" multiple="multiple" class="fullwidth select">
+    @foreach (var r in Roles.GetAllRoles())
+    {
+        if (((string[])ViewBag.UserRoles).Count() > 0 && ((string[])ViewBag.UserRoles).Contains(r))
+        {
+            <option value="@r" selected="selected">@r</option>
+        }
+        else
+        {
+            <option value="@r">@r</option>
+        }
+    }
+</select>
