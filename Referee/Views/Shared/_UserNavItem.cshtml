@@ -1,16 +1,22 @@
-﻿@if (1==1 || Request.IsAuthenticated)
+﻿@if (Request.IsAuthenticated)
 {
+    string photoPath = "~/Content/themes/aquincum/images/userLogin2.png";
+    Referee.Models.RefereeEntity CurrentReferee = (Referee.Models.RefereeEntity)ViewBag.CurrentReferee;
+    if (CurrentReferee != null && CurrentReferee.DestinationFolder != null && CurrentReferee.Photo != null)
+    {
+        photoPath = Referee.Lib.FileUploader.GetUserPhotoPath(String.Format("{0}{1}", CurrentReferee.DestinationFolder, CurrentReferee.Photo));
+    }
 <div class="user">
     <a title="" class="leftUserDrop">
-        <img width="70px" height="72px" src="@Url.Content("~/Content/themes/aquincum/images/userLogin2.png")" alt="" />
-        <span><strong>3</strong></span>
+        
+        <img width="70px" height="72px" src="@Url.Content(photoPath)" alt="" />
+        <span><strong>@((int)ViewBag.NewNominationsAmount)</strong></span>
     </a>
     <span>@Html.DisplayText("Lolek")</span>
     <ul class="leftUser">
-        <li><a href="/RefEntity/Profile" title="" class="sProfile">Mój profil</a></li>
-        <li><a href="/RefEntity/NewNominations" title="" class="sMessages">Nowe nominacje</a></li>
-        <li><a href="/RefEntityt/Nominations" title="" class="sSettings">Nominacje</a></li>
-        <li><a href="/RefEntity/Availability" title="" class="sLogout">Niedyspozycyjność</a></li>
+        <li><a href="/Home/Profile" title="" class="sProfile">Mój profil</a></li>
+        <li><a href="/Home/NewNominations" title="" class="sMessages">Nowe nominacje</a></li>
+        <li><a href="/Home/Nominations" title="" class="sSettings">Nominacje</a></li>
         <li><a href="/Account/LogOff" title="" class="sLogout">Wyloguj</a></li>
     </ul>
 </div>
@@ -26,10 +32,9 @@
             
     <!-- User nav -->
     <ul class="userNav">
-        <li><a href="/RefEntity/Profile" title="" class="profile">Mój profil</a></li>
-        <li><a href="/RefEntity/NewNominations" title="" class="messages">Nowe nominacje</a></li>
-        <li><a href="/RefEntityt/Nominations" title="" class="settings">Nominacje</a></li>
-        <li><a href="/RefEntity/Availability" title="" class="logout">Niedyspozycyjność</a></li>
+        <li><a href="/Home/Profile" title="" class="profile">Mój profil</a></li>
+        <li><a href="/Home/NewNominations" title="" class="messages">Nowe nominacje</a></li>
+        <li><a href="/Home/Nominations" title="" class="settings">Nominacje</a></li>
         <li><a href="/Account/LogOff" title="" class="logout">Wyloguj</a></li>
     </ul>
 </div>

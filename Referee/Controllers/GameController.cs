@@ -8,13 +8,25 @@ using System.Web.Mvc;
 using Referee.Models;
 using Referee.DAL;
 using Referee.Controllers.Base;
+using Referee.Helpers;
 
 namespace Referee.Controllers
 { 
     public class GameController : BaseController
     {
         private RefereeContext db = new RefereeContext();
+        
+        protected override void Initialize(System.Web.Routing.RequestContext requestContext)
+        {
+            base.Initialize(requestContext);
 
+            ViewData["IconName"] = "icos-home2";
+            ViewData["breadcrumbs"] = new List<BreadcrumbHelper>
+            {
+                new BreadcrumbHelper { Href = "/", Text = "Pulpit" },
+                new BreadcrumbHelper { Href = "/tournament", Text = "Mecze" }
+            };
+        }
         //
         // GET: /Game/
 
@@ -73,12 +85,22 @@ namespace Referee.Controllers
 
         public ViewResult Details(int id)
         {
-            return View(Unit.GameRepository.GetById(id));
+            var MatchGame = Unit.GameRepository.GetById(id);
+            ViewBag.Nomination = Unit.NominationRepository.Get(filter: n => n.GameId == id && n.Published).FirstOrDefault();
+            ViewData["PageTitle"] = String.Format("Dane meczu: {0}", MatchGame.Name);
+            ViewData["IconName"] = "icos-home2";
+            ViewData["breadcrumbs"] = new List<BreadcrumbHelper>
+            {
+                new BreadcrumbHelper { Href = "/", Text = "Pulpit" },
+                new BreadcrumbHelper { Href = String.Format("/Game/?LeagueId={0}", MatchGame.LeagueId), Text = "Ligi" },
+                new BreadcrumbHelper { Href = "#", Text = MatchGame.Name }
+            };
+            return View(MatchGame);
         }
 
         //
         // GET: /Game/Create
-
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Create(int LeagueId)
         {
             ViewBag.SeasonId = CurrentSeason.Id;
@@ -95,6 +117,7 @@ namespace Referee.Controllers
         // POST: /Game/Create
 
         [HttpPost]
+        [Authorize(Roles=HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Create(Game game, FormCollection form)
         {
             game = PrepareGame(game, form);
@@ -119,6 +142,7 @@ namespace Referee.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult CreateAndNominate(Game game, FormCollection form)
         {
             game = PrepareGame(game, form);
@@ -128,7 +152,7 @@ namespace Referee.Controllers
             {
                 Unit.GameRepository.Insert(game);
                 Unit.Save();
-                return RedirectToAction("Create", "Nomination", new { GameId = game.Id });
+                return RedirectToAction("Create", "Nomination", new { EventId = game.Id, @Type = "game" });
             }
            
             ViewBag.SeasonId = CurrentSeason.Id;
@@ -168,7 +192,7 @@ namespace Referee.Controllers
         
         //
         // GET: /Game/Edit/5
- 
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Edit(int id)
         {
             Game game = Unit.GameRepository.GetById(id);
@@ -190,6 +214,7 @@ namespace Referee.Controllers
         // POST: /Game/Edit/5
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Edit(Game game, FormCollection form)
         {
             game = PrepareGame(game, form);
@@ -214,7 +239,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Game/Delete/5
- 
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Delete(int id)
         {
             return PartialView(Unit.GameRepository.GetById(id));
@@ -224,6 +249,7 @@ namespace Referee.Controllers
         // POST: /Game/Delete/5
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult DeleteConfirmed(int id)
         {
             Game game = Unit.GameRepository.GetById(id);

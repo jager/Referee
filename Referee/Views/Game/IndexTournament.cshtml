@@ -16,7 +16,7 @@
         <div class="whead">
             <h6>Turnieje w @ViewData["PageTitle"]</h6>
             <ul class="titleToolbar">
-                <li>@Html.AuthLink("Dodaj nowy turniej", "Create", "Tournament", new { LeagueId = ((Referee.Models.League)ViewBag.DefaultLeague).Id}, new { })</li>
+                <li>@Html.AuthLink("Dodaj nowy turniej", "Create", "Tournament", new { LeagueId = ((Referee.Models.League)ViewBag.DefaultLeague).Id }, new { }, HelperRoles.WydzialGieriEwidencji)</li>
             </ul>
             <div class="clear"></div>
         </div>
@@ -27,7 +27,7 @@
                     Turniej
                 </td>
                 <td>
-                    Wynik
+                    Miejsce
                 </td>
                 <td>
                     Data
@@ -63,9 +63,10 @@
                     @Html.DisplayFor(modelItem => item.StartTime)
                 </td>
                 <td>
-                    @Html.AuthLink("Edytuj", "Edit", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj turniej" })
-                    @Html.AuthLink("Pokaż szczegóły", "Details", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły turnieju" })
-                    @Html.AuthLink("Usuń", "Delete", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń turniej" })
+                    @Html.AuthLink("Pokaż", "Details", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły turnieju" })
+                    @Html.AuthLink("Obsada", "Create", "Nomination", new { EventId = item.Id, @Type = "tournament" }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj obsadę" }, HelperRoles.RefereatObsad)
+                    @Html.AuthLink("Edytuj", "Edit", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj turniej" }, HelperRoles.WydzialGieriEwidencji)
+                    @Html.AuthLink("Usuń", "Delete", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń turniej" }, HelperRoles.WydzialGieriEwidencji)
                 </td>
             </tr>
     }

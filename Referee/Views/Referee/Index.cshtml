@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Referee.Models.RefereeEntity>
+﻿    @model IEnumerable<Referee.Models.RefereeEntity>
 @using Referee.Helpers           
 @using Referee.Lib           
 
@@ -16,9 +16,13 @@
             <h6>Lista sędziów</h6>
             <div class="clear"></div>
         </div>
-    <table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
+        <div id="dyn2" class="shownpars">
+            <a class="tOptions act" title="Options">
+                <img src="@Url.Content("~/Content/themes/aquincum/images/icons/options")" alt="" />
+            </a>
+            <table cellpadding="0" cellspacing="0" width="100%" class="tDefault tMedia dTable">
         <thead>
-            <tr>
+           <!-- <tr>
                 <td colspan="10">
                     <a href="#">A</a>
                     <a href="#">B</a>
@@ -45,29 +49,34 @@
                     <a href="#">Y</a>
                     <a href="#">Z</a>
                 </td>
-            </tr>
+            </tr> -->
             <tr>
-                <td></td>
-                <td>
+                <td width="50"></td>
+                <td class="sortCol">
                     Nazwisko, Imię
-                </td>           
-                <td>
+                </td>
+                @if (Request.IsAuthenticated)
+                {           
+                <td class="sortCol">
                     Adres mailowy
                 </td>
-                <td>
+                <td class="sortCol">
                     Telefon
                 </td>
-                <td>
+                <td class="sortCol">
                     Telefon komórkowy
                 </td>
-            
-                <td>
+                }
+                <td class="sortCol" width="100">
                     Klasa sędziowska
                 </td>
-                <td>
+                <td class="sortCol" width="100">
                     Uprawnienia
                 </td>
+                @if (Request.IsAuthenticated)
+                {  
                 <td></td>
+                }
             </tr>
         </thead>
         <tbody>
@@ -92,6 +101,8 @@
                 @Html.DisplayFor(modelItem => item.LastName),
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
+            @if (Request.IsAuthenticated)
+            {
             <td>
                 @Html.DisplayFor(modelItem => item.Mailadr)
             </td>
@@ -100,22 +111,27 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Mobile)
-            </td>        
+            </td>   
+            }     
             <td>
                 @Html.DisplayFor(modelItem => item.RefClass.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Authorization.Name)
             </td>
+            @if (Request.IsAuthenticated)
+            {  
             <td>
-                @Html.AuthLink("Edytuj", "Edit", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj dane sędziego" })
-                @Html.AuthLink("Pokaż", "Details", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż sędziego" })
-                @Html.AuthLink("Usuń", "Delete", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń sędziego" })
+                @Html.AuthLink("Pokaż", "Details", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż sędziego" }, HelperRoles.Sedzia)
+                @Html.AuthLink("Edytuj", "Edit", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj dane sędziego" }, HelperRoles.RefereatObsad)
+                @Html.AuthLink("Usuń", "Delete", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń sędziego" }, HelperRoles.RefereatObsad)
             </td>
+            }
         </tr>
     }
             </tbody>
         </table>
+        </div>
         <div id="openableDialogContener" class="dialog" title=""></div>
     </div>
 </div>

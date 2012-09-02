@@ -37,7 +37,7 @@ namespace Referee.Controllers
             ViewData["PageTitle"] = "Kluby MWZPS";
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
-                new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub" }
+                new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub", Role = HelperRoles.WydzialGieriEwidencji }
             };            
             return View(Unit.ClubRepository.Get());
         }
@@ -63,7 +63,7 @@ namespace Referee.Controllers
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
                 new BreadcrumbHelper { Href = "/Club", Text = "Listuj kluby" },
-                new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub" }
+                new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub", Role = HelperRoles.WydzialGieriEwidencji }
             };
 
             return View(ClubWithTeams);
@@ -71,7 +71,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Club/Create
-
+        [Authorize(Roles=HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Create()
         {
             ViewData["PageTitle"] = "Dodaj nowy klub";
@@ -89,6 +89,7 @@ namespace Referee.Controllers
         // POST: /Club/Create
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Create(Club club)
         {
             if (ModelState.IsValid)
@@ -104,7 +105,8 @@ namespace Referee.Controllers
         
         //
         // GET: /Club/Edit/5
- 
+
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Edit(Guid id)
         {
             var Club = Unit.ClubRepository.GetById(id);
@@ -115,7 +117,7 @@ namespace Referee.Controllers
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
                 new BreadcrumbHelper { Href = "/Club", Text = "Listuj kluby" },
-                new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub" }
+                new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub", Role = HelperRoles.WydzialGieriEwidencji }
             };
             return View(Club);
         }
@@ -124,6 +126,7 @@ namespace Referee.Controllers
         // POST: /Club/Edit/5
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Edit(Club club)
         {
             if (ModelState.IsValid)
@@ -137,7 +140,8 @@ namespace Referee.Controllers
 
         //
         // GET: /Club/Delete/5
- 
+
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Delete(Guid id)
         {
             return PartialView(Unit.ClubRepository.GetById(id));
@@ -147,6 +151,7 @@ namespace Referee.Controllers
         // POST: /Club/Delete/5
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult DeleteConfirmed(Guid id)
         {
             Unit.ClubRepository.Delete(id);

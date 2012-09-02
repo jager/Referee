@@ -25,23 +25,26 @@
                 <td>
                     Pozostali sędziowie
                 </td>
-                <td>
-                    Opublikowana
-                </td>
-                <td>
-                    Wysłano powiadomienie
-                </td>
-                <td>
-                    Potwierdzona
-                </td>                      
-                <td></td>
+                @if (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad))
+                {
+                    <td>
+                        Opublikowana
+                    </td>
+                    <td>
+                        Wysłano powiadomienie
+                    </td>
+                    <td>
+                        Potwierdzona
+                    </td>                      
+                    <td></td>
+                }
             </tr>
         </thead>
         <tbody>
 
 @foreach (var item in Model)
 {
-    if (1==1 || item.Nomination.Published)
+    if (item.Nomination.Published || (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad)))
     {
             <tr>
                 <td>
@@ -58,47 +61,56 @@
                     {
                         foreach (var referee in item.NominatedReferees)
                         {
-                            <span><b>@referee.Function.Name: </b>@referee.Referee.FullName</span><br />
+                            @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
+                                               "Details",
+                                               "Referee",
+                                               new { @id = referee.RefereeId },
+                                               new { },
+                                               HelperRoles.Sedzia)
+                            <br />
                         }
                     }        
                 </td>
-                <td>
-                    @if (item.Nomination.Published)
-                    {
-                        <span class="fileSuccess"></span>
-                        @item.Nomination.PublishDate
-                    }
-                    else
-                    {
-                        <span class="fileError"></span>
-                    }
-                </td>
-                <td>
-                    @if (item.Nomination.Emailed)
-                    {
-                        <span class="fileSuccess"></span>
-                        @Html.DisplayFor(modelItem => item.Nomination.EmailDate)
-                    }
-                    else
-                    {
-                        <span class="fileError"></span>
-                    }
-                </td>
-                <td>
-                    @if (item.Nomination.Confirmed)
-                    {
-                        <span class="fileSuccess"></span>
-                        @Html.DisplayFor(modelItem => item.Nomination.ConfirmationDate)
-                    }
-                    else
-                    {
-                        <span class="fileError"></span>
-                    }        
-                </td>    
+                @if (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad))
+                {
+                    <td>
+                        @if (item.Nomination.Published)
+                        {
+                            <span class="fileSuccess"></span>
+                            @item.Nomination.PublishDate
+                        }
+                        else
+                        {
+                            <span class="fileError"></span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Nomination.Emailed)
+                        {
+                            <span class="fileSuccess"></span>
+                            @Html.DisplayFor(modelItem => item.Nomination.EmailDate)
+                        }
+                        else
+                        {
+                            <span class="fileError"></span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Nomination.Confirmed)
+                        {
+                            <span class="fileSuccess"></span>
+                            @Html.DisplayFor(modelItem => item.Nomination.ConfirmationDate)
+                        }
+                        else
+                        {
+                            <span class="fileError"></span>
+                        }        
+                    </td>
+                }    
                 <td class="tableActs" align="center">
-                    @Html.AuthLink("Pokaż", "Details", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" })
-                    @Html.AuthLink("Edytuj", "Edit", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Zmień obsadę" })
-                    @Html.AuthLink("Usuń", "Delete", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń obsadę" })
+                    @Html.AuthLink("Pokaż", "Details", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" }, HelperRoles.Sedzia)
+                    @Html.AuthLink("Edytuj", "Edit", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Zmień obsadę" }, HelperRoles.RefereatObsad)
+                    @Html.AuthLink("Usuń", "Delete", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń obsadę" }, HelperRoles.RefereatObsad)
                 </td>
             </tr>
     }

@@ -64,8 +64,10 @@ namespace Referee.Controllers
         //
         // GET: /Account/Register
 
+        /*
         public ActionResult Register()
         {
+            
             return View();
         }
 
@@ -83,7 +85,7 @@ namespace Referee.Controllers
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
-                    FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
+                    FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie );
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -95,14 +97,16 @@ namespace Referee.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+        */        
 
+    
         //
         // GET: /Account/ChangePassword
 
         [Authorize]
         public ActionResult ChangePassword()
         {
-            return View();
+            return PartialView();
         }
 
         //

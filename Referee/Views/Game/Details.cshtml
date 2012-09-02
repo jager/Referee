@@ -1,60 +1,67 @@
 ﻿@model Referee.Models.Game
+@using Referee.Helpers 
+
+@Html.Partial("_ContentTop", ViewData)
+
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+
+@{
+    var nomination = (Referee.Models.Nomination)ViewBag.Nomination;
+}   
 <div class="wrapper">
-    <fieldset>
-    <legend>Game</legend>
-
-    <div class="display-label">Venue</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Venue)
+    <div class="fluid">
+        <div class="widget grid12">
+            <div class="whead">
+                <h6>@Html.DisplayFor(model => model.Name)</h6>
+                <div class="clear"></div>
+            </div>
+            <div class="grid4">
+                <ul class="updates">
+                    <li>
+                        <a href="#">@Model.Name</a>
+                    </li>
+                    <li>
+                        <strong>Data meczu:</strong>
+                        @Model.DateAndTime.ToShortDateString()
+                    </li>
+                    <li>
+                        <strong>Godzina rozpoczęcia: </strong>@Model.DateAndTime.ToShortTimeString()
+                    </li>
+                    <li>
+                        <strong>Miejsce: </strong>@Model.Venue
+                    </li>
+                </ul>
+            </div>
+            <div class="grid4">
+                <ul class="updates">
+                    <li>
+                        <strong>Wynik: </strong>@Model.Score
+                    </li>
+                    
+                </ul>
+            </div>
+            <div class="clear"></div>
+            
+            @if (nomination != null)
+            {
+                <div class="grid4">
+                    <ul class="updates">
+                        @foreach (var n in nomination.Nominateds)
+                        {
+                            <li>
+                                @Html.AuthLink(String.Format("Sędzia {0}: {1}", n.Function.Name, n.Referee.FullName),
+                                                   "Details",
+                                                   "Referee",
+                                                   new { @id = n.RefereeId },
+                                                   new { },
+                                                   HelperRoles.Sedzia)
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="clear"></div>
+            }
+        </div>
     </div>
-
-    <div class="display-label">DateAndTime</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.DateAndTime)
-    </div>
-
-    <div class="display-label">Score</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Score)
-    </div>
-
-    <div class="display-label">Published</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Published)
-    </div>
-
-    <div class="display-label">HostTeamId</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.HostTeamId)
-    </div>
-
-    <div class="display-label">GuestTeamId</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.GuestTeamId)
-    </div>
-
-    <div class="display-label">HostTeam</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.HostTeam)
-    </div>
-
-    <div class="display-label">GuestTeam</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.GuestTeam)
-    </div>
-
-    <div class="display-label">Season</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Season.Name)
-    </div>
-
-    <div class="display-label">League</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.LeagueName)
-    </div>
-</fieldset>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
 </div>

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Referee.Models;
 using Referee.DAL;
 using Referee.Controllers.Base;
+using Referee.Helpers;
 
 namespace Referee.Controllers
 { 
@@ -17,23 +18,16 @@ namespace Referee.Controllers
 
         //
         // GET: /Season/
-
+        [Authorize(Roles = "Administrator")]//HelperRoles.Administrator)]
         public ViewResult Index()
         {
             return View(Unit.SeasonRepository.Get());
         }
 
         //
-        // GET: /Season/Details/5
-
-        public ViewResult Details(int id)
-        {
-            return View(Unit.SeasonRepository.GetById(id));
-        }
-
-        //
         // GET: /Season/Create
 
+        [Authorize(Roles="" + HelperRoles.Administrator)]
         public ActionResult Create()
         {
             return View();
@@ -43,6 +37,7 @@ namespace Referee.Controllers
         // POST: /Season/Create
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.Administrator)]
         public ActionResult Create(Season season)
         {
             if (ModelState.IsValid)
@@ -58,7 +53,8 @@ namespace Referee.Controllers
         
         //
         // GET: /Season/Edit/5
- 
+
+        [Authorize(Roles = HelperRoles.Administrator)]
         public ActionResult Edit(int id)
         {
             return View(Unit.SeasonRepository.GetById(id));
@@ -68,6 +64,7 @@ namespace Referee.Controllers
         // POST: /Season/Edit/5
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.Administrator)]
         public ActionResult Edit(Season season)
         {
             if (ModelState.IsValid)
@@ -82,7 +79,8 @@ namespace Referee.Controllers
 
         //
         // GET: /Season/Delete/5
- 
+
+        [Authorize(Roles = HelperRoles.Administrator)]
         public ActionResult Delete(int id)
         {
             return View(Unit.SeasonRepository.GetById(id));
@@ -92,6 +90,7 @@ namespace Referee.Controllers
         // POST: /Season/Delete/5
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = HelperRoles.Administrator)]
         public ActionResult DeleteConfirmed(int id)
         {
             Unit.SeasonRepository.Delete(id);

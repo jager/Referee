@@ -510,7 +510,16 @@ $(function() {
 		"bJQueryUI": false,
 		"bAutoWidth": false,
 		"sPaginationType": "full_numbers",
-		"sDom": '<"H"fl>t<"F"ip>'
+		"sDom": '<"H"fl>t<"F"ip>',
+         "oLanguage": {
+            "sLengthMenu": "Pokazuj po _MENU_ na stronie",
+            "sZeroRecords": "Brak wyników wyszukiwania",
+            "sInfo": "Rekordy od _START_ do _END_ ze wszystkich _TOTAL_",
+            "sInfoEmpty": "Rekordy od 0 do 0 ze wszystkich 0",
+            "sInfoFiltered": "(Wyszukane z _MAX_ wszystkich)",
+            "sSearch": "Szukaj",
+        oPaginate:{sFirst:"Pierwszy",sLast:"Ostatni",sNext:"Nastepny",sPrevious:"Poprzedni"}
+        }
 	});
 	
 

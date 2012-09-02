@@ -7,16 +7,20 @@
     <!-- Top line begins -->
     <div id="top">
         <div class="wrapper">
-            <a href="/" title="" class="logo"><img src="@Url.Content("~/Content/themes/aquincum/images/logo.png")" alt="" /></a>
+            <a href="/" title="" class="logo">System obsad MWZPS</a>
         
             <!-- Right top nav -->
             <div class="topNav">
+           
             <ul class="userNav">
-                <li><a title="" class="search"></a></li>
-                <li><a href="#" title="" class="screen"></a></li>
-                <li><a href="#" title="" class="settings"></a></li>
-                <li><a href="#" title="" class="logout"></a></li>
-                <li class="showTabletP"><a href="#" title="" class="sidebar"></a></li>
+            @if (Request.IsAuthenticated)
+            {
+                <li><a href="/Account/LogOff" title="" class="logout"></a></li>                
+            }
+            else
+            {
+                <li><a href="/Account/LogOn" title="" class="settings"></a></li>
+            }
             </ul>
             <a title="" class="iButton"></a>
             <a title="" class="iTop"></a>

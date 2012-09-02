@@ -11,7 +11,7 @@
         <div class="widget grid4">
             <div class="whead">
                 <h6>@Html.DisplayFor(model => model.Club.Name)</h6>
-                    @Html.AuthLink("Dodaj zespół", "create", "team", new { @Clubid = Model.Club.Id }, new { @class = "buttonH bGreen" })
+                    @Html.AuthLink("Dodaj zespół", "create", "team", new { @Clubid = Model.Club.Id }, new { @class = "buttonH bGreen" }, HelperRoles.WydzialGieriEwidencji)
                 <div class="clear"></div>
             </div>
             <ul class="updates">
@@ -99,8 +99,8 @@
                 </span>
             </td>
             <td>
-                @Html.AuthLink("Edytuj", "Edit", "Team", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Zmień dane drużyny" })
-                @Html.AuthLink("Usuń", "Delete", "Team", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń dane drużyny" })
+                @Html.AuthLink("Edytuj", "Edit", "Team", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Zmień dane drużyny" }, HelperRoles.WydzialGieriEwidencji)
+                @Html.AuthLink("Usuń", "Delete", "Team", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń dane drużyny" }, HelperRoles.WydzialGieriEwidencji)
             </td>
         </tr>
     }

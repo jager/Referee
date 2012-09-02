@@ -169,7 +169,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdfdfd', end
 ================================================== */
 
 #top { background: url(../images/backgrounds/top.jpg) repeat-x 0 0; height: 48px; display: block; width: 100%; position: absolute; z-index: 10000; border-bottom: 1px solid #1c1c1c; }
-.logo { float: left; margin-top: 10px; }
+.logo { float: left; margin-top: 10px; font-size:18px; font-weight: bold; color: #ffffff }
 .topNav { float: right; position: relative; }
 .topSearch input[type=submit], .userSearch input[type=submit] { background: url(../images/sprites/sprite.png); }
 

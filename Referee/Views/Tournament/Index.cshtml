@@ -44,16 +44,17 @@
             @item.StartDate.ToShortDateString()
             @if (item.StartDate != item.EndDate)
             {
-                <span> - </span>@item.EndDate.ToShortDateString()
+                @String.Format(" - {0}", item.EndDate.ToShortDateString())
             }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.StartTime)
         </td>
         <td>
-            @Html.AuthLink("Edytuj", "Edit", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj turniej" })
-            @Html.AuthLink("Pokaż szczegóły", "Details", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły turnieju" })
-            @Html.AuthLink("Usuń", "Delete", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń turniej" })
+            @Html.AuthLink("Pokaż", "Details", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły turnieju" })
+            @Html.AuthLink("Obsada", "Create", "Nomination", new { EventId = item.Id, @Type = "tournament" }, new { @class = "tablectrl_small bDefault tipS", @title = "Utwórz obsadę" }, HelperRoles.RefereatObsad)
+            @Html.AuthLink("Edytuj", "Edit", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj turniej" }, HelperRoles.WydzialGieriEwidencji)
+            @Html.AuthLink("Usuń", "Delete", "Tournament", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń turniej" }, HelperRoles.WydzialGieriEwidencji)
         </td>
     </tr>
 }

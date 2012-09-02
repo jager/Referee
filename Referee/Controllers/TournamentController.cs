@@ -36,7 +36,7 @@ namespace Referee.Controllers
             ViewData["PageTitle"] = "Turnieje MWZPS";
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
-                new BreadcrumbHelper { Href = "/Tournament/Create", Text = "Dodaj turniej" }
+                new BreadcrumbHelper { Href = "/Tournament/Create", Text = "Dodaj turniej", Role = HelperRoles.WydzialGieriEwidencji }
             };
             return View(tournaments);
         }
@@ -47,12 +47,17 @@ namespace Referee.Controllers
         public ViewResult Details(int id)
         {
             Tournament tournament = Unit.TournamentRepository.GetById(id);
+            ViewBag.Nomination = Unit.NominationRepository.Get(filter: n => n.TournamentId == id && n.Published).FirstOrDefault();
+            ViewData["PageTitle"] = String.Format("Dane turnieju: {0}", tournament.Name);
+            ((List<BreadcrumbHelper>)ViewData["breadcrumbs"]).Add(
+                new BreadcrumbHelper { Href = "#", Text = tournament.Name }
+            );
             return View(tournament);
         }
 
         //
         // GET: /Tournament/Create
-
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Create(int? LeagueId)
         {
             ViewData["PageTitle"] = "Dodaj nowy turniej";
@@ -71,6 +76,7 @@ namespace Referee.Controllers
         // POST: /Tournament/Create
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Create(Tournament tournament)
         {
             tournament.SeasonId = CurrentSeason.Id;
@@ -98,7 +104,7 @@ namespace Referee.Controllers
         
         //
         // GET: /Tournament/Edit/5
- 
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Edit(int id)
         {
             Tournament tournament = Unit.TournamentRepository.GetById(id);
@@ -124,6 +130,7 @@ namespace Referee.Controllers
         // POST: /Tournament/Edit/5
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Edit(Tournament tournament)
         {
             if (tournament.Type == "League")
@@ -158,7 +165,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Tournament/Delete/5
- 
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Delete(int id)
         {
             Tournament tournament = Unit.TournamentRepository.GetById(id);
@@ -169,6 +176,7 @@ namespace Referee.Controllers
         // POST: /Tournament/Delete/5
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult DeleteConfirmed(int id)
         {
             Unit.TournamentRepository.Delete(id);

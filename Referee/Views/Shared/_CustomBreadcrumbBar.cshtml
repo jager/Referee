@@ -17,16 +17,22 @@
         }
         </ul>
     </div>
-    <div class="breadLinks">        
-        @if (ViewData["breadlinks"] != null && ((List<BreadcrumbHelper>)ViewData["breadlinks"]).Count() > 0)
-        {
-            var breadCrumbs = (List<BreadcrumbHelper>)ViewData["breadlinks"];
-            <ul>            
-            @foreach (var bc in breadCrumbs)
-            {                
-                <li><a href="@bc.Href">@bc.Text</a></li>   
-            }   
-            </ul>         
-        }        
-    </div>
+    @if (Request.IsAuthenticated)
+    {
+        <div class="breadLinks">        
+            @if (ViewData["breadlinks"] != null && ((List<BreadcrumbHelper>)ViewData["breadlinks"]).Count() > 0)
+            {
+                var breadCrumbs = (List<BreadcrumbHelper>)ViewData["breadlinks"];
+                <ul>            
+                @foreach (var bc in breadCrumbs)
+                {
+                    if (bc.Role == null || (bc.Role != null && User.IsInRole(bc.Role)))
+                    {             
+                        <li><a href="@bc.Href">@bc.Text</a></li>  
+                    }
+                }   
+                </ul>         
+            }        
+        </div>
+    }
 </div>

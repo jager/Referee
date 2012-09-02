@@ -1,8 +1,13 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
+﻿@using Referee.Helpers 
 
-<h2>@ViewBag.Message</h2>
-<p>
-    To learn more about ASP.NET MVC visit <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
-</p>
+@Html.Partial("_ContentTop", ViewData)
+
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+
+<div class="wrapper">
+    <div class="fluid">
+        <div class="widget grid6"></div>
+        <div class="widget grid6"></div>
+    </div>
+</div>

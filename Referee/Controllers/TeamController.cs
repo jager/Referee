@@ -27,13 +27,6 @@ namespace Referee.Controllers
             };
             ViewBag.Gender = "";
         }
-        //
-        // GET: /Team/
-
-        public ViewResult Index()
-        {
-            return View(Unit.TeamRepository.Get());
-        }
 
         //
         // GET: /Team/Details/5
@@ -92,7 +85,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Team/Create
-
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ViewResult Create(Guid ClubId)
         {
             if (ClubId != null)
@@ -111,7 +104,7 @@ namespace Referee.Controllers
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
                 new BreadcrumbHelper { Href = "/Club", Text = "Listuj kluby" },
-                new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub" }
+                new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub", Role = HelperRoles.WydzialGieriEwidencji }
             };
 
             return View();
@@ -121,6 +114,7 @@ namespace Referee.Controllers
         // POST: /Team/Create
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Create(Team team)
         {
             if (ModelState.IsValid)
@@ -149,7 +143,7 @@ namespace Referee.Controllers
         
         //
         // GET: /Team/Edit/5
- 
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Edit(int id)
         {
             Team team = Unit.TeamRepository.GetById(id);
@@ -165,7 +159,7 @@ namespace Referee.Controllers
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
                 new BreadcrumbHelper { Href = "/Club", Text = "Listuj kluby" },
-                new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub" }
+                new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub", Role = HelperRoles.WydzialGieriEwidencji }
             };
             ViewBag.Gender = team.Gender;
             return View(team);
@@ -175,6 +169,7 @@ namespace Referee.Controllers
         // POST: /Team/Edit/5
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Edit(Team team)
         {
             if (ModelState.IsValid)
@@ -194,7 +189,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Team/Delete/5
- 
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Delete(int id)
         {
             return PartialView(Unit.TeamRepository.GetById(id));
@@ -204,6 +199,7 @@ namespace Referee.Controllers
         // POST: /Team/Delete/5
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult DeleteConfirmed(int id, string ClubId)
         {
             Unit.TeamRepository.Delete(id);

@@ -29,7 +29,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Nomination/
-
+        [Authorize(Roles = HelperRoles.Sedzia)]
         public ViewResult Index()
         {
             var Nominations = Unit.NominationRepository.Get();
@@ -56,7 +56,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Nomination/Details/5
-
+        [Authorize(Roles = HelperRoles.Sedzia)]
         public ViewResult Details(int id)
         {
             Nomination nomination = Unit.NominationRepository.GetById(id);
@@ -75,7 +75,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Nomination/Create
-
+        [Authorize(Roles = HelperRoles.RefereatObsad)]
         public ActionResult Create(int EventId, string Type)
         {
             Event Event = new Event();
@@ -135,6 +135,7 @@ namespace Referee.Controllers
             return PartialView();
         }
 
+        [Authorize(Roles = HelperRoles.RefereatObsad)]
         public PartialViewResult Update( string what, string val, int nominationId )
         {
             var Nomination = Unit.NominationRepository.GetById(nominationId);
@@ -295,6 +296,7 @@ namespace Referee.Controllers
         // POST: /Nomination/Create
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.RefereatObsad)]
         public ActionResult Create(Nomination nomination, FormCollection form)
         {
             nomination.Added = DateTime.Now;
@@ -315,7 +317,7 @@ namespace Referee.Controllers
         
         //
         // GET: /Nomination/Edit/5
- 
+        [Authorize(Roles = HelperRoles.RefereatObsad)]
         public ActionResult Edit(int id)
         {
             Nomination nomination = Unit.NominationRepository.GetById(id);
@@ -371,6 +373,7 @@ namespace Referee.Controllers
         // POST: /Nomination/Edit/5
 
         [HttpPost]
+        [Authorize(Roles = HelperRoles.RefereatObsad)]
         public ActionResult Edit(Nomination nomination, FormCollection form)
         {
             nomination.Emailed = false;
@@ -413,7 +416,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Nomination/Delete/5
- 
+        [Authorize(Roles = HelperRoles.RefereatObsad)]
         public ActionResult Delete(int id)
         {
             return PartialView(Unit.NominationRepository.GetById(id));
@@ -423,6 +426,7 @@ namespace Referee.Controllers
         // POST: /Nomination/Delete/5
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = HelperRoles.RefereatObsad)]
         public ActionResult DeleteConfirmed(int id)
         {
             Unit.NominationRepository.Delete(id);

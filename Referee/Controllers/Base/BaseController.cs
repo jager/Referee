@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Referee.DAL;
 using Referee.Models;
+using System.Web.Security;
 
 namespace Referee.Controllers.Base
 {
@@ -12,10 +13,46 @@ namespace Referee.Controllers.Base
     {
         protected UOW Unit = new UOW();
         protected Season CurrentSeason;
+        protected MembershipUser CurrentUser = null;
+        protected RefereeEntity CurrentReferee = null;
+        protected int NewNominationsAmount = 0;
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
             base.Initialize(requestContext);
-            SetCurrentSeason(); 
+            SetCurrentSeason();
+            /*
+            string[] roles = { "Administrator", "Sędzia", "WGiE", "RO" };
+            string[] ExistingRoles = Roles.GetAllRoles();
+            if (ExistingRoles.Count() < roles.Count()) 
+            {
+                foreach (var r in roles)
+                {
+                    if (!Roles.RoleExists(r))
+                    {
+                        Roles.CreateRole(r);
+                    }
+                }
+            }
+            else if (ExistingRoles.Count() > roles.Count())
+            {
+                foreach (var r in ExistingRoles)
+                {
+                    if (!roles.Contains(r))
+                    {
+                        Roles.DeleteRole(r);
+                    }
+                }
+            }
+            */
+            
+            if (Request.IsAuthenticated)
+            {
+                CurrentUser = Membership.GetUser(User.Identity.Name);
+                CurrentReferee = Unit.RefereeRepository.Get(filter: r => r.Mailadr == User.Identity.Name).FirstOrDefault();
+                CheckUnconfirmedNominationsAmount();
+                ViewBag.NewNominationsAmount = NewNominationsAmount;
+                ViewBag.CurrentReferee = CurrentReferee;
+            }
         }
 
         /// <summary>
@@ -53,6 +90,14 @@ namespace Referee.Controllers.Base
                         System.Diagnostics.Debug.WriteLine("MODEL STATE ERROR = " + error.ErrorMessage);
                 }
             } 
+        }
+
+        protected void CheckUnconfirmedNominationsAmount()
+        {
+            NewNominationsAmount = Unit.NominatedRepository.Get(filter: n => n.RefereeId == CurrentReferee.Id)
+                .Where(o => o.Nomination.Published && o.Nomination.Emailed && !o.Nomination.Confirmed)
+                .Count();
+            
         }
     }
 }

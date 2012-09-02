@@ -10,14 +10,15 @@ using Referee.DAL;
 using Referee.Controllers.Base;
 
 namespace Referee.Controllers
-{ 
+{
+    [Authorize]
     public class AvailController : BaseController
     {
 
 
         //
         // GET: /Avail/
-
+        
         public PartialViewResult Index(string id)
         {
             ViewBag.RefereeId = id;

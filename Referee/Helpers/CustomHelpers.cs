@@ -9,7 +9,7 @@ namespace Referee.Helpers
     {
         public static MvcHtmlString LiNavigationElement(this HtmlHelper helper, string Name, string Href, string ImgSrc, bool IsActive, bool ForAuth)
         {
-            if (1==0 && ForAuth && !HttpContext.Current.Request.IsAuthenticated)
+            if (ForAuth && !HttpContext.Current.Request.IsAuthenticated)
             {
                 return new MvcHtmlString("");
             }
@@ -23,7 +23,16 @@ namespace Referee.Helpers
 
         public static MvcHtmlString AuthLink(this HtmlHelper helper, string linkText, string actionName, string controllerName, object routeValues, object htmlAttributes)
         {
-            if (1 == 0 && !HttpContext.Current.Request.IsAuthenticated)
+            if (!HttpContext.Current.Request.IsAuthenticated)
+            {
+                return new MvcHtmlString("");
+            }
+            return helper.ActionLink(linkText, actionName, controllerName, routeValues, htmlAttributes);
+        }
+
+        public static MvcHtmlString AuthLink(this HtmlHelper helper, string linkText, string actionName, string controllerName, object routeValues, object htmlAttributes, string Role)
+        {
+            if (!HttpContext.Current.Request.IsAuthenticated || !HttpContext.Current.User.IsInRole(Role))
             {
                 return new MvcHtmlString("");
             }

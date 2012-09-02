@@ -65,8 +65,11 @@
                 </td>
                 <td class="tableActs" align="center">                
                     @Html.ActionLink("Pokaż drużyny", "Details", "Club", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż drużyny tego klubu" })
-                    @Html.AuthLink("Edytuj", "Edit", "Club", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Zmień dane klubu" })
-                    @Html.AuthLink("Usuń", "Delete", "Club", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń klub z systemu" })
+                    @if (User.IsInRole(HelperRoles.WydzialGieriEwidencji))
+                    {
+                        @Html.AuthLink("Edytuj", "Edit", "Club", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Zmień dane klubu" })                    
+                        @Html.AuthLink("Usuń", "Delete", "Club", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń klub z systemu" })
+                    }
                 </td>
             </tr>
     }
