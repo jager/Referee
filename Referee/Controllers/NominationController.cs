@@ -129,8 +129,8 @@ namespace Referee.Controllers
             {
                 ViewBag.ButtonDeleteVisible = true;
             }
-            ViewData["RefereeId"] = new SelectList(Unit.RefereeRepository.Get(), "Id", "FullName");            
-            ViewData["FunctionId"] = new SelectList(Unit.FunctionRepository.Get(), "Id", "Name");
+            ViewData["RefereeId"] = Unit.RefereeRepository.Get();
+            ViewData["FunctionId"] = Unit.FunctionRepository.Get();
             
             return PartialView();
         }
@@ -363,8 +363,8 @@ namespace Referee.Controllers
             { 
                 new BreadcrumbHelper { Href = "/Nomination", Text = "Pokaż nominacje" }
             };
-            ViewData["RefereeId"] = new SelectList(Unit.RefereeRepository.Get(), "Id", "FullName");
-            ViewData["FunctionId"] = new SelectList(Unit.FunctionRepository.Get(), "Id", "Name");
+            ViewData["RefereeId"] = Unit.RefereeRepository.Get();
+            ViewData["FunctionId"] = Unit.FunctionRepository.Get();
             ViewBag.Event = Event;
             return View(nomination);
         }
@@ -376,41 +376,38 @@ namespace Referee.Controllers
         [Authorize(Roles = HelperRoles.RefereatObsad)]
         public ActionResult Edit(Nomination nomination, FormCollection form)
         {
-            nomination.Emailed = false;
-            nomination.Confirmed = false;
-            nomination.HashConfirmation = nomination.GetCode();
-            if (nomination.Published)
-            {
-                nomination.PublishDate = DateTime.Now;
-            }
+            
             if (ModelState.IsValid)
             {
-                
-                foreach (var n in nomination.Nominateds)
-                {                    
-                    if (n.Id > 0)
-                    {
-                        if (n.FunctionId == 0)
-                        {
-                            Unit.NominatedRepository.Delete(n);
-                            Unit.Save();
-                        }
-                        else
-                        {
-                            Unit.NominatedRepository.Update(n);
-                        }
-                    }
-                    else if (n.FunctionId > 0)
-                    {
-                        n.NominationId = nomination.Id;
-                        Unit.NominatedRepository.Insert(n);
-                    }
+               
+                List<Nominated> NewNominateds = nomination.Nominateds as List<Nominated>;
+                List<Nominated> ExistingNominateds = Unit.NominatedRepository.Get(filter: n => n.NominationId == nomination.Id).ToList();
+                Nomination NewNomination = Unit.NominationRepository.GetById(nomination.Id);
+
+                foreach (Nominated n in ExistingNominateds)
+                {
+                    Unit.NominatedRepository.Delete(n);
                 }
-                Unit.NominationRepository.Update(nomination);
+
+                foreach (Nominated n in NewNominateds)
+                {
+                    NewNomination.Nominateds.Add(n);
+                }
+                NewNomination.Note = nomination.Note;
+                NewNomination.Published = nomination.Published;
+                NewNomination.Emailed = false;
+                NewNomination.Confirmed = false;
+                NewNomination.HashConfirmation = NewNomination.GetCode();
+                if (nomination.Published)
+                {
+                    NewNomination.PublishDate = DateTime.Now;
+                }
+                Unit.NominationRepository.Update(NewNomination);
                 Unit.Save();
                 return RedirectToAction("Index");
             }
             //ViewBag.TournamentId = new SelectList(db.Tournaments, "Id", "Name", nomination.TournamentId);
+            
             return View(nomination);
         }
 

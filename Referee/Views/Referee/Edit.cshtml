@@ -15,6 +15,7 @@
         @Html.HiddenFor(Model => Model.Longitude)
         @Html.HiddenFor(Model => Model.Photo)
         @Html.HiddenFor(Model => Model.DestinationFolder)
+        @Html.HiddenFor(Model => Model.Mailadr)
         @Html.ValidationSummary(true)
         <fieldset>
             <div class="widget fluid">
@@ -89,16 +90,7 @@
                     </div>
                     <div class="clear"></div>
                 </div>
-                <div class="formRow">
-                    <div class="grid3">
-                        @Html.LabelFor(model => model.Mailadr)
-                    </div>
-                    <div class="grid9">
-                        @Html.EditorFor(model => model.Mailadr)
-                        @Html.ValidationMessageFor(model => model.Mailadr)
-                    </div>
-                    <div class="clear"></div>
-                </div>
+               
                 <div class="formRow">
                     <div class="grid3">
                         @Html.LabelFor(model => model.DOB)

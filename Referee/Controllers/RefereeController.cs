@@ -316,6 +316,40 @@ namespace Referee.Controllers
             return View(refereeentity);
         }
 
+        [Authorize(Roles = HelperRoles.RefereatObsad)]
+        public ActionResult ChangeMailadr(Guid id)
+        {
+            var Referee = Unit.RefereeRepository.GetById(id);
+            return PartialView(Referee);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = HelperRoles.RefereatObsad)]
+        public ActionResult ChangeMailadr(FormCollection form)
+        {
+            Guid RId = Guid.Empty;
+            Guid.TryParse(form["Id"], out RId);
+            string Mailadr = form["mailadr"];  
+            string OldMailadr = String.Empty;
+            if (RId != Guid.Empty && Mailadr != null)
+            {
+                var Referee = Unit.RefereeRepository.GetById(RId);
+                OldMailadr = Referee.Mailadr;
+                if (Referee != null && Unit.RefereeRepository.UpdateUserNameAndEmail(Referee.Mailadr, Mailadr))
+                {
+                    Referee.Mailadr = Mailadr;                       
+                    Unit.RefereeRepository.Update(Referee);
+                    Unit.Save();   
+                }
+                
+                
+            }
+            if (User.Identity.Name == OldMailadr)
+            {
+                FormsAuthentication.SignOut();
+            }
+            return RedirectToAction("Details", new { id = RId });
+        }
         //
         // GET: /Referee/Delete/5
         [Authorize(Roles = HelperRoles.RefereatObsad)]

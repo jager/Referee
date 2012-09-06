@@ -1,0 +1,24 @@
+﻿@model Referee.Models.RefereeEntity
+           
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="formRow">
+        <div class="grid3">
+            @Html.LabelFor(model => model.Mailadr)
+        </div>
+        <div class="grid9">
+            @Html.EditorFor(model => model.Mailadr)
+            @Html.ValidationMessageFor(model => model.Mailadr)
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="formRow">
+        <div class="grid3"></div>
+        <div class="grid9">
+            <input class="buttonS bGreen" type="submit" value="Zapisz" />        
+            @Html.ActionLink("Anuluj", "Details", new { @id = Model.Id }, new { @class = "buttonS bRed" })        
+        </div>
+        <div class="clear"></div>
+    </div>
+}

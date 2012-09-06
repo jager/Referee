@@ -94,10 +94,17 @@ namespace Referee.Controllers.Base
 
         protected void CheckUnconfirmedNominationsAmount()
         {
-            NewNominationsAmount = Unit.NominatedRepository.Get(filter: n => n.RefereeId == CurrentReferee.Id)
-                .Where(o => o.Nomination.Published && o.Nomination.Emailed && !o.Nomination.Confirmed)
-                .Count();
-            
+            if (CurrentReferee != null)
+            {
+                var NewNominations = Unit.NominatedRepository.Get(filter: n => n.RefereeId == CurrentReferee.Id);
+                if (NewNominations != null)
+                {
+                    NewNominationsAmount = NewNominations
+                        .Where(o => o.Nomination.Published && !o.Nomination.Confirmed)
+                        .Count();
+                }
+            }
+                           
         }
     }
 }
