@@ -1,0 +1,14 @@
+2012-09-10 17:36:14;Controller: Tournament; Action: Index; x0k0hilx23om43bbdochjgyn;GET;/Tournament;http://localhost:3223/Tournament;Firefox;C:\Users\jager\Documents\GitHub\Referee\Referee\Tournament;::1; 
+
+2012-09-10 17:36:18;Controller: Game; Action: Index; x0k0hilx23om43bbdochjgyn;GET;/Game;http://localhost:3223/Tournament;Firefox;C:\Users\jager\Documents\GitHub\Referee\Referee\Game;::1; 
+
+2012-09-10 17:36:18;Controller: Game; Action: IndexTournament; x0k0hilx23om43bbdochjgyn;GET;/Game/IndexTournament;http://localhost:3223/Tournament;Firefox;C:\Users\jager\Documents\GitHub\Referee\Referee\Game\IndexTournament;::1; 
+
+2012-09-10 17:36:21;Controller: Referee; Action: Index; x0k0hilx23om43bbdochjgyn;GET;/Referee/Index;http://localhost:3223/Game/IndexTournament?LeagueId=1;Firefox;C:\Users\jager\Documents\GitHub\Referee\Referee\Referee\Index;::1; 
+
+2012-09-10 17:36:24;Controller: Club; Action: Index; x0k0hilx23om43bbdochjgyn;GET;/Club;http://localhost:3223/Referee/Index;Firefox;C:\Users\jager\Documents\GitHub\Referee\Referee\Club;::1; 
+2012-09-10 17:37:46;Controller: Club; Action: Index; x0k0hilx23om43bbdochjgyn;GET;/Club;http://localhost:3223/Club;Firefox;C:\Users\jager\Documents\GitHub\Referee\Referee\Club;::1; 
+2012-09-10 17:37:50;Controller: Club; Action: Details; x0k0hilx23om43bbdochjgyn;GET;/Club/Details/8a9484c7-a3e7-4577-aa9c-015dae7cd19f;http://localhost:3223/Club;Firefox;C:\Users\jager\Documents\GitHub\Referee\Referee\Club\Details\8a9484c7-a3e7-4577-aa9c-015dae7cd19f;::1; 
+2012-09-10 17:39:58;Controller: Club; Action: Index; x0k0hilx23om43bbdochjgyn;GET;/Club;http://localhost:3223/Club/Details/8a9484c7-a3e7-4577-aa9c-015dae7cd19f;Firefox;C:\Users\jager\Documents\GitHub\Referee\Referee\Club;::1;Anonimous 
+2012-09-10 22:00:47;Controller: Game; Action: Index; x0k0hilx23om43bbdochjgyn;GET;/Game;http://localhost:3223/Club;Firefox;C:\Users\jager\Documents\GitHub\Referee\Referee\Game;::1;Anonimous 
+2012-09-10 22:00:47;Controller: Game; Action: IndexTournament; x0k0hilx23om43bbdochjgyn;GET;/Game/IndexTournament;http://localhost:3223/Club;Firefox;C:\Users\jager\Documents\GitHub\Referee\Referee\Game\IndexTournament;::1;Anonimous 

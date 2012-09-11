@@ -6,9 +6,11 @@ using System.Web.Mvc;
 using Referee.DAL;
 using Referee.Models;
 using System.Web.Security;
+using Referee.Filters;
 
 namespace Referee.Controllers.Base
 {
+    [LogActionFilter]
     public class BaseController : Controller
     {
         protected UOW Unit = new UOW();

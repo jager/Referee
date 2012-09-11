@@ -309,7 +309,8 @@ namespace Referee.Controllers
                 AssignRole(refereeentity.Mailadr, selectedRoles))
             {
                 Unit.RefereeRepository.Update(refereeentity);
-                Unit.Save();                
+                Unit.Save();
+                MailBox.Send(refereeentity.Mailadr, "no-reply@systemobsad.pl", "Nowe konto zostało utworzone", new Message { Txt = "W systemie zostało utworzone dla ciebi konto" });
                 return RedirectToAction("Index");
             }
             PopulateDropDowns(refereeentity);
