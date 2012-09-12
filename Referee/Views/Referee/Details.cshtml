@@ -92,7 +92,14 @@
                         </div>
                         <div class="grid2"><input class="buttonS bGreen" type="submit" value="Zmień zdjęcie" /></div>
                         <div class="grid2">                            
-                            @Html.AuthLink("Zmień hasło", "ChangePassword", "Account", new { }, new { @class = "buttonS bBlue openableDialogContenerButton" }, HelperRoles.RefereatObsad)
+                            @if ((Model.Mailadr == User.Identity.Name) && User.IsInRole(HelperRoles.Sedzia))
+                            {
+                                @Html.AuthLink("Zmień hasło", "ChangePassword", "Account", new { }, new { @class = "buttonS bBlue openableDialogContenerButton" })    
+                            }
+                            else if (User.IsInRole(HelperRoles.RefereatObsad) && (Model.Mailadr != User.Identity.Name)) 
+                            {
+                                @Html.AuthLink("Zmień hasło", "RemindPassword", "Account", new { @id = Model.Id }, new { @class = "buttonS bBlue openableDialogContenerButton" })    
+                            }
                         </div>
                         <div class="grid3">                            
                             @Html.AuthLink("Zmień adres mailowy", "ChangeMailadr", "Referee", new { @id = Model.Id }, new { @class = "buttonS bBlue openableDialogContenerButton" }, HelperRoles.RefereatObsad)
@@ -170,7 +177,7 @@
                     {
                         foreach (var referee in item.NominatedReferees)
                         {
-                            if(referee.RefereeId != Model.Id) 
+                            if (referee.RefereeId != Model.Id)
                             {
                                 @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
                                                "Details",

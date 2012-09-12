@@ -76,6 +76,40 @@ namespace Referee.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        public ActionResult NewNominations()
+        {
+            if (CurrentReferee != null)
+            {
+                var NominatedReferees = Unit.NominatedRepository.Get(filter: n => n.RefereeId == CurrentReferee.Id && !n.Confirmed); //GNRepository.Get();
+                List<int> RefNominationsIDS = new List<int>();
+                foreach (var nominated in NominatedReferees)
+                {
+                    RefNominationsIDS.Add(nominated.NominationId);
+                }
+                var Nominations = Unit.NominationRepository.Get(n => n.Published && RefNominationsIDS.Contains(n.Id), n => n.OrderByDescending(o => o.PublishDate));
+                List<NominationDetails> NominationEvents = new List<NominationDetails>();
+                foreach (Nomination _nomination in Nominations)
+                {
+                    Event _event = new Event();
+                    if (_nomination.GameId != null)
+                    {
+                        _event.Parse(_nomination.Game, "game");
+                    }
+                    else if (_nomination.TournamentId != null)
+                    {
+                        _event.Parse(_nomination.Tournament, "tournament");
+                    }
+                    else
+                    {
+                        throw new Exception("Brak typu nominacji");
+                    }
+                    NominationEvents.Add(new NominationDetails { Event = _event, Nomination = _nomination, NominatedReferees = _nomination.Nominateds });
+                }
+            }
+            return View();
+        }
+
 
     }
 }

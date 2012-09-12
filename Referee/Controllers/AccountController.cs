@@ -7,6 +7,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using Referee.Models;
 using Referee.Controllers.Base;
+using Referee.Helpers;
 
 namespace Referee.Controllers
 {
@@ -153,6 +154,33 @@ namespace Referee.Controllers
         public ActionResult ChangePasswordSuccess()
         {
             return View();
+        }
+
+        public PartialViewResult RemindPassword(Guid id)
+        {
+            var referee = Unit.RefereeRepository.GetById(id);
+
+            if (referee == null)
+            {
+                ViewBag.Message = "Podany sędzia nie istnieje.";
+            }
+            else
+            {
+                var securityUser = Membership.GetUser(referee.Mailadr);
+                //var Password = SetPassword(referee);
+                var Password = securityUser.ResetPassword();
+
+                MailHelper.RemindPasswordMessage(referee.Mailadr, Password);
+
+                ViewBag.Message = "Hasło zostało wysłane na adres mailowy sędziego.";
+
+                if (MailHelper.ErrorMessage != MailHelper._success)
+                {
+                    ViewBag.Message = MailHelper.ErrorMessage;
+                }
+            }
+
+            return PartialView();
         }
 
         #region Status Codes

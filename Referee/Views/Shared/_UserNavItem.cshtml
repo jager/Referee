@@ -4,7 +4,8 @@
     Referee.Models.RefereeEntity CurrentReferee = (Referee.Models.RefereeEntity)ViewBag.CurrentReferee;
     if (CurrentReferee != null && CurrentReferee.DestinationFolder != null && CurrentReferee.Photo != null)
     {
-        photoPath = Referee.Lib.FileUploader.GetUserPhotoPath(String.Format("{0}{1}", CurrentReferee.DestinationFolder, CurrentReferee.Photo));
+        string tempPhotoPath = Referee.Lib.FileUploader.GetUserPhotoPath(String.Format("{0}{1}", CurrentReferee.DestinationFolder, CurrentReferee.Photo));
+        photoPath = String.IsNullOrEmpty(tempPhotoPath) ? photoPath : tempPhotoPath;
     }
 <div class="user">
     <a title="" class="leftUserDrop">

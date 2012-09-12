@@ -7,6 +7,7 @@ using Referee.DAL;
 using Referee.Models;
 using System.Web.Security;
 using Referee.Filters;
+using Referee.Lib.Security;
 
 namespace Referee.Controllers.Base
 {
@@ -107,6 +108,11 @@ namespace Referee.Controllers.Base
                 }
             }
                            
+        }
+
+        protected string SetPassword(RefereeEntity refereeentity)
+        {
+            return HashString.SHA1(String.Format("{0}{1}", refereeentity.Mailadr, DateTime.Now.ToUniversalTime().ToLongDateString())).Substring(0, 8);
         }
     }
 }

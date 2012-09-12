@@ -131,6 +131,7 @@
     <Compile Include="ViewModels\Event.cs" />
     <Compile Include="ViewModels\GameNomination.cs" />
     <Compile Include="ViewModels\NominationDetails.cs" />
+    <Compile Include="ViewModels\NominationMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\aquincum\css\bootstrap.css" />
@@ -1377,6 +1378,7 @@
     <Content Include="Views\Shared\_LayoutLogOn.cshtml" />
     <Content Include="Views\Nomination\EditRefereeData.cshtml" />
     <Content Include="Views\Referee\ChangeMailadr.cshtml" />
+    <Content Include="Views\Account\RemindPassword.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

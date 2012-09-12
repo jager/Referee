@@ -302,17 +302,55 @@ namespace Referee.Controllers
             nomination.Added = DateTime.Now;
             nomination.Confirmed = false;
             nomination.ConfirmationDate = DateTime.Now;
-            nomination.Emailed = false;
+            nomination.Emailed = nomination.Published;
             nomination.EmailDate = DateTime.Now;
             nomination.PublishDate = DateTime.Now;
+            foreach (var Nominated in nomination.Nominateds)
+            {
+                Nominated.Confirmed = false;
+                Nominated.ConfirmedDate = DateTime.Now;
+                Nominated.HashConfirmation = nomination.GetCode();
+            }
             if (ModelState.IsValid)
             {
-                nomination.HashConfirmation = nomination.GetCode();
+                nomination.HashConfirmation = nomination.GetCode();                
                 Unit.NominationRepository.Insert(nomination);
                 Unit.Save();
+                if (nomination.Emailed)
+                {
+                    SendConfirmationMessages(nomination);
+                }
                 return RedirectToAction("Index");  
             }
             return View(nomination);
+        }
+
+        /// <summary>
+        /// Wysyła potwierdzenia do sędziów o zrobionych obsadach
+        /// </summary>
+        /// <param name="nomination">Nominacja</param>
+        private void SendConfirmationMessages(Nomination nomination)
+        {
+            foreach (var Nominated in nomination.Nominateds)
+            {
+                var rf = Unit.RefereeRepository.GetById(Nominated.RefereeId);
+                NominationMessage nm = new NominationMessage() 
+                {
+                    Type = nomination.GameId != null ? "game" : "tournament",
+                    NominationId = nomination.Id,
+                    HashConfirmation = Nominated.HashConfirmation,
+                    Mailadr = rf.Mailadr,
+                    RefereeId = Nominated.RefereeId
+                };
+                MailHelper.CreateNominationMessage(nm);
+            }
+        }
+
+
+        private void GetNewNominations(Guid RefereeId)
+        {
+            var Nominations = Unit.NominatedRepository.Get(filter: n => n.RefereeId == RefereeId && !n.Confirmed);
+            
         }
         
         //
@@ -391,11 +429,14 @@ namespace Referee.Controllers
 
                 foreach (Nominated n in NewNominateds)
                 {
+                    n.Confirmed = false;
+                    n.ConfirmedDate = DateTime.Now;
+                    n.HashConfirmation = NewNomination.GetCode();
                     NewNomination.Nominateds.Add(n);
                 }
                 NewNomination.Note = nomination.Note;
                 NewNomination.Published = nomination.Published;
-                NewNomination.Emailed = false;
+                NewNomination.Emailed = nomination.Published;
                 NewNomination.Confirmed = false;
                 NewNomination.HashConfirmation = NewNomination.GetCode();
                 if (nomination.Published)
@@ -404,6 +445,10 @@ namespace Referee.Controllers
                 }
                 Unit.NominationRepository.Update(NewNomination);
                 Unit.Save();
+                if (NewNomination.Emailed)
+                {
+                    SendConfirmationMessages(NewNomination);
+                }
                 return RedirectToAction("Index");
             }
             //ViewBag.TournamentId = new SelectList(db.Tournaments, "Id", "Name", nomination.TournamentId);
