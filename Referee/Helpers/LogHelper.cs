@@ -14,9 +14,21 @@ namespace Referee.Helpers
     public class LogHelper
     {
         private int _output = (int)LogOutput.File;
+        private string _destinationFileName = String.Empty;
+
+        public LogHelper()
+        {
+        }
+
         public LogHelper(int output = (int)LogOutput.File)
         {
-            _output = output;
+            this._output = output;
+        }
+
+        public LogHelper(string DestinationFileName)
+        {
+            this._output = (int)LogOutput.File;
+            this._destinationFileName = DestinationFileName;
         }
 
         public void Write(string OutputText)
@@ -35,21 +47,24 @@ namespace Referee.Helpers
 
         private void WriteToFile(string Text)
         {
-            string _fileName = System.Configuration.ConfigurationManager.AppSettings["LogFilePath"];
-            if (String.IsNullOrEmpty(_fileName))
+            if (String.IsNullOrEmpty(this._destinationFileName))
+            {
+                this._destinationFileName = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["LogFilePath"]);
+            }
+
+            if (String.IsNullOrEmpty(this._destinationFileName))
             {
                 return;
             }
 
-            _fileName = HttpContext.Current.Server.MapPath(_fileName);
             string _text = String.Format("{0};{1}", DateTime.Now.ToString(), Text);
-            if (File.Exists(_fileName))
+            if (File.Exists(this._destinationFileName))
             {
-                File.AppendAllText(_fileName, _text);
+                File.AppendAllText(this._destinationFileName, _text);
             }
             else
             {
-                File.WriteAllText(_fileName, _text);
+                File.WriteAllText(this._destinationFileName, _text);
             }
         }
 

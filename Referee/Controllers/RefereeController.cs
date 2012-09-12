@@ -12,6 +12,7 @@ using Referee.Helpers;
 using Referee.Repositories;
 using Referee.ViewModels;
 using System.Web.Security;
+using System.Diagnostics;
 
 namespace Referee.Controllers
 { 
@@ -40,7 +41,7 @@ namespace Referee.Controllers
             ViewData["PageTitle"] = "Sędziowie MWZPS";
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
-                new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego" }
+                new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego", Role = HelperRoles.RefereatObsad }
             };
             return View(Unit.RefereeRepository.Get(orderBy: l => l.OrderBy(r => r.LastName)));
         }
@@ -124,7 +125,7 @@ namespace Referee.Controllers
 
             string Password = HashString.SHA1(String.Format("{0}{1}", refereeentity.Mailadr, DateTime.Now.ToUniversalTime().ToLongDateString())).Substring(0, 8);
             ///Trzeba to zmienić w wersji docelowej.
-            Password = "qawseD123";
+            //Password = "qawseD123";
 
             if (ModelState.IsValid &&
                 CreateUser(refereeentity.Mailadr, Password, Password, out NewUserGuid) &&
@@ -150,6 +151,11 @@ namespace Referee.Controllers
                 
                 Unit.RefereeRepository.Insert(refereeentity);
                 Unit.Save();
+                MailHelper.CreateNewAccountMessage(refereeentity.Mailadr, Password);
+                if (MailHelper.ErrorMessage != MailHelper._success)
+                {
+                    ///TODO: logowanie błędów
+                }
                 return RedirectToAction("Index");  
             }
 
@@ -301,7 +307,7 @@ namespace Referee.Controllers
 
             string Password = HashString.SHA1(String.Format("{0}{1}", refereeentity.Mailadr, DateTime.Now.ToUniversalTime().ToLongDateString())).Substring(0, 8);
             ///Trzeba to zmienić w wersji docelowej.
-            Password = "qawseD123";
+            //Password = "qawseD123";
             AddCredentialsIfNotExists(refereeentity.Mailadr, Password);
 
             if (ModelState.IsValid && 
@@ -309,8 +315,7 @@ namespace Referee.Controllers
                 AssignRole(refereeentity.Mailadr, selectedRoles))
             {
                 Unit.RefereeRepository.Update(refereeentity);
-                Unit.Save();
-                MailBox.Send(refereeentity.Mailadr, "no-reply@systemobsad.pl", "Nowe konto zostało utworzone", new Message { Txt = "W systemie zostało utworzone dla ciebi konto" });
+                Unit.Save();                
                 return RedirectToAction("Index");
             }
             PopulateDropDowns(refereeentity);

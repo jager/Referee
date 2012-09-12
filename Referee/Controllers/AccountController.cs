@@ -6,10 +6,11 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using Referee.Models;
+using Referee.Controllers.Base;
 
 namespace Referee.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
 
         //

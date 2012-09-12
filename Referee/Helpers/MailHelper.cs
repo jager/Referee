@@ -21,15 +21,16 @@ namespace Referee.Helpers
         public static void CreateNewAccountMessage(string Mailadr, string Password)
         {
             Message _message = new Message();
-            string _txt = @"W aplikacji {0} zostało założone dla ciebie konto.\r\n
-                            Aby się zalogowac do systemu wejdź na stronę {1} i użyj następujących danych.\r\n
-                            \r\n
-                            Login: {2}\r\n
-                            Hasło: {3}\r\n
-                            \r\n
+            string _txt = @"W aplikacji {0} zostało założone dla ciebie konto.
+                            Aby się zalogowac do systemu wejdź na stronę {1} i użyj następujących danych.
+                            
+                            Login: {2}
+                            Hasło: {3}
+                            
                             {4}";
+            string _subject = String.Format("Rejestracja w {0}", MailHelper._systemName);
             _message.Txt = String.Format(_txt, MailHelper._systemName, MailHelper._systemUrl, Mailadr, Password, MailHelper._mailSignature);
-            if (MailBox.Send(Mailadr, MailHelper._mailFrom, "", _message))
+            if (MailBox.Send(Mailadr, MailHelper._mailFrom, _subject, _message))
             {
                 MailHelper.ErrorMessage = MailHelper._success;
             }
