@@ -1,0 +1,140 @@
+﻿@model IEnumerable<Referee.ViewModels.NominationDetails>
+@using Referee.Helpers
+@Html.Partial("_ContentTop", ViewData)
+
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+<div class="wrapper">
+    <div class="widget">
+    <div class="whead">
+        <h6>Obsady sędziowskie</h6>
+        <div class="clear"></div>
+    </div>
+    <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
+        <thead>
+            <tr>
+                <td>
+                    Mecz/Turniej
+                </td>
+                <td>
+                    Data
+                </td>
+                <td>
+                    Godzina
+                </td>
+                <td>
+                    Pozostali sędziowie
+                </td>
+                @if (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad))
+                {
+                    <td>
+                        Opublikowana
+                    </td>
+                    <td>
+                        Wysłano powiadomienie
+                    </td>
+                    <td>
+                        Potwierdzona
+                    </td>                                          
+                }
+                    <td></td>
+            </tr>
+        </thead>
+        <tbody>
+
+@foreach (var item in Model)
+{
+    if (item.Nomination.Published || (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad)))
+    {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Event.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Event.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Event.Time)
+                </td>
+                <td>
+                    @if (item.NominatedReferees.Count() > 0)
+                    {
+                        foreach (var referee in item.NominatedReferees)
+                        {
+                            
+                            if (referee.Confirmed) 
+                            {
+                                @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
+                                               "Details",
+                                               "Referee",
+                                               new { @id = referee.RefereeId },
+                                               new { @class = "greenBack" },
+                                               HelperRoles.Sedzia)
+                            }
+                            else
+                            {
+                                @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
+                                               "Details",
+                                               "Referee",
+                                               new { @id = referee.RefereeId },
+                                               new { },
+                                               HelperRoles.Sedzia)
+                            }
+                            
+                            <br />
+                        }
+                    }        
+                </td>
+                @if (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad))
+                {
+                    <td>
+                        @if (item.Nomination.Published)
+                        {
+                            <span class="fileSuccess"></span>
+                            @item.Nomination.PublishDate
+                        }
+                        else
+                        {
+                            <span class="fileError"></span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Nomination.Emailed)
+                        {
+                            <span class="fileSuccess"></span>
+                            @Html.DisplayFor(modelItem => item.Nomination.EmailDate)
+                        }
+                        else
+                        {
+                            <span class="fileError"></span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Nomination.Confirmed)
+                        {
+                            <span class="fileSuccess"></span>
+                            @Html.DisplayFor(modelItem => item.Nomination.ConfirmationDate)
+                        }
+                        else
+                        {
+                            <span class="fileError"></span>
+                        }        
+                    </td>
+                }    
+                <td class="tableActs" align="center">
+                    @Html.AuthLink("Pokaż", "Details", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" }, HelperRoles.Sedzia)
+                    @if (ViewBag.CurrentReferee != null) 
+                    {
+                        @Html.AuthLink("Potwierdź", "Confirm", "Nomination", new { id = item.Nomination.Id, rid = ((Referee.Models.RefereeEntity)ViewBag.CurrentReferee).Id }, new { @class = "tablectrl_small bDefault tipS confirmButton", @title = "Potwierdź nominacje" }, HelperRoles.Sedzia)
+                    }
+                    @Html.AuthLink("Edytuj", "Edit", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Zmień obsadę" }, HelperRoles.RefereatObsad)
+                    @Html.AuthLink("Usuń", "Delete", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń obsadę" }, HelperRoles.RefereatObsad)
+                </td>
+            </tr>
+    }
+}
+        </tbody>
+    </table>
+    <div id="openableDialogContener" class="dialog" title=""></div>
+    </div>
+</div>

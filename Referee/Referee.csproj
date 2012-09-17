@@ -89,6 +89,7 @@
     <Compile Include="DAL\RefInitializer.cs" />
     <Compile Include="DAL\UOW.cs" />
     <Compile Include="Filters\LogActionFilter.cs" />
+    <Compile Include="Filters\MarkConfirmed.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1379,6 +1380,9 @@
     <Content Include="Views\Nomination\EditRefereeData.cshtml" />
     <Content Include="Views\Referee\ChangeMailadr.cshtml" />
     <Content Include="Views\Account\RemindPassword.cshtml" />
+    <Content Include="Views\Shared\ListNominations.cshtml" />
+    <Content Include="Views\Nomination\Confirm.cshtml" />
+    <Content Include="Views\Nomination\ConfirmFromEmail.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

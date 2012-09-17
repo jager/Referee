@@ -5,6 +5,7 @@
            
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
 @Html.Partial("_ContentTop", ViewData)
 
 @Html.Partial("_CustomBreadcrumbBar", ViewData)
@@ -50,7 +51,18 @@
                             Sędzia: @NominatedReferee.Function.Name
                         </div>
                         <div class="grid9">
-                            @NominatedReferee.Referee.FullName
+                            @if (NominatedReferee.Confirmed) 
+                            {
+                                <span class="greenBack">@NominatedReferee.Referee.FullName</span>
+                            } 
+                            else 
+                            {                                
+                                <span>@NominatedReferee.Referee.FullName</span>
+                                if (ViewBag.CurrentReferee != null && ((Referee.Models.RefereeEntity)ViewBag.CurrentReferee).Id == NominatedReferee.RefereeId)
+                                {
+                                    @Html.AuthLink("Potwierdź", "Confirm", "Nomination", new { id = NominatedReferee.NominationId, rid = NominatedReferee.RefereeId }, new { @class = "tablectrl_small bDefault tipS confirmButton", @title = "Potwierdź nominacje" }, HelperRoles.Sedzia)
+                                }
+                            }
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -84,7 +96,7 @@
                     @Html.DisplayFor(model => model.Published)
                 </div>
                 <div class="grid3" id="BoxPublishButtons">
-                    @if (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad)) 
+                    @if (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad))
                     {
                         <a href="#" id="publish" class="buttonS bGreen">Zmień</a>
                     }

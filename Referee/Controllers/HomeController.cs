@@ -79,6 +79,10 @@ namespace Referee.Controllers
         [Authorize]
         public ActionResult NewNominations()
         {
+            ViewData["PageTitle"] = "Twoje nowe nominacje";
+            ((List<BreadcrumbHelper>)ViewData["breadcrumbs"]).Add(
+                new BreadcrumbHelper { Href = "#", Text = "Nowe nominacje" }
+            );
             if (CurrentReferee != null)
             {
                 var NominatedReferees = Unit.NominatedRepository.Get(filter: n => n.RefereeId == CurrentReferee.Id && !n.Confirmed); //GNRepository.Get();
@@ -105,9 +109,15 @@ namespace Referee.Controllers
                         throw new Exception("Brak typu nominacji");
                     }
                     NominationEvents.Add(new NominationDetails { Event = _event, Nomination = _nomination, NominatedReferees = _nomination.Nominateds });
+                    
                 }
+                ViewBag.Games = NominationEvents;
+                return View("ListNominations", NominationEvents);
             }
-            return View();
+            else
+            {
+                return RedirectToAction("Index");
+            }            
         }
 
 

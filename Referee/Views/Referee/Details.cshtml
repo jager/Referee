@@ -179,12 +179,35 @@
                         {
                             if (referee.RefereeId != Model.Id)
                             {
-                                @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
-                                               "Details",
-                                               "Referee",
-                                               new { @id = referee.RefereeId },
-                                               new { },
-                                               HelperRoles.Sedzia)
+                                if (referee.Confirmed) 
+                                {
+                                    @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
+                                                   "Details",
+                                                   "Referee",
+                                                   new { @id = referee.RefereeId },
+                                                   new { @class = "greenBack" },
+                                                   HelperRoles.Sedzia)
+                                }
+                                else
+                                {
+                                    @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
+                                                   "Details",
+                                                   "Referee",
+                                                   new { @id = referee.RefereeId },
+                                                   new { },
+                                                   HelperRoles.Sedzia)
+                                }
+                            } 
+                            else 
+                            {
+                                if (referee.Confirmed) 
+                                {
+                                    <span class="greenBack" style="font-weight: bold">@String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName)</span>
+                                } 
+                                else 
+                                {
+                                    <span style="font-weight: bold">@String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName)</span>
+                                }
                             }
                             <br />
                         }

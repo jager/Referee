@@ -51,7 +51,7 @@ namespace Referee.Controllers
                 }
                 NominationEvents.Add(new NominationDetails {  Event = _event, Nomination = _nomination, NominatedReferees = _nomination.Nominateds } );
             }
-            return View(NominationEvents);
+            return View("ListNominations", NominationEvents);
         }
 
         //
@@ -176,64 +176,62 @@ namespace Referee.Controllers
             Unit.Save();
             return PartialView(PartialViewTemplate, Nomination);
         }
-        /*
-        public void GetCurrentRefereesSelectBox(int FunctionId, string Type, int? GameId, int? TournamentId)
-        {
-            if (!Request.IsAjaxRequest())
-            {
-            }
-            if (FunctionId == null)
-            {
-                FunctionId = 0;
-            }
-            int LeagueId = 0;
-            if (FunctionId == 1001 || FunctionId == 2002)
-            {
-                //pobierz tylko odpowiednich sędziów                
-                if (Type == "game")
-                {
-                    var game = Unit.GameRepository.GetById(GameId);
-                    LeagueId = game.LeagueId;
-                }
-                else if (Type == "tournament")
-                {
-                    var tournament = Unit.TournamentRepository.GetById(TournamentId);
-                    if (tournament.LeagueId != null)
-                    {
-                        LeagueId = (int)tournament.LeagueId;
-                    }
-                }
-            }
 
-            var Referees = Unit.RefereeRepository.Get();
-            if ((FunctionId == 1001 || FunctionId == 2002) && LeagueId > 0)
+
+        [Authorize(Roles = HelperRoles.Sedzia)]
+        public PartialViewResult Confirm(int id, Guid rid)
+        {
+            ViewBag.Message = "Potwierdzona";
+            try
             {
-                var RefereeAuthorization = Unit.RefRoleRepository.Get(
-                                            filter: r => r.FunctionId == FunctionId && r.LeagueId == LeagueId);
-                if (RefereeAuthorization.Count() > 0)
+                var Nominated = Unit.NominatedRepository.Get(filter: n => n.NominationId == id && n.RefereeId == rid && !n.Confirmed).FirstOrDefault();
+                if (Nominated != null)
                 {
-                    List<int> auths = new List<int>();
-                    foreach (var item in RefereeAuthorization)
-                    {
-                        auths.Add(item.AuthorizationId);
-                    }
-                    ViewBag.RefereeId = new SelectList(Referees.Where(r => auths.Contains(r.AuthorizationId)), "Id", "FullName");
+                    Nominated.Confirmed = true;
+                    Nominated.ConfirmedDate = DateTime.Now;
+                    Unit.NominatedRepository.Update(Nominated);
+                    Unit.Save();
+                }
+            } 
+            catch (Exception ) 
+            {
+                ViewBag.Message = "Error";
+            }
+            return PartialView();
+        }
+
+        [Authorize(Roles = HelperRoles.Sedzia)]
+        [HttpGet, ActionName("Confirmation")]
+        public ActionResult ConfirmFromEmail(int NominationId, string HashConf, Guid RefereeId)
+        {
+            ViewBag.Class = "greenBack";
+            ViewBag.Message = "Dziękujemy za potwierdzenie nominacji";
+            try
+            {
+                var Nominated = Unit.NominatedRepository.Get(filter: 
+                        n => n.NominationId == NominationId && 
+                            n.RefereeId == RefereeId && 
+                            n.HashConfirmation == HashConf && 
+                            !n.Confirmed).FirstOrDefault();
+                if (Nominated != null)
+                {
+                    Nominated.Confirmed = true;
+                    Nominated.ConfirmedDate = DateTime.Now;
+                    Unit.NominatedRepository.Update(Nominated);
+                    Unit.Save();
                 }
                 else
                 {
-                    ViewBag.RefereeId = new SelectList(Referees, "Id", "FullName");
+                    throw new Exception("Brak podanej nominacji lub jest już potwierdzona");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.RefereeId = new SelectList(Referees, "Id", "FullName");
+                ViewBag.Class = "redBack";
+                ViewBag.Message = ex.Message;
             }
+            return View("ConfirmFromEmail");
         }
-
-
-        */
-
-
 
 
 
