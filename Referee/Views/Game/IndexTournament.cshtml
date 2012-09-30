@@ -11,16 +11,53 @@
 
 @Html.Partial("_BarLeagues", (IEnumerable<Referee.Models.League>)ViewBag.ListOfLeagues)
  
-<div class="wrapper">       
-    <div class="widget">
-        <div class="whead">
-            <h6>Turnieje w @ViewData["PageTitle"]</h6>
-            <ul class="titleToolbar">
-                <li>@Html.AuthLink("Dodaj nowy turniej", "Create", "Tournament", new { LeagueId = ((Referee.Models.League)ViewBag.DefaultLeague).Id }, new { }, HelperRoles.WydzialGieriEwidencji)</li>
-            </ul>
-            <div class="clear"></div>
+<div class="wrapper"> 
+    <div class="fluid">
+        <div class="grid3">
+            <div class="widget">
+                <div class="whead">
+                    <h6>Wykaz drużyn</h6>
+                    <div class="clear"></div>
+                </div>
+                <table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
+                <thead>
+                    <tr>
+                        <td>Lp.</td>
+                        <td>Nazwa drużyny</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (((IEnumerable<Referee.Models.Enrollment>)ViewBag.ListOfTeams).Count() > 0)
+                    {
+                        var i = 0;
+                        foreach (var Enrollment in (IEnumerable<Referee.Models.Enrollment>)ViewBag.ListOfTeams)
+                        {
+                            <tr>
+                                <td>@(++i)</td>
+                                <td>@Enrollment.Team.Name</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">Brak drużyn dla tej ligi!</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
         </div>
-        <table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
+        <div class="grid9">      
+        <div class="widget">
+            <div class="whead">
+                <h6>Turnieje w @ViewData["PageTitle"]</h6>
+                <ul class="titleToolbar">
+                    <li>@Html.AuthLink("Dodaj nowy turniej", "Create", "Tournament", new { LeagueId = ((Referee.Models.League)ViewBag.DefaultLeague).Id }, new { }, HelperRoles.WydzialGieriEwidencji)</li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+            <table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
         <thead>
             <tr>
                 <td>
@@ -80,6 +117,9 @@
         }
         </tbody>
     </table>
-        <div id="openableDialogContener" class="dialog" title=""></div>
+        </div>
     </div>
+        <div class="clear"></div>
+    </div>
+    <div id="openableDialogContener" class="dialog" title=""></div>
 </div>

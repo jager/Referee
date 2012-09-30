@@ -38,5 +38,10 @@ namespace Referee.Helpers
             }
             return helper.ActionLink(linkText, actionName, controllerName, routeValues, htmlAttributes);
         }
+
+        public static double ToUnixTimestamp(DateTime dt)
+        {
+            return (double)(dt - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime()).TotalSeconds;
+        }
     }
 }

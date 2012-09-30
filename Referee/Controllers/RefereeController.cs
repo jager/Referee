@@ -93,7 +93,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Referee/Create
-        [Authorize(Roles=HelperRoles.RefereatObsad)]
+        //[Authorize(Roles=HelperRoles.RefereatObsad)]
         public ActionResult Create()
         {
             ViewData["PageTitle"] = "Dodaj nowego sędziego";
@@ -112,7 +112,7 @@ namespace Referee.Controllers
         // POST: /Referee/Create
 
         [HttpPost]
-        [Authorize(Roles = HelperRoles.RefereatObsad)]
+        //[Authorize(Roles = HelperRoles.RefereatObsad)]
         public ActionResult Create(RefereeEntity refereeentity, FormCollection form, HttpPostedFileBase Photo)
         {
             Guid NewUserGuid = Guid.Empty;

@@ -32,14 +32,38 @@ namespace Referee.Controllers
         //
         // GET: /Club/
 
-        public ViewResult Index()
+        public ViewResult Index(int? League)
         {
-            ViewData["PageTitle"] = "Kluby MWZPS";
+
+            
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
                 new BreadcrumbHelper { Href = "/Club/Create", Text = "Dodaj klub", Role = HelperRoles.WydzialGieriEwidencji }
-            };            
-            return View(Unit.ClubRepository.Get());
+            };
+            IEnumerable<Club> Clubs;
+
+            //get all leagues
+            ViewBag.LeaguesSelect = Unit.LeagueRepository.Get(filter: l => l.Id < 1000);
+
+
+
+            if (League != null)
+            {
+                var Enrollments = Unit.EnrollmentRepository.Get(filter: e => e.LeagueId == League);
+                List<Club> Teams = new List<Club>();
+                foreach (var Enrollment in Enrollments)
+                {
+                    Teams.Add(Enrollment.Team.Club);
+                }
+                Clubs = (IEnumerable<Club>)Teams;
+                ViewData["PageTitle"] = String.Format("Kluby MWZPS - {0}",((IEnumerable<League>)ViewBag.LeaguesSelect).Where( l => l.Id == League).FirstOrDefault().Name);
+            } 
+            else 
+            {
+                Clubs = Unit.ClubRepository.Get();
+                ViewData["PageTitle"] = "Kluby MWZPS";
+            }
+            return View(Clubs);            
         }
 
         //

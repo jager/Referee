@@ -290,6 +290,28 @@ namespace Referee.Controllers
             return PartialView();
         }
 
+
+        private List<Conflicts> GetConflictNominations(DateTime minDate, DateTime maxDate)
+        {
+            var Nominations = Unit.NominationRepository.Get(
+                n => (n.GameId != null && n.Game.DateAndTime > minDate && n.Game.DateAndTime < maxDate) ||
+                     (n.TournamentId != null && n.Tournament.StartDate > minDate && n.Tournament.StartDate < maxDate));
+            List<Conflicts> ConflictedNominations = new List<Conflicts>();
+            foreach (var Nomination in Nominations)
+            {
+                foreach (var Nominated in Nomination.Nominateds)
+                {
+                    ConflictedNominations.Add( new Conflicts() 
+                    {
+                        Referee = Nominated.Referee.FullName,
+                        Event = (Nomination.GameId != null ? Nomination.Game.Name : Nomination.Tournament.Name),
+                        Period = (Nomination.GameId != null ? Nomination.Game.DateAndTime : Nomination.Tournament.StartDate).ToString()
+                    });
+                }
+            }
+            return ConflictedNominations;
+        }
+
         //
         // POST: /Nomination/Create
 

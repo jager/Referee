@@ -1,4 +1,18 @@
 ﻿<div class="contentTop">
-    <span class="pageTitle"><span class="@ViewData["IconName"]"></span>@ViewData["PageTitle"]</span>    
+    <span class="pageTitle"><span class="@ViewData["IconName"]"></span>@ViewData["PageTitle"]</span>   
+    @if (Request.IsAuthenticated)
+    {
+        <ul class="quickStats">
+            <li>
+                <div class="floatL">
+                    <strong class="">Witaj, @ViewBag.CurrentReferee.FullName</strong>
+                    <a href="/Account/LogOff">Wyloguj</a>
+                </div>
+                <a class="greenImg" href="/Home/Profile">
+                    <img src="@Url.Content("~/Content/themes/aquincum/images/icons/quickstats/user.png")" alt="Wyloguj" />
+                </a>
+            </li>
+        </ul> 
+    }
     <div class="clear"></div>
 </div>

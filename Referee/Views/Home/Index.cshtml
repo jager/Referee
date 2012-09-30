@@ -7,7 +7,63 @@
 
 <div class="wrapper">
     <div class="fluid">
-        <div class="widget grid6"></div>
-        <div class="widget grid6"></div>
+        <div class="grid6">
+            <div class="widget">
+                <div class="whead">
+                    <h6>Ligi</h6>
+                    <div class="clear"></div>
+                </div>
+                <table class="tDefault" cellpadding="0" cellspacing="0" width="100%">
+                    <thead>
+                        <td width="20">Lp.</td>
+                        <td>Liga</td>
+                    </thead>
+                    <tbody>
+                    @if (ViewBag.Leagues != null && ((IEnumerable<Referee.Models.League>)ViewBag.Leagues).Count() > 0)
+                    {
+                        int i = 0;
+                        foreach (var league in (IEnumerable<Referee.Models.League>)ViewBag.Leagues)
+                        {
+                            <tr>
+                                <td width="20">@(++i)</td>
+                                <td>@Html.ActionLink(league.Name, "Index", "Game", new { @LeagueId = league.Id }, new { @class = "blue"})</td>                                
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="grid6">
+            <div class="widget">
+                <div class="whead">
+                    <h6>Turnieje</h6>
+                    <div class="clear"></div>
+                </div>
+                <table class="tDefault" cellpadding="0" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <td>Lp.</td>
+                            <td>Turniej</td>
+                            <td>Data</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.Tournaments != null && ((IEnumerable<Referee.Models.Tournament>)ViewBag.Tournaments).Count() > 0)
+                        {
+                            int i = 0;
+                            foreach (var Tournament in (IEnumerable<Referee.Models.Tournament>)ViewBag.Tournaments)
+                            {
+                                <tr>
+                                    <td width="20">@(++i)</td>
+                                    <td>@Html.ActionLink(Tournament.Name, "Details", "Tournament", new { @id = Tournament.Id }, new { })</td>
+                                    <td width="40">@Tournament.StartDate.ToShortDateString()</td>
+                                </tr>
+                            }
+                            
+                        }
+                    </tbody>
+            </div>
+        </div>
     </div>
 </div>

@@ -210,6 +210,32 @@ namespace Referee.DAL
             }
         }
 
+        private GenericRepository<Voluntary> voluntaryRepository;
+        public GenericRepository<Voluntary> VoluntaryRepository
+        {
+            get
+            {
+                if (this.voluntaryRepository == null)
+                {
+                    this.voluntaryRepository = new GenericRepository<Voluntary>(db);
+                }
+                return this.voluntaryRepository;
+            }
+        }
+
+        private GenericRepository<VoluntaryReferee> vRefereeRepository;
+        public GenericRepository<VoluntaryReferee> VRefereeRepository
+        {
+            get
+            {
+                if (this.vRefereeRepository == null)
+                {
+                    this.vRefereeRepository = new GenericRepository<VoluntaryReferee>(db);
+                }
+                return this.vRefereeRepository;
+            }
+        }
+
         #endregion;
 
 

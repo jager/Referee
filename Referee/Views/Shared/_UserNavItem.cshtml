@@ -13,7 +13,7 @@
         <img width="70px" height="72px" src="@Url.Content(photoPath)" alt="" />
         <span><strong>@(ViewBag.NewNominationsAmount)</strong></span>
     </a>
-    <span>@Html.DisplayText("Lolek")</span>
+    <span>@(Request.IsAuthenticated ? CurrentReferee.FullName : "")</span>
     <ul class="leftUser">
         <li><a href="/Home/Profile" title="" class="sProfile">Mój profil</a></li>
         <li><a href="/Home/NewNominations" title="" class="sMessages">Nowe nominacje</a></li>

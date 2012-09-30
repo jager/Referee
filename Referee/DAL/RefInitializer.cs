@@ -7,7 +7,7 @@ using Referee.Models;
 
 namespace Referee.DAL
 {
-    public class RefInitializer : CreateDatabaseIfNotExists<RefereeContext>
+    public class RefInitializer : DropCreateDatabaseIfModelChanges<RefereeContext>
     {
         protected override void Seed(RefereeContext context)
         {
@@ -71,7 +71,7 @@ namespace Referee.DAL
                 new League { Id = 280, Name = "II liga Kobiet - Grupa 4", Type = "league" },
                 new League { Id = 290, Name = "I liga Kobiet", Type = "league" },
                 new League { Id = 300, Name = "I liga Mężczyzn", Type = "league" },
-                new League { Id = 310, Name = "Plus Liga Kobiet", Type = "league" },
+                new League { Id = 310, Name = "Orlen Liga", Type = "league" },
                 new League { Id = 320, Name = "Plus Liga Mężczyzn", Type = "league" },
                 new League { Id = 400, Name = "Liga Mistrzyń CEV", Type = "league" },
                 new League { Id = 410, Name = "Liga Mistrzów CEV", Type = "league" }, 

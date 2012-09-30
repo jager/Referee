@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Referee.Models.League>        
+<div class="breadLine">
+    <div class="breadLinks">
+        <ul>
+            <!--
+            <li><a href="#" title=""><i class="icos-list"></i><span>Orders</span> <strong>(+58)</strong></a></li>
+            
+            -->
+            <li><a href="/Club" title=""><i class="icos-check"></i><span>Wszystkie</span></a></li>
+            <li class="has">
+                <a title="">
+                    <i class="icos-money3"></i>
+                    <span>Ligi wojewódzkie</span>
+                    <span><img src="@Url.Content("~/Content/themes/aquincum/images/elements/control/hasddArrow.png")" alt="" /></span>
+                </a>
+                <ul>
+                    @foreach (var item in Model.Where(model => model.Id < 200))
+                    {
+                        <li><a href="/club/?League=@item.Id" title=""><span class="icos-add"></span>@item.Name</a></li>
+                    }                                        
+                </ul>
+            </li>
+            <li class="has">
+                <a title="">
+                    <i class="icos-money3"></i>
+                    <span>Ligi akademickie</span>
+                    <span><img src="@Url.Content("~/Content/themes/aquincum/images/elements/control/hasddArrow.png")" alt="" /></span>
+                </a>
+                <ul>
+                    @foreach (var item in Model.Where(model => model.Id >= 600 && model.Id < 1000))
+                    {
+                        <li><a href="/club/?League=@item.Id" title=""><span class="icos-add"></span>@item.Name</a></li>
+                    }                                        
+                </ul>
+            </li>
+            <li class="has">
+                <a title="">
+                    <i class="icos-money3"></i>
+                    <span>Ligi centralne</span>
+                    <span><img src="@Url.Content("~/Content/themes/aquincum/images/elements/control/hasddArrow.png")" alt="" /></span>
+                </a>
+                <ul>
+                    @foreach (var item in Model.Where(model => model.Id >= 200 && model.Id < 400))
+                    {
+                        <li><a href="/club/?League=@item.Id" title=""><span class="icos-add"></span>@item.Name</a></li>
+                    }                                        
+                </ul>
+            </li>
+            <li class="has">
+                <a title="">
+                    <i class="icos-money3"></i>
+                    <span>Rozgrywki międzynarodowe</span>
+                    <span><img src="@Url.Content("~/Content/themes/aquincum/images/elements/control/hasddArrow.png")" alt="" /></span>
+                </a>
+                <ul>
+                    @foreach (var item in Model.Where(model => model.Id >= 400 && model.Id < 600))
+                    {
+                        <li><a href="/club/?League=@item.Id" title=""><span class="icos-add"></span>@item.Name</a></li>
+                    }                                        
+                </ul>
+            </li>
+        </ul>
+            <div class="clear"></div>
+    </div>
+</div>

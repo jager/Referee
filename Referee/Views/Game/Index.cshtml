@@ -12,73 +12,118 @@
 @Html.Partial("_BarLeagues", (IEnumerable<Referee.Models.League>)ViewBag.ListOfLeagues)
  
 <div class="wrapper">
-    <div class="widget">
-        <div class="whead">
-            <h6>Lista meczy w @ViewData["PageTitle"]</h6>
-            <ul class="titleToolbar">
-                <li>@Html.AuthLink("Dodaj nowy mecz", "Create", "Game", new { LeagueId = ((Referee.Models.League)ViewBag.DefaultLeague).Id }, new { }, HelperRoles.WydzialGieriEwidencji)</li>
-            </ul>
-            <div class="clear"></div>
+    <div class="fluid">
+
+
+        <div class="grid3">
+            <div class="widget">
+                <div class="whead">
+                    <h6>Wykaz drużyn</h6>
+                    <div class="clear"></div>
+                </div>
+                <table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
+                <thead>
+                    <tr>
+                        <td>Lp.</td>
+                        <td>Nazwa drużyny</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (((IEnumerable<Referee.Models.Enrollment>)ViewBag.ListOfTeams).Count() > 0)
+                    {
+                        var i = 0;
+                        foreach (var Enrollment in (IEnumerable<Referee.Models.Enrollment>)ViewBag.ListOfTeams)
+                        {
+                            <tr>
+                                <td>@(++i)</td>
+                                <td>@Html.ActionLink(Enrollment.Team.Name, "Details", "Club", new { @id = Enrollment.Team.ClubId }, new {})</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">Brak drużyn dla tej ligi!</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
         </div>
-        <table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
-        <thead>
-            <tr>
-                <td>
-                    Mecz
-                </td>
-                <td>
-                    Data
-                </td>
-                <td>
-                    Godzina
-                </td>
-                <td>
-                    Wynik
-                </td>            
-                <td></td>
-            </tr>
-        </thead>
-        <tbody>
 
-    @foreach (var item in Model)
-    {
 
-        if ((User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.WydzialGieriEwidencji)) || item.Published)
+        <div class="grid9">
+            <div class="widget">
+                <div class="whead">
+                <h6>Lista meczy w @ViewData["PageTitle"]</h6>
+                <ul class="titleToolbar">
+                    <li>@Html.AuthLink("Dodaj nowy mecz", "Create", "Game", new { LeagueId = ((Referee.Models.League)ViewBag.DefaultLeague).Id }, new { }, HelperRoles.WydzialGieriEwidencji)</li>
+                </ul>
+                <div class="clear"></div>
+            </div> 
+                <table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
+            <thead>
+                <tr>
+                    <td>
+                        Mecz
+                    </td>
+                    <td>
+                        Data
+                    </td>
+                    <td>
+                        Godzina
+                    </td>
+                    <td>
+                        Wynik
+                    </td>            
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+
+        @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HostTeam)
-                -
-                    @Html.DisplayFor(modelItem => item.GuestTeam)
-                </td>
-                <td>
-                    @item.DateAndTime.ToShortDateString()
-                </td>
-                <td>
-                    @item.DateAndTime.ToShortTimeString()
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Score)
-                </td>
-                <td>
-                    @Html.AuthLink("Pokaż", "Details", "Game", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" })
-                    @Html.AuthLink("Obsada", "Create", "Nomination", new { EventId = item.Id, @Type = "game" }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj obsadę" }, HelperRoles.RefereatObsad)
-                    @Html.AuthLink("Edytuj", "Edit", "Game", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj mecz" }, HelperRoles.WydzialGieriEwidencji)
-                    @Html.AuthLink("Usuń", "Delete", "Game", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń mecz" }, HelperRoles.WydzialGieriEwidencji)
-                </td>
-            </tr>
-        }
-    }
 
-        @if (Model.Count() == 0)
-        {
-            <tr>
-                <td colspan="10">Brak meczy dla tej ligi.</td>
-            </tr>
-
+            if ((User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.WydzialGieriEwidencji)) || item.Published)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HostTeam)
+                    -
+                        @Html.DisplayFor(modelItem => item.GuestTeam)
+                    </td>
+                    <td>
+                        @item.DateAndTime.ToShortDateString()
+                    </td>
+                    <td>
+                        @item.DateAndTime.ToShortTimeString()
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Score)
+                    </td>
+                    <td>
+                        @Html.AuthLink("Pokaż", "Details", "Game", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" })
+                        @Html.AuthLink("Obsada", "Create", "Nomination", new { EventId = item.Id, @Type = "game" }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj obsadę" }, HelperRoles.RefereatObsad)
+                        @Html.AuthLink("Edytuj", "Edit", "Game", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj mecz" }, HelperRoles.WydzialGieriEwidencji)
+                        @Html.AuthLink("Usuń", "Delete", "Game", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń mecz" }, HelperRoles.WydzialGieriEwidencji)
+                    </td>
+                </tr>
+            }
         }
-        </tbody>
-    </table>
-        <div id="openableDialogContener" class="dialog" title=""></div>
+
+            @if (Model.Count() == 0)
+            {
+                <tr>
+                    <td colspan="10">Brak meczy dla tej ligi.</td>
+                </tr>
+
+            }
+            </tbody>
+        </table>
+            </div>
+        </div>
+        <div class="clear"></div>
     </div>
+    <div id="openableDialogContener" class="dialog" title=""></div>
+    
 </div>

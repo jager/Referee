@@ -8,6 +8,7 @@ using System.Web.Security;
 using System.Text;
 using System.Collections;
 using System.Data.SqlClient;
+using Referee.Helpers;
 
 namespace Referee.DAL
 {
@@ -15,11 +16,13 @@ namespace Referee.DAL
     {
         protected RefereeContext db;
         internal DbSet<TEntity> dbSet;
+        private string EntityName = String.Empty;
 
         public GenericRepository(RefereeContext context)
         {
             db = context;
             dbSet = context.Set<TEntity>();
+            EntityName = typeof(TEntity).Name;
         }
 
         public virtual IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
@@ -106,5 +109,22 @@ namespace Referee.DAL
                 return false;
             }
         }
+
+        /*
+        private IQueryable<TEntity> PrepareWhere(IQueryable<TEntity> q)
+        {
+            IQueryable<TEntity> query = q;
+            switch (EntityName)
+            {
+                case "":
+
+                    break;
+                default:
+
+                    break;
+            }
+            return query;
+        }
+         * */
     }
 }

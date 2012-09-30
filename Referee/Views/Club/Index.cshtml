@@ -2,7 +2,12 @@
 @using Referee.Helpers
 @Html.Partial("_ContentTop", ViewData)
 
-@Html.Partial("_CustomBreadcrumbBar", ViewData)
+
+<!--@Html.Partial("_CustomBreadcrumbBar", ViewData) -->
+
+@Html.Partial("_BarClubs", (IEnumerable<Referee.Models.League>)ViewBag.LeaguesSelect)
+
+
 <script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
 <div class="wrapper">
 
@@ -21,19 +26,10 @@
                     Nr telefonu
                 </td>
                 <td>
-                    Adres mailowy
+                    WWW
                 </td>
                 <td>
-                    Kod Pocztowy
-                </td>
-                <td>
-                    Miasto
-                </td>
-                <td>
-                    Ullica,nr domu, nr mieszkania
-                </td>
-                <td>
-                    Strona www
+                    Adres
                 </td>
                 <td></td>
             </tr>
@@ -49,19 +45,13 @@
                     @Html.DisplayFor(modelItem => item.Phone)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Mailadr)
+                    <a href="mailto:@item.Mailadr">@item.Mailadr</a><br />
+                    <a href="http://@item.WebSite" target="_blank">@item.WebSite</a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Zip)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.City)
-                </td>
-                <td>
+                    @Html.DisplayFor(modelItem => item.Zip)                
+                    @Html.DisplayFor(modelItem => item.City)<br />                
                     @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.WebSite)
                 </td>
                 <td class="tableActs" align="center">                
                     @Html.ActionLink("Pokaż drużyny", "Details", "Club", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż drużyny tego klubu" })

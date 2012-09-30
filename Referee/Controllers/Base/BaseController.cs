@@ -8,6 +8,7 @@ using Referee.Models;
 using System.Web.Security;
 using Referee.Filters;
 using Referee.Lib.Security;
+using Referee.Helpers;
 
 namespace Referee.Controllers.Base
 {
@@ -23,8 +24,8 @@ namespace Referee.Controllers.Base
         {
             base.Initialize(requestContext);
             SetCurrentSeason();
-            /*
-            string[] roles = { "Administrator", "Sędzia", "WGiE", "RO" };
+           
+            string[] roles = { HelperRoles.Administrator, HelperRoles.RefereatObsad, HelperRoles.Sedzia, HelperRoles.WydzialGieriEwidencji };
             string[] ExistingRoles = Roles.GetAllRoles();
             if (ExistingRoles.Count() < roles.Count()) 
             {
@@ -46,7 +47,7 @@ namespace Referee.Controllers.Base
                     }
                 }
             }
-            */
+            
             
             if (Request.IsAuthenticated)
             {

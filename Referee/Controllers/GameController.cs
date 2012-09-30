@@ -52,6 +52,7 @@ namespace Referee.Controllers
 
             ViewBag.DefaultLeague = league;
             ViewBag.ListOfLeagues = ListOfLeagues;
+            ViewBag.ListOfTeams = Unit.EnrollmentRepository.Get(filter: e => e.LeagueId == LeagueId, IncludeProperties: "Team");
 
             return View(Unit.GameRepository.Get(
                 g => g.SeasonId == CurrentSeason.Id && g.LeagueId == LeagueId,
@@ -73,8 +74,11 @@ namespace Referee.Controllers
             {
                 league = Unit.LeagueRepository.GetById(LeagueId);
             }
+            
             ViewBag.DefaultLeague = league;
             ViewBag.ListOfLeagues = ListOfLeagues;
+            ViewBag.ListOfTeams = Unit.EnrollmentRepository.Get(filter: e => e.LeagueId == LeagueId, IncludeProperties: "Team");
+
             return View(Unit.TournamentRepository.Get(
                 t => t.SeasonId == CurrentSeason.Id && t.LeagueId == LeagueId,
                 t => t.OrderBy(o => o.StartDate)));

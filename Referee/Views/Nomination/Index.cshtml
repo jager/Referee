@@ -32,9 +32,6 @@
                     </td>
                     <td>
                         Wysłano powiadomienie
-                    </td>
-                    <td>
-                        Potwierdzona
                     </td>                      
                     <td></td>
                 }
@@ -88,24 +85,14 @@
                         @if (item.Nomination.Emailed)
                         {
                             <span class="fileSuccess"></span>
-                            @Html.DisplayFor(modelItem => item.Nomination.EmailDate)
+                            @item.Nomination.EmailDate
                         }
                         else
                         {
                             <span class="fileError"></span>
                         }
                     </td>
-                    <td>
-                        @if (item.Nomination.Confirmed)
-                        {
-                            <span class="fileSuccess"></span>
-                            @Html.DisplayFor(modelItem => item.Nomination.ConfirmationDate)
-                        }
-                        else
-                        {
-                            <span class="fileError"></span>
-                        }        
-                    </td>
+                    
                 }    
                 <td class="tableActs" align="center">
                     @Html.AuthLink("Pokaż", "Details", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" }, HelperRoles.Sedzia)

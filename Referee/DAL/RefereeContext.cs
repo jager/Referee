@@ -25,6 +25,8 @@ namespace Referee.DAL
         public DbSet<Game> Games { get; set; }
         public DbSet<Nomination> Nominations { get; set; }
         public DbSet<Nominated> Nominateds { get; set; }
+        public DbSet<Voluntary> Voluntaries { get; set; }
+        public DbSet<VoluntaryReferee> VoluntaryReferees { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
