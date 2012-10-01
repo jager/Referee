@@ -3,14 +3,18 @@
     @if (Request.IsAuthenticated)
     {
         <ul class="quickStats">
+            
             <li>
                 <div class="floatL">
-                    <strong class="">Witaj, @ViewBag.CurrentReferee.FullName</strong>
-                    <a href="/Account/LogOff">Wyloguj</a>
+                    <strong class="">Zalogowany jako, @ViewBag.CurrentReferee.FullName</strong>
+                    <span>
+                        <a href="/Home/Profile">Profil</a>
+                        <a href="/Home/NewNominations">Nowe Nominacje</a>
+                        <a href="/Home/Nominations">Nominacje</a>
+                        <a href="/Account/LogOff">Wyloguj się</a>
+                    </span>
                 </div>
-                <a class="greenImg" href="/Home/Profile">
-                    <img src="@Url.Content("~/Content/themes/aquincum/images/icons/quickstats/user.png")" alt="Wyloguj" />
-                </a>
+                
             </li>
         </ul> 
     }
