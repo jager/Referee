@@ -182,8 +182,8 @@ namespace Referee.Controllers
             DateTime enDate = dt.AddSeconds(end).ToLocalTime();
 
             var Nominations = Unit.NominationRepository.Get(filter: 
-                    n => (n.TournamentId != null && n.Tournament.StartDate > stDate && n.Tournament.StartDate < enDate)
-                        || (n.GameId != null && n.Game.DateAndTime > stDate && n.Game.DateAndTime < enDate)
+                    n => n.Published && ((n.TournamentId != null && n.Tournament.StartDate > stDate && n.Tournament.StartDate < enDate)
+                        || (n.GameId != null && n.Game.DateAndTime > stDate && n.Game.DateAndTime < enDate))
                     );
             foreach (var Nomination in Nominations)
             {

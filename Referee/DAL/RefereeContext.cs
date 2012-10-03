@@ -27,6 +27,7 @@ namespace Referee.DAL
         public DbSet<Nominated> Nominateds { get; set; }
         public DbSet<Voluntary> Voluntaries { get; set; }
         public DbSet<VoluntaryReferee> VoluntaryReferees { get; set; }
+        public DbSet<AppConfig> AppConfigs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

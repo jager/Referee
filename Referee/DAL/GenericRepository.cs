@@ -114,10 +114,12 @@ namespace Referee.DAL
         private IQueryable<TEntity> PrepareWhere(IQueryable<TEntity> q)
         {
             IQueryable<TEntity> query = q;
+            
             switch (EntityName)
             {
-                case "":
-
+                case "League":
+                    Func<Referee.Models.League, bool> filter = TEntity => TEntity.Visible;
+                    query = q.Where(filter);
                     break;
                 default:
 

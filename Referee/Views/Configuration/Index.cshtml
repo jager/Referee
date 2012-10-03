@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Referee.Models.AppConfig>
+@using Referee.Helpers
+@Html.Partial("_ContentTop", ViewData)
+
+
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+<div class="wrapper">
+    <div class="fluid">
+        <div class="grid12">
+            <div class="widget acc">
+            @foreach (var item in Model)
+            {
+                <div class="whead"><h6>@item.Name</h6><div class="clear"></div></div>
+                <div class="menu_body">
+                    <div class="formRow">
+                        @using (Html.BeginForm("Update", "Configuration", FormMethod.Post)) 
+                        {
+                            @Html.Hidden("Key", item.Key)
+                            @Html.Hidden("Name", item.Name)
+                            switch(item.Key) 
+                            {
+                                case "SendEmails":
+                                case "RequireHttps":
+                                case "SendNewAccountEmail":
+                                case "SendRemindPasswordEmail":
+                                case "SendNominationsEmail":
+                                    
+                                    <div class="grid6 on_off">
+                                        <div class="floatL mr10">
+                                            @Html.CheckBox("Value", (item.Value == "1" ? true : false))
+                                        </div>
+                                    </div>
+                                    break;
+                                case "MailSignature":
+                                    <div class="grid6">
+                                        @Html.TextArea("Value", item.Value)
+                                    </div>
+                                   break;
+                                case "DefultDomain":
+                                default:
+                                    <div class="grid6">
+                                        @Html.TextBox("Value", item.Value)
+                                    </div>
+                                   break;
+                            }
+                            <div class="grid3">
+                                @Html.ActionLink("Zapisz", "Update", "Configuration", new { }, new { @class = "saveConfiguration buttonS bGreen" })                   
+                            </div>
+                        }
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
+    </div>    
+</div>

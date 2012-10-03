@@ -20,9 +20,12 @@ namespace Referee.Controllers.Base
         protected MembershipUser CurrentUser = null;
         protected RefereeEntity CurrentReferee = null;
         protected int NewNominationsAmount = 0;
+        protected IEnumerable<AppConfig> Configuration;
+
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
             base.Initialize(requestContext);
+            GetConfiguration();
             SetCurrentSeason();
            
             string[] roles = { HelperRoles.Administrator, HelperRoles.RefereatObsad, HelperRoles.Sedzia, HelperRoles.WydzialGieriEwidencji };
@@ -112,6 +115,12 @@ namespace Referee.Controllers.Base
         protected string SetPassword(RefereeEntity refereeentity)
         {
             return HashString.SHA1(String.Format("{0}{1}", refereeentity.Mailadr, DateTime.Now.ToUniversalTime().ToLongDateString())).Substring(0, 8);
+        }
+
+        [OutputCache]
+        protected void GetConfiguration()
+        {            
+            this.Configuration = Unit.ConfigRepository.Get();            
         }
     }
 }

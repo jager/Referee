@@ -46,44 +46,45 @@ namespace Referee.DAL
 
             var league = new List<League>
             {
-                new League { Id = 1, Name = "I Liga młodziczek", Type = "tournament" },
-                new League { Id = 11, Name = "I Liga młodzików", Type = "tournament" },
+                new League { Id = 1, Name = "I Liga młodziczek", Type = "tournament", Visible = true },
+                new League { Id = 11, Name = "I Liga młodzików", Type = "tournament", Visible = true },
 
-                new League { Id = 10, Name = "I liga kadetek", Type = "league" },
-                new League { Id = 20, Name = "II liga kadetek", Type = "league" },
-                new League { Id = 30, Name = "I liga kadetów", Type = "league" },
-                new League { Id = 40, Name = "II liga kadetów", Type = "league" },
-                new League { Id = 50, Name = "I liga juniorek", Type = "league" },
-                new League { Id = 60, Name = "II liga juniorek", Type = "league" },
-                new League { Id = 70, Name = "I liga juniorów", Type = "league" },
-                new League { Id = 80, Name = "II liga juniorów", Type = "league" },
-                new League { Id = 90, Name = "III liga seniorów", Type = "league" },
-                new League { Id = 100, Name = "III liga seniorek", Type = "league" },
-                new League { Id = 110, Name = "IV liga seniorów", Type = "league" },
+                new League { Id = 10, Name = "I liga kadetek", Type = "league", Visible = true },
+                new League { Id = 20, Name = "II liga kadetek", Type = "league", Visible = true },
+                new League { Id = 30, Name = "I liga kadetów", Type = "league", Visible = true },
+                new League { Id = 40, Name = "II liga kadetów", Type = "league", Visible = true },
+                new League { Id = 50, Name = "I liga juniorek", Type = "league", Visible = true },
+                new League { Id = 60, Name = "II liga juniorek", Type = "league", Visible = true },
+                new League { Id = 70, Name = "I liga juniorów", Type = "league", Visible = true },
+                new League { Id = 80, Name = "II liga juniorów", Type = "league", Visible = true },
+                new League { Id = 90, Name = "III liga seniorów", Type = "league", Visible = true },
+                new League { Id = 100, Name = "III liga seniorek", Type = "league", Visible = true },
+                new League { Id = 110, Name = "IV liga seniorów", Type = "league", Visible = true },
 
-                new League { Id = 210, Name = "II liga Mężczyzn - Grupa 1", Type = "league" },
-                new League { Id = 220, Name = "II liga Mężczyzn - Grupa 2", Type = "league" },
-                new League { Id = 230, Name = "II liga Mężczyzn - Grupa 3", Type = "league" },
-                new League { Id = 240, Name = "II liga Mężczyzn - Grupa 4", Type = "league" },
-                new League { Id = 250, Name = "II liga Kobiet - Grupa 1", Type = "league" },
-                new League { Id = 260, Name = "II liga Kobiet - Grupa 2", Type = "league" },
-                new League { Id = 270, Name = "II liga Kobiet - Grupa 3", Type = "league" },
-                new League { Id = 280, Name = "II liga Kobiet - Grupa 4", Type = "league" },
-                new League { Id = 290, Name = "I liga Kobiet", Type = "league" },
-                new League { Id = 300, Name = "I liga Mężczyzn", Type = "league" },
-                new League { Id = 310, Name = "Orlen Liga", Type = "league" },
-                new League { Id = 320, Name = "Plus Liga Mężczyzn", Type = "league" },
-                new League { Id = 400, Name = "Liga Mistrzyń CEV", Type = "league" },
-                new League { Id = 410, Name = "Liga Mistrzów CEV", Type = "league" }, 
-                new League { Id = 420, Name = "Puchar CEV Kobiet", Type = "league" },
-                new League { Id = 430, Name = "Puchar CEV Mężczyzn", Type = "league" },
-                new League { Id = 440, Name = "Challenge Cup Kobiet", Type = "league" },
-                new League { Id = 450, Name = "Challenge Cup Mężczyzn", Type = "league" },
+                new League { Id = 210, Name = "II liga Mężczyzn - Grupa 1", Type = "league", Visible = true },
+                new League { Id = 220, Name = "II liga Mężczyzn - Grupa 2", Type = "league", Visible = true },
+                new League { Id = 230, Name = "II liga Mężczyzn - Grupa 3", Type = "league", Visible = true },
+                new League { Id = 240, Name = "II liga Mężczyzn - Grupa 4", Type = "league", Visible = true },
+                new League { Id = 250, Name = "II liga Kobiet - Grupa 1", Type = "league", Visible = true },
+                new League { Id = 260, Name = "II liga Kobiet - Grupa 2", Type = "league", Visible = true },
+                new League { Id = 270, Name = "II liga Kobiet - Grupa 3", Type = "league", Visible = true },
+                new League { Id = 280, Name = "II liga Kobiet - Grupa 4", Type = "league", Visible = true },
+                new League { Id = 290, Name = "I liga Kobiet", Type = "league", Visible = true },
+                new League { Id = 300, Name = "I liga Mężczyzn", Type = "league", Visible = true },
+                new League { Id = 310, Name = "Orlen Liga", Type = "league", Visible = true },
+                new League { Id = 320, Name = "Plus Liga Mężczyzn", Type = "league", Visible = true },
+
+                new League { Id = 400, Name = "Liga Mistrzyń CEV", Type = "league", Visible = true },
+                new League { Id = 410, Name = "Liga Mistrzów CEV", Type = "league", Visible = true }, 
+                new League { Id = 420, Name = "Puchar CEV Kobiet", Type = "league", Visible = true },
+                new League { Id = 430, Name = "Puchar CEV Mężczyzn", Type = "league", Visible = true },
+                new League { Id = 440, Name = "Challenge Cup Kobiet", Type = "league", Visible = true },
+                new League { Id = 450, Name = "Challenge Cup Mężczyzn", Type = "league", Visible = true },
                 
-                new League { Id = 600, Name = "Liga akademicka Kobiet", Type = "league" },
-                new League { Id = 610, Name = "Liga akademicka Mężczyzn", Type = "league" },
+                new League { Id = 600, Name = "Liga akademicka Kobiet", Type = "league", Visible = true },
+                new League { Id = 610, Name = "Liga akademicka Mężczyzn", Type = "league", Visible = true },
                 
-                new League { Id = 1000, Name = "Wszystkie ligi" }
+                new League { Id = 1000, Name = "Wszystkie ligi", Visible = false }
             };
             league.ForEach(l => context.Leagues.Add(l));
             context.SaveChanges();
@@ -220,6 +221,24 @@ namespace Referee.DAL
                 new Club { Name = "WUKS Junior Stolarka Wołomin", Phone = "22 787 59 26", Mailadr = "szerszeniewska@wp.pl", Zip = "05-200", City = "Wołomin", Address = "Lipińska 16", WebSite = "" }
             };
             clubs.ForEach(c => context.Clubs.Add(c));
+            context.SaveChanges();
+
+            var defaultConfiguration = new List<AppConfig>() 
+            { 
+                new AppConfig() { Key = "RequireHttps", Name = "Wymuszaj bezpieczne połączenie", Value = "1" },
+                new AppConfig() { Key = "DefultDomain", Name = "Podstawowa domena systemu.", Value = "systemobsad.pl" },
+                new AppConfig() { Key = "MailSignature", Name = "Podpis w mailu.", Value = "" },
+                new AppConfig() { Key = "SendEmails", Name = "Wysyłaj powiadomienia mailowe.", Value = "1" },
+                new AppConfig() { Key = "SendNewAccountEmail", Name = "Wysyłaj powiadomienia mailowe o założeniu nowego konta.", Value = "1" },
+                new AppConfig() { Key = "SendRemindPasswordEmail", Name = "Wysyłaj powiadomienia mailowe z przypomnieniem hasła.", Value = "1" },
+                new AppConfig() { Key = "SendNominationsEmail", Name = "Wysyłaj powiadomienia mailowe z nominacjami.", Value = "1" }
+                /*new AppConfig() { Key = "", Name = "", Value = "" },
+                new AppConfig() { Key = "", Name = "", Value = "" },
+                new AppConfig() { Key = "", Name = "", Value = "" },
+                new AppConfig() { Key = "", Name = "", Value = "" },
+                new AppConfig() { Key = "", Name = "", Value = "" }*/
+            };
+            defaultConfiguration.ForEach(c => context.AppConfigs.Add(c));
             context.SaveChanges();
         }
     }

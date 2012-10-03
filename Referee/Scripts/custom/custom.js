@@ -34,4 +34,19 @@ $().ready(function () {
         });
         return false;
     });
+    $.jGrowl.defaults.position = 'bottom-right';
+    $("a.saveConfiguration").bind("click", function () {
+        var formData = $(this).parents("form").serialize();
+        var URL = this.href;
+        $.post(URL, formData, function (dt) {
+            var ErrorMessage = 'Nieznany b³¹d';
+            if (dt.Error == 0) {
+                ErrorMessage = 'Konfiguracja poprawnie zapisana';
+            } else if (dt.Error == 1) {
+                ErrorMessage = dt.Message;
+            }
+            $.jGrowl(ErrorMessage);
+        });
+        return false;
+    });
 });

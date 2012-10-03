@@ -236,6 +236,19 @@ namespace Referee.DAL
             }
         }
 
+        private GenericRepository<AppConfig> configRepository;
+        public GenericRepository<AppConfig> ConfigRepository
+        {
+            get
+            {
+                if (this.configRepository == null)
+                {
+                    this.configRepository = new GenericRepository<AppConfig>(db);
+                }
+                return this.configRepository;
+            }
+        }
+
         #endregion;
 
 
