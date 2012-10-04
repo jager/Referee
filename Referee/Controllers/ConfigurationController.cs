@@ -38,5 +38,91 @@ namespace Referee.Controllers
             }
             return Json(Message);
         }
+
+        public ActionResult League()
+        {
+            var Leagues = Unit.LeagueRepository.Get();
+            return View(Leagues);
+        }
+
+        public JsonResult UpdateLeague(League League)
+        {
+            var Message = new { @Message = "", @Error = 0 };
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Unit.LeagueRepository.Update(League);
+                    Unit.Save();
+                }
+            }
+            catch (Exception e)
+            {
+                Message = new { @Message = e.Message, @Error = 1 };
+            }
+            return Json(Message);
+        }
+
+        public ActionResult LeagueAuthorization()
+        {
+            var Roles = Unit.RefRoleRepository.Get();
+            ViewBag.Auths = Unit.AuthorizationRepository.Get();
+            ViewBag.Leagues = Unit.LeagueRepository.Get();
+            return View(Roles);
+        }
+
+        public JsonResult UpdateAuth(RefereeRole RefereeRole)
+        {
+            var Message = new { @Message = "", @Error = 0 };
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Unit.RefRoleRepository.Update(RefereeRole);
+                    Unit.Save();
+                }
+            }
+            catch (Exception e)
+            {
+                Message = new { @Message = e.Message, @Error = 1 };
+            }
+            return Json(Message);
+        }
+
+        public JsonResult AddAuth(RefereeRole RefereeRole)
+        {
+            var Message = new { @Message = "", @Error = 0 };
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Unit.RefRoleRepository.Insert(RefereeRole);
+                    Unit.Save();
+                }
+            }
+            catch (Exception e)
+            {
+                Message = new { @Message = e.Message, @Error = 1 };
+            }
+            return Json(Message);
+        }
+
+        public JsonResult DeleteAuth(RefereeRole RefereeRole)
+        {
+            var Message = new { @Message = "", @Error = 0 };
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    Unit.RefRoleRepository.Delete(RefereeRole);
+                    Unit.Save();
+                }
+            }
+            catch (Exception e)
+            {
+                Message = new { @Message = e.Message, @Error = 1 };
+            }
+            return Json(Message);
+        }
     }
 }

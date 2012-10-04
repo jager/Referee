@@ -21,12 +21,15 @@ namespace Referee.Controllers.Base
         protected RefereeEntity CurrentReferee = null;
         protected int NewNominationsAmount = 0;
         protected IEnumerable<AppConfig> Configuration;
+        protected ConfigHelper CHelper;
+
 
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
             base.Initialize(requestContext);
             GetConfiguration();
             SetCurrentSeason();
+            GetConfigHelper();
            
             string[] roles = { HelperRoles.Administrator, HelperRoles.RefereatObsad, HelperRoles.Sedzia, HelperRoles.WydzialGieriEwidencji };
             string[] ExistingRoles = Roles.GetAllRoles();
@@ -121,6 +124,11 @@ namespace Referee.Controllers.Base
         protected void GetConfiguration()
         {            
             this.Configuration = Unit.ConfigRepository.Get();            
+        }
+
+        protected void GetConfigHelper() 
+        {
+            CHelper = new ConfigHelper(Unit);
         }
     }
 }

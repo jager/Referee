@@ -8,24 +8,28 @@
 
 @Html.Partial("_CustomBreadcrumbBar", ViewData)
 
-
+@{
+    List<Referee.ViewModels.Conflicts> Conflicts = (List<Referee.ViewModels.Conflicts>)ViewBag.Conflicts;
+}
 <div class="wrapper">
-@using (Html.BeginForm())
-{
-    @Html.ValidationSummary(true)
-    var Event = (Event)ViewBag.Event;
-    if (((Event)ViewBag.Event).Type == "game")
-    {
-        @Html.Hidden("GameId", Event.Ident, new { id = "EventIdent" } )
-        @Html.Hidden("Type", "Game", new { id = "EventType" })
-    }
-    else
-    {
-        @Html.Hidden("Type", "Tournamet", new { id = "EventType" })
-        @Html.Hidden("TournamentId", Event.Ident, new { id = "EventIdent" })
-    }
-    <fieldset>
-        <div class="widget fluid" id="refereeNominations">
+    <div class="fluid">
+        <div class="grid9">        
+            @using (Html.BeginForm())
+            {
+                @Html.ValidationSummary(true)
+                var Event = (Event)ViewBag.Event;
+                if (((Event)ViewBag.Event).Type == "game")
+                {
+                    @Html.Hidden("GameId", Event.Ident, new { id = "EventIdent" } )
+                    @Html.Hidden("Type", "Game", new { id = "EventType" })
+                }
+                else
+                {
+                    @Html.Hidden("Type", "Tournamet", new { id = "EventType" })
+                    @Html.Hidden("TournamentId", Event.Ident, new { id = "EventIdent" })
+                }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <fieldset>
+        <div class="widget" id="refereeNominations">
             <div class="whead">
                 <h6>Utwórz obsadę</h6>
                 <div class="clear"></div>
@@ -34,7 +38,7 @@
                 <div class="grid3">
                     Obsada dla @((((Event)ViewBag.Event).Type == "game") ? "meczu" : "turnieju")
                 </div>
-                <div class="grid9">
+                <div class="grid6">
                     <ul>
                         <li>
                             @(((Event)ViewBag.Event).Name)
@@ -57,7 +61,7 @@
                 @{ Html.RenderAction("CreateRefereeData"); }
                  
             <div class="formRow" id="NotePosition">
-                <div class="grid12">
+                <div class="grid9">
                     <a href="/Nomination/CreateRefereeData" id="addItem" class="buttonS bBlue">Dodaj sędziego</a>
                 </div>
                 <div class="clear"></div>
@@ -66,7 +70,7 @@
                 <div class="grid3">
                     @Html.LabelFor(model => model.Note)
                 </div>
-                <div class="grid9">
+                <div class="grid6">
                     @Html.EditorFor(model => model.Note)
                     @Html.ValidationMessageFor(model => model.Note)
                 </div>
@@ -78,7 +82,7 @@
                 <div class="grid3">
                     @Html.LabelFor(model => model.Published)
                 </div>
-                <div class="grid9">
+                <div class="grid6">
                     @Html.EditorFor(model => model.Published)
                     @Html.ValidationMessageFor(model => model.Published)
                 </div>
@@ -90,7 +94,23 @@
             </div>
         </div>
     </fieldset>
-}   
+            }   
+        </div>
+        <div class="grid3">
+            <div class="widget">
+                <div class="whead"><h6>Zajęci sędziowie</h6><div class="clear"></div></div>
+                @foreach (var conflict in Conflicts)
+                {
+                    <div class="formRow">
+                        @conflict.Referee
+                        @conflict.Event
+                        @conflict.Period
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
 </div>
 <script type="text/javascript">
     $("#addItem").click(function () {

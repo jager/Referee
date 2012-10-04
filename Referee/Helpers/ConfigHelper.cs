@@ -16,22 +16,16 @@ namespace Referee.Helpers
         public ConfigHelper(UOW _unit)
         {
             Unit = _unit;
-            CacheRepository = new Cache();
+            this.CacheRepository = new Cache();
         }
 
         public string GetValue(string key) 
         {
             string ConfigValue = String.Empty;
-            if (this.CacheRepository.Get(key) == null)
-            {
-                var Conf = this.GetRawFromDB(key);
-                ConfigValue = Conf.Value;
-                this.CacheRepository.Insert(key, ConfigValue);
-            }
-            else
-            {
-                ConfigValue = this.CacheRepository.Get(key).ToString();
-            }
+           
+            var Conf = this.GetRawFromDB(key);
+            ConfigValue = Conf.Value;
+            
             return ConfigValue;
         }
 

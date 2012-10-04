@@ -151,10 +151,13 @@ namespace Referee.Controllers
                 
                 Unit.RefereeRepository.Insert(refereeentity);
                 Unit.Save();
-                MailHelper.CreateNewAccountMessage(refereeentity.Mailadr, Password);
-                if (MailHelper.ErrorMessage != MailHelper._success)
+                if (CHelper.GetValue("SendEmails") == "1" && CHelper.GetValue("SendNewAccountEmail") == "1")
                 {
-                    ///TODO: logowanie błędów
+                    MailHelper.CreateNewAccountMessage(refereeentity.Mailadr, Password);
+                    if (MailHelper.ErrorMessage != MailHelper._success)
+                    {
+                        ///TODO: logowanie błędów
+                    }
                 }
                 return RedirectToAction("Index");  
             }

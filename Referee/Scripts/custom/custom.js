@@ -49,4 +49,42 @@ $().ready(function () {
         });
         return false;
     });
+
+    $("a.addConfiguration").bind("click", function () {
+        var formData = $(this).parents("form").serialize();
+        var URL = this.href;
+        var ReloadUrl = document.location.href;
+        $.post(URL, formData, function (dt) {
+            var ErrorMessage = 'Nieznany b³¹d';
+            if (dt.Error == 0) {
+                ErrorMessage = 'Konfiguracja poprawnie zapisana';
+            } else if (dt.Error == 1) {
+                ErrorMessage = dt.Message;
+            }
+            $.jGrowl(ErrorMessage);
+            document.location.href = ReloadUrl;
+        });
+        return false;
+    });
+
+    $("a.delConfiguration").bind("click", function () {
+        var URL = this.href;
+        var $FormRow = $(this).parents("div.formRow");
+        $.ajax({
+            url: URL,
+            type: "POST",
+            cache: false,
+            success: function (dt) {
+                var ErrorMessage = 'Nieznany b³¹d';
+                if (dt.Error == 0) {
+                    ErrorMessage = 'Konfiguracja poprawnie wymazana.';
+                } else if (dt.Error == 1) {
+                    ErrorMessage = dt.Message;
+                }
+                $.jGrowl(ErrorMessage);
+                $FormRow.hide();
+            }
+        });
+        return false;
+    });
 });

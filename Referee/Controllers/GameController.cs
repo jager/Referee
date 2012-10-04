@@ -32,7 +32,7 @@ namespace Referee.Controllers
 
         public ActionResult Index(int? LeagueId)
         {
-            var ListOfLeagues = Unit.LeagueRepository.Get();
+            var ListOfLeagues = Unit.LeagueRepository.Get(filter: l => l.Visible);
             
             League league;
             if (LeagueId == null || LeagueId == 0)
@@ -62,7 +62,7 @@ namespace Referee.Controllers
 
         public ViewResult IndexTournament(int? LeagueId)
         {
-            var ListOfLeagues = Unit.LeagueRepository.Get();
+            var ListOfLeagues = Unit.LeagueRepository.Get(filter: l => l.Visible);
 
             League league;
             if (LeagueId == null || LeagueId == 0)

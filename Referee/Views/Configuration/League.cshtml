@@ -1,0 +1,152 @@
+﻿@model IEnumerable<Referee.Models.League>
+@using Referee.Helpers
+@Html.Partial("_ContentTop", ViewData)
+@{
+    Dictionary<string, string> dTypes = new Dictionary<string,string>();
+    dTypes.Add("tournament", "System turniejowy");
+    dTypes.Add("game", "System meczowy");
+    
+}
+
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+<div class="wrapper">
+    <div class="fluid">
+        <div class="grid12">
+            <div class="widget acc">
+                <div class="whead"><h6>Ligi wojewódzkie</h6><div class="clear"></div></div>
+                <div class="menu_body">
+                    @foreach (var league in Model.Where(l => l.Id <= l.Internal))
+                    {
+                        IEnumerable<SelectListItem> Items =
+                            from type in dTypes
+                            select new SelectListItem
+                            {
+                                Value = type.Key,
+                                Text = type.Value,
+                                Selected = (type.Key == league.Type)
+                            };
+                        using (Html.BeginForm("UpdateLeague", "Configuration", FormMethod.Post))
+                        {
+                            @Html.Hidden("Id", league.Id);
+                            <div class="formRow">
+                                <div class="grid2">
+                                    @Html.TextBox("Name", @league.Name)
+                                </div>
+                                <div class="grid2">
+                                    @Html.DropDownList("Type", Items)
+                                </div>
+                                <div class="grid2 on_off">
+                                    @Html.CheckBox("Visible", league.Visible)
+                                </div>
+                                <div class="grid2">
+                                    @Html.ActionLink("Zapisz", "UpdateLeague", "Configuration", new { }, new { @class = "saveConfiguration buttonS bGreen" })
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        }
+                    }                                    
+                </div>
+                <div class="whead"><h6>Ligi centralne</h6><div class="clear"></div></div>
+                <div class="menu_body">
+                    @foreach (var league in Model.Where(l => l.Id > l.Internal && l.Id <= l.Central))
+                    {
+                        IEnumerable<SelectListItem> Items =
+                            from type in dTypes
+                            select new SelectListItem
+                            {
+                                Value = type.Key,
+                                Text = type.Value,
+                                Selected = (type.Key == league.Type)
+                            };
+                        using (Html.BeginForm("UpdateLeague", "Configuration", FormMethod.Post))
+                        {
+                            @Html.Hidden("Id", league.Id);
+                            <div class="formRow">
+                                <div class="grid2">
+                                    @Html.TextBox("Name", @league.Name)
+                                </div>
+                                <div class="grid2">
+                                    @Html.DropDownList("Type", Items)
+                                </div>
+                                <div class="grid2 on_off">
+                                    @Html.CheckBox("Visible", league.Visible)
+                                </div>
+                                <div class="grid2">
+                                    @Html.ActionLink("Zapisz", "UpdateLeague", "Configuration", new { }, new { @class = "saveConfiguration buttonS bGreen" })
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        }
+                    } 
+                </div>
+                <div class="whead"><h6>Ligi międzynarodowe</h6><div class="clear"></div></div>
+                <div class="menu_body">
+                    @foreach (var league in Model.Where(l => l.Id > l.Central && l.Id <= l.European))
+                    {
+                        IEnumerable<SelectListItem> Items =
+                            from type in dTypes
+                            select new SelectListItem
+                            {
+                                Value = type.Key,
+                                Text = type.Value,
+                                Selected = (type.Key == league.Type)
+                            };
+                        using (Html.BeginForm("UpdateLeague", "Configuration", FormMethod.Post))
+                        {
+                            @Html.Hidden("Id", league.Id);
+                            <div class="formRow">
+                                <div class="grid2">
+                                    @Html.TextBox("Name", @league.Name)
+                                </div>
+                                <div class="grid2">
+                                    @Html.DropDownList("Type", Items)
+                                </div>
+                                <div class="grid2 on_off">
+                                    @Html.CheckBox("Visible", league.Visible)
+                                </div>
+                                <div class="grid2">
+                                    @Html.ActionLink("Zapisz", "UpdateLeague", "Configuration", new { }, new { @class = "saveConfiguration buttonS bGreen" })
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        }
+                    } 
+                </div>
+                <div class="whead"><h6>Ligi akademickie i amatorskie</h6><div class="clear"></div></div>
+                <div class="menu_body">
+                    @foreach (var league in Model.Where(l => l.Id > l.European && l.Id <= l.Academic)) 
+                    {
+                        IEnumerable<SelectListItem> Items =
+                            from type in dTypes
+                            select new SelectListItem
+                            {
+                                Value = type.Key,
+                                Text = type.Value,
+                                Selected = (type.Key == league.Type)
+                            };
+                        using (Html.BeginForm("UpdateLeague", "Configuration", FormMethod.Post))
+                        {
+                            @Html.Hidden("Id", league.Id);
+                            <div class="formRow">
+                                <div class="grid2">
+                                    @Html.TextBox("Name", @league.Name)
+                                </div>
+                                <div class="grid2">
+                                    @Html.DropDownList("Type", Items)
+                                </div>
+                                <div class="grid2 on_off">
+                                    @Html.CheckBox("Visible", league.Visible)
+                                </div>
+                                <div class="grid2">
+                                    @Html.ActionLink("Zapisz", "UpdateLeague", "Configuration", new { }, new { @class = "saveConfiguration buttonS bGreen" })
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        }
+                    } 
+                </div>
+            </div>
+        </div>
+   </div>
+</div>

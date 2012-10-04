@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Referee.Models.RefereeRole>
+@using Referee.Helpers
+@Html.Partial("_ContentTop", ViewData)
+@{
+    Dictionary<int, string> dFunctions = new Dictionary<int,string>();
+    dFunctions.Add(1001, "Sędzia I");
+    dFunctions.Add(2002, "Sędzia II");
+    IEnumerable<Referee.Models.League> Leagues = (IEnumerable<Referee.Models.League>)ViewBag.Leagues;
+    IEnumerable<Referee.Models.Authorization> Auths = (IEnumerable<Referee.Models.Authorization>)ViewBag.Auths;    
+}
+
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+<div class="wrapper">
+    <div class="fluid">
+        <div class="grid12">
+            <div class="widget acc">
+            @foreach (var au in Auths)
+            {
+                IEnumerable<SelectListItem> NewItems =
+                    from type in dFunctions
+                    select new SelectListItem
+                    {
+                        Value = type.Key.ToString(),
+                        Text = type.Value
+                    };
+                IEnumerable<SelectListItem> NewItemsL =
+                    from it in Leagues
+                    select new SelectListItem
+                    {
+                        Value = it.Id.ToString(),
+                        Text = it.Name
+                    };
+                <div class="whead"><h6>@au.Name</h6><div class="clear"></div></div>
+                <div class="menu_body">
+                    @foreach (var role in Model.Where(m => m.AuthorizationId == au.Id))
+                    {
+                        IEnumerable<SelectListItem> Items =
+                            from type in dFunctions
+                            select new SelectListItem
+                            {
+                                Value = type.Key.ToString(),
+                                Text = type.Value,
+                                Selected = (type.Key == role.FunctionId)
+                            };
+                        IEnumerable<SelectListItem> ItemsL =
+                            from it in Leagues
+                            select new SelectListItem
+                            {
+                                Value = it.Id.ToString(),
+                                Text = it.Name,
+                                Selected = (it.Id ==role.LeagueId)
+                            };
+                        using (Html.BeginForm("UpdateAuth", "Configuration", FormMethod.Post))
+                        {
+                            @Html.Hidden("Id", role.Id);
+                            @Html.Hidden("AuthorizationId", role.AuthorizationId);
+                            <div class="formRow">
+                                <div class="grid3">
+                                    @Html.DropDownList("FunctionId", Items)
+                                </div>
+                                <div class="grid3">
+                                    @Html.DropDownList("LeagueId", ItemsL)
+                                </div>
+                                <div class="grid2">
+                                    @Html.ActionLink("Zapisz", "UpdateAuth", "Configuration", new { }, new { @class = "saveConfiguration buttonS bGreen" })
+                                </div>
+                                <div class="grid2">
+                                    @Html.ActionLink("Usuń", "DeleteAuth", "Configuration", new { @Id = role.Id }, new { @class = "delConfiguration buttonS bRed" })
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        }
+                    } 
+                    @using (Html.BeginForm("AddAuth", "Configuration", FormMethod.Post))
+                    {
+                        @Html.Hidden("AuthorizationId", au.Id);
+                        <div class="formRow">
+                            <div class="grid4">
+                                @Html.DropDownList("FunctionId", NewItems)
+                            </div>
+                            <div class="grid4">
+                                @Html.DropDownList("LeagueId", NewItemsL)
+                            </div>
+                            <div class="grid2">
+                                @Html.ActionLink("Dodaj", "AddAuth", "Configuration", new { }, new { @class = "addConfiguration buttonS bBlue" })
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    }                  
+                </div>
+            }
+            </div>
+        </div>
+    </div>
+</div>

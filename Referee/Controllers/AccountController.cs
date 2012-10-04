@@ -170,13 +170,20 @@ namespace Referee.Controllers
                 //var Password = SetPassword(referee);
                 var Password = securityUser.ResetPassword();
 
-                MailHelper.RemindPasswordMessage(referee.Mailadr, Password);
-
-                ViewBag.Message = "Hasło zostało wysłane na adres mailowy sędziego.";
-
-                if (MailHelper.ErrorMessage != MailHelper._success)
+                if (CHelper.GetValue("SendEmails") == "1" && CHelper.GetValue("SendRemindPasswordEmail") == "1")
                 {
-                    ViewBag.Message = MailHelper.ErrorMessage;
+                    MailHelper.RemindPasswordMessage(referee.Mailadr, Password);
+
+                    ViewBag.Message = "Hasło zostało wysłane na adres mailowy sędziego.";
+
+                    if (MailHelper.ErrorMessage != MailHelper._success)
+                    {
+                        ViewBag.Message = MailHelper.ErrorMessage;
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = String.Format("Nowe hasło dla tego sędziego to: {0}.", Password);
                 }
             }
 

@@ -119,6 +119,7 @@ namespace Referee.Controllers
             };
 
             ViewBag.Event = Event;
+            ViewBag.Conflicts = GetConflictNominations(Event.MinDate, Event.MaxDate);
             return View();
         }
 
@@ -246,6 +247,7 @@ namespace Referee.Controllers
                 FunctionId = 0;
             }
             int LeagueId = 0;
+            List<Guid> ConflictedReferees = new List<Guid>();
             if (FunctionId == 1001 || FunctionId == 2002)
             {
                 //pobierz tylko odpowiednich sędziów                
@@ -253,6 +255,9 @@ namespace Referee.Controllers
                 {
                     var game = Unit.GameRepository.GetById(GameId);
                     LeagueId = game.LeagueId;
+                    DateTime minDate = game.DateAndTime.AddHours(-2);
+                    DateTime maxDate = game.DateAndTime.AddHours(2);
+                    ConflictedReferees = this.GetConflictReferees(minDate, maxDate);
                 }
                 else if (Type == "tournament")
                 {
@@ -261,10 +266,13 @@ namespace Referee.Controllers
                     {
                         LeagueId = (int)tournament.LeagueId;
                     }
+                    DateTime minDate = tournament.StartDate;
+                    DateTime maxDate = tournament.EndDate != null ? tournament.EndDate : tournament.StartDate;
+                    ConflictedReferees = this.GetConflictReferees(minDate, maxDate);
                 }
             }
             
-            var Referees = Unit.RefereeRepository.Get();
+            var Referees = Unit.RefereeRepository.Get(filter: r => !ConflictedReferees.Contains(r.Id));
             if ((FunctionId == 1001 || FunctionId == 2002) && LeagueId > 0)
             {
                 var RefereeAuthorization = Unit.RefRoleRepository.Get(
@@ -312,6 +320,22 @@ namespace Referee.Controllers
             return ConflictedNominations;
         }
 
+        private List<Guid> GetConflictReferees(DateTime minDate, DateTime maxDate)
+        {
+            List<Guid> Conflicts = new List<Guid>();
+            var Nominations = Unit.NominationRepository.Get(
+                n => (n.GameId != null && n.Game.DateAndTime > minDate && n.Game.DateAndTime < maxDate) ||
+                     (n.TournamentId != null && n.Tournament.StartDate > minDate && n.Tournament.StartDate < maxDate));
+            foreach (var Nomination in Nominations)
+            {
+                foreach (var Nominated in Nomination.Nominateds)
+                {
+                    Conflicts.Add(Nominated.RefereeId);                   
+                }
+            }
+            return Conflicts;
+        }
+
         //
         // POST: /Nomination/Create
 
@@ -336,7 +360,7 @@ namespace Referee.Controllers
                 nomination.HashConfirmation = nomination.GetCode();                
                 Unit.NominationRepository.Insert(nomination);
                 Unit.Save();
-                if (nomination.Emailed)
+                if (nomination.Emailed && CHelper.GetValue("SendEmails") == "1" && CHelper.GetValue("SendNominationsEmail") == "1")
                 {
                     SendConfirmationMessages(nomination);
                 }

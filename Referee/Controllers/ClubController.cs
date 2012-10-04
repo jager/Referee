@@ -43,7 +43,7 @@ namespace Referee.Controllers
             IEnumerable<Club> Clubs;
 
             //get all leagues
-            ViewBag.LeaguesSelect = Unit.LeagueRepository.Get(filter: l => l.Id < 1000);
+            ViewBag.LeaguesSelect = Unit.LeagueRepository.Get(filter: l => l.Id < 1000 && l.Visible);
 
 
 
