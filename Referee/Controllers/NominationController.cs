@@ -10,6 +10,7 @@ using Referee.DAL;
 using Referee.Controllers.Base;
 using Referee.ViewModels;
 using Referee.Helpers;
+using Referee.Lib;
 
 namespace Referee.Controllers
 { 
@@ -301,9 +302,7 @@ namespace Referee.Controllers
 
         private List<Conflicts> GetConflictNominations(DateTime minDate, DateTime maxDate)
         {
-            var Nominations = Unit.NominationRepository.Get(
-                n => (n.GameId != null && n.Game.DateAndTime > minDate && n.Game.DateAndTime < maxDate) ||
-                     (n.TournamentId != null && n.Tournament.StartDate > minDate && n.Tournament.StartDate < maxDate));
+            var Nominations = GetConflicts(minDate, maxDate);
             List<Conflicts> ConflictedNominations = new List<Conflicts>();
             foreach (var Nomination in Nominations)
             {
@@ -312,8 +311,11 @@ namespace Referee.Controllers
                     ConflictedNominations.Add( new Conflicts() 
                     {
                         Referee = Nominated.Referee.FullName,
+                        Photo = FileUploader.GetUserPhotoPath(String.Format("{0}{1}", Nominated.Referee.DestinationFolder, Nominated.Referee.Photo)),
                         Event = (Nomination.GameId != null ? Nomination.Game.Name : Nomination.Tournament.Name),
-                        Period = (Nomination.GameId != null ? Nomination.Game.DateAndTime : Nomination.Tournament.StartDate).ToString()
+                        Period = (Nomination.GameId != null ? Nomination.Game.DateAndTime : Nomination.Tournament.StartDate).ToString(),
+                        NominationId = Nomination.Id,
+                        RefereeId = Nominated.RefereeId
                     });
                 }
             }
@@ -323,9 +325,7 @@ namespace Referee.Controllers
         private List<Guid> GetConflictReferees(DateTime minDate, DateTime maxDate)
         {
             List<Guid> Conflicts = new List<Guid>();
-            var Nominations = Unit.NominationRepository.Get(
-                n => (n.GameId != null && n.Game.DateAndTime > minDate && n.Game.DateAndTime < maxDate) ||
-                     (n.TournamentId != null && n.Tournament.StartDate > minDate && n.Tournament.StartDate < maxDate));
+            var Nominations = GetConflicts(minDate, maxDate);
             foreach (var Nomination in Nominations)
             {
                 foreach (var Nominated in Nomination.Nominateds)
@@ -334,6 +334,13 @@ namespace Referee.Controllers
                 }
             }
             return Conflicts;
+        }
+
+        private IEnumerable<Nomination> GetConflicts(DateTime minDate, DateTime maxDate)
+        {
+            return Unit.NominationRepository.Get(
+                n => (n.GameId != null && n.Game.DateAndTime > minDate && n.Game.DateAndTime < maxDate) ||
+                     (n.TournamentId != null && n.Tournament.StartDate > minDate && n.Tournament.StartDate < maxDate));
         }
 
         //
@@ -360,7 +367,7 @@ namespace Referee.Controllers
                 nomination.HashConfirmation = nomination.GetCode();                
                 Unit.NominationRepository.Insert(nomination);
                 Unit.Save();
-                if (nomination.Emailed && CHelper.GetValue("SendEmails") == "1" && CHelper.GetValue("SendNominationsEmail") == "1")
+                if (nomination.Emailed && this.GetConfigValue("SendEmails") == "1" && this.GetConfigValue("SendNominationsEmail") == "1")
                 {
                     SendConfirmationMessages(nomination);
                 }

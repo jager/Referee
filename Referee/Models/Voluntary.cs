@@ -9,13 +9,15 @@ namespace Referee.Models
     public class Voluntary
     {
         public int Id { get; set; }
-        public int GameId { get; set; }
-        public int TournamentId { get; set; }
+        public int? GameId { get; set; }
+        public int? TournamentId { get; set; }
         public string Code { get; set; }
         public bool Active { get; set; }
         public int AmountOfReferees { get; set; }
 
-        public ICollection<VoluntaryReferee> VoluntaryReferees { get; set; }
+        public virtual ICollection<VoluntaryReferee> VoluntaryReferees { get; set; }
+        public virtual Game Game { get; set; }
+        public virtual Tournament Tournament { get; set; }
 
         public string GetCode()
         {

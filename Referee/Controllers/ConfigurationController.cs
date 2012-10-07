@@ -5,10 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using Referee.Controllers.Base;
 using Referee.Models;
-
+using Referee.Helpers;
 
 namespace Referee.Controllers
 {
+    [Authorize(Roles=HelperRoles.Administrator)]
     public class ConfigurationController : BaseController
     {
         //

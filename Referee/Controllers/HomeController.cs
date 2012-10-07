@@ -55,11 +55,11 @@ namespace Referee.Controllers
                 {
                     if (vol.GameId != null)
                     {
-                        GameIDS.Add(vol.GameId);
+                        GameIDS.Add((int)vol.GameId);
                     }
                     else if (vol.TournamentId != null)
                     {
-                        TourIDS.Add(vol.TournamentId);
+                        TourIDS.Add((int)vol.TournamentId);
                     }
                 }
 

@@ -8,6 +8,10 @@
     @Html.LiNavigationElement("Turnieje", "/Tournament", @Url.Content("~/Content/themes/aquincum/images/icons/mainnav/tables.png"), false, false)
     @Html.LiNavigationElement("Obsady", "/Nomination", @Url.Content("~/Content/themes/aquincum/images/icons/mainnav/forms.png"), false, true)
     @Html.LiNavigationElement("Kalendarz", "/Home/Calendar", @Url.Content("~/Content/themes/aquincum/images/icons/mainnav/messages.png"), false, true)
+    @if (Request.IsAuthenticated && User.IsInRole(HelperRoles.Administrator))
+    {
+        @Html.LiNavigationElement("Konfiguracja", "/Configuration", @Url.Content("~/Content/themes/aquincum/images/icons/mainnav/tables.png"), false, true)
+    }
     @Html.LiNavigationElement("Wyloguj", "/Account/LogOff", @Url.Content("~/Content/themes/aquincum/images/icons/mainnav/other.png"), false, true)
     @if (!Request.IsAuthenticated)
     {

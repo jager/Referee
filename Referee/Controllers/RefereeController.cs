@@ -151,7 +151,7 @@ namespace Referee.Controllers
                 
                 Unit.RefereeRepository.Insert(refereeentity);
                 Unit.Save();
-                if (CHelper.GetValue("SendEmails") == "1" && CHelper.GetValue("SendNewAccountEmail") == "1")
+                if (this.GetConfigValue("SendEmails") == "1" && this.GetConfigValue("SendNewAccountEmail") == "1")
                 {
                     MailHelper.CreateNewAccountMessage(refereeentity.Mailadr, Password);
                     if (MailHelper.ErrorMessage != MailHelper._success)

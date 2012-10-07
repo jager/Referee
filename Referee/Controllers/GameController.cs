@@ -99,7 +99,14 @@ namespace Referee.Controllers
                 new BreadcrumbHelper { Href = String.Format("/Game/?LeagueId={0}", MatchGame.LeagueId), Text = "Ligi" },
                 new BreadcrumbHelper { Href = "#", Text = MatchGame.Name }
             };
+
+            ViewBag.Voluntary = this.CheckVoluntary(id);
             return View(MatchGame);
+        }
+
+        private Voluntary CheckVoluntary(int GameId)
+        {
+            return Unit.VoluntaryRepository.Get(filter: v => v.GameId == GameId && v.Active).FirstOrDefault();
         }
 
         //
@@ -261,6 +268,53 @@ namespace Referee.Controllers
             Unit.GameRepository.Delete(game);
             Unit.Save();
             return RedirectToAction("Index", new { LeagueId = LeagueId });
+        }
+
+        [Authorize(Roles=HelperRoles.RefereatObsad)]
+        public JsonResult AddVol(int EventId, string Type, int Amount)
+        {
+            var Message = new { @Message = "", @Error = 0 };
+            Voluntary vol = new Voluntary();
+            if (Type == "tournament")
+            {
+                var Tour = Unit.TournamentRepository.GetById(EventId);
+                if (Tour != null)
+                {
+                    vol.TournamentId = EventId;
+                    vol.Active = true;
+                    vol.AmountOfReferees = Amount;
+                    vol.Code = vol.GetCode();
+                }
+            }
+            else
+            {
+                var Game = Unit.GameRepository.GetById(EventId);
+                if (Game != null)
+                {
+                    vol.GameId = EventId;
+                    vol.Active = true;
+                    vol.AmountOfReferees = Amount;
+                    vol.Code = vol.GetCode();
+                }
+            }
+            try
+            {
+                if (vol.Code != null)
+                {
+                    Unit.VoluntaryRepository.Insert(vol);
+                    Unit.Save();
+                    Message = new { Message = "Dodano poprawnie", Error = 0 };
+                }
+                else
+                {
+                    Message = new { Message = "Brak meczu lut turnieju poprawnie", Error = 1 };
+                }
+            }
+            catch (Exception e)
+            {
+                Message = new { Message = e.Message, Error = 0 };
+            }
+            return Json(Message);
         }
 
         protected override void Dispose(bool disposing)

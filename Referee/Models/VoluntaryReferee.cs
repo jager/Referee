@@ -13,5 +13,6 @@ namespace Referee.Models
         public DateTime Added { get; set; }
 
         public virtual Voluntary Voluntary { get; set; }
+        public virtual RefereeEntity Referee { get; set; }
     }
 }

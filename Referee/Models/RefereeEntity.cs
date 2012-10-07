@@ -84,6 +84,7 @@ namespace Referee.Models
         public virtual ICollection<Penalty> Penalties { get; set; }
         public virtual Authorization Authorization { get; set; }
         public virtual ICollection<Availability> Availabilities { get; set; }
+        public virtual ICollection<Voluntary> Voluntaries { get; set; }
 
 
         public string FullName

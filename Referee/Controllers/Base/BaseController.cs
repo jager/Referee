@@ -29,7 +29,6 @@ namespace Referee.Controllers.Base
             base.Initialize(requestContext);
             GetConfiguration();
             SetCurrentSeason();
-            GetConfigHelper();
            
             string[] roles = { HelperRoles.Administrator, HelperRoles.RefereatObsad, HelperRoles.Sedzia, HelperRoles.WydzialGieriEwidencji };
             string[] ExistingRoles = Roles.GetAllRoles();
@@ -126,9 +125,14 @@ namespace Referee.Controllers.Base
             this.Configuration = Unit.ConfigRepository.Get();            
         }
 
-        protected void GetConfigHelper() 
+        protected string GetConfigValue(string key) 
         {
-            CHelper = new ConfigHelper(Unit);
+            if (this.Configuration != null)
+            {
+                var Config = this.Configuration.Where(c => c.Key == key).FirstOrDefault();
+                return Config.Key;
+            }
+            return String.Empty;
         }
     }
 }

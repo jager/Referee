@@ -170,7 +170,7 @@ namespace Referee.Controllers
                 //var Password = SetPassword(referee);
                 var Password = securityUser.ResetPassword();
 
-                if (CHelper.GetValue("SendEmails") == "1" && CHelper.GetValue("SendRemindPasswordEmail") == "1")
+                if (this.GetConfigValue("SendEmails") == "1" && this.GetConfigValue("SendRemindPasswordEmail") == "1")
                 {
                     MailHelper.RemindPasswordMessage(referee.Mailadr, Password);
 
