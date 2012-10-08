@@ -12,12 +12,32 @@ namespace Referee.Controllers
     [Authorize(Roles=HelperRoles.Administrator)]
     public class ConfigurationController : BaseController
     {
-        //
-        // GET: /Configuration/
+        protected override void Initialize(System.Web.Routing.RequestContext requestContext)
+        {
+            base.Initialize(requestContext);
+
+            ViewData["IconName"] = "icos-home2";
+            ViewData["breadcrumbs"] = new List<BreadcrumbHelper>
+            {
+                new BreadcrumbHelper { Href = "/", Text = "Pulpit" },
+                new BreadcrumbHelper { Href = "/Configuration", Text = "Konfiguracja systemu" }
+            };
+            ViewData["breadlinks"] = new List<BreadcrumbHelper> 
+            { 
+                new BreadcrumbHelper { Href = "/Configuration", Text = "Ogólna" },
+                new BreadcrumbHelper { Href = "/Configuration/League", Text = "Ligi" },
+                new BreadcrumbHelper { Href = "/Configuration/LeagueAuthorization", Text = "Uprawnienia" }
+            };
+        }
 
         [HttpGet]
         public ActionResult Index()
         {
+            ViewData["PageTitle"] = "Konfiguracja systemu";
+            ((List<BreadcrumbHelper>)ViewData["breadcrumbs"]).Add(
+                new BreadcrumbHelper { Href = "#", Text = "Ogólna" }
+            );
+            
             return View(Configuration);
         }
 

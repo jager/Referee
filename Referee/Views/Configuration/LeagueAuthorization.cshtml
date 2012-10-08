@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Referee.Models.RefereeRole>
 @using Referee.Helpers
 @Html.Partial("_ContentTop", ViewData)
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
 @{
     Dictionary<int, string> dFunctions = new Dictionary<int,string>();
     dFunctions.Add(1001, "Sędzia I");

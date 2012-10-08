@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Referee.Models.League>
 @using Referee.Helpers
 @Html.Partial("_ContentTop", ViewData)
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
 @{
     Dictionary<string, string> dTypes = new Dictionary<string,string>();
     dTypes.Add("tournament", "System turniejowy");

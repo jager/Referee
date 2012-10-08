@@ -1435,7 +1435,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', end
 
 /* ===== News widget  ===== */
 
-.wNews { float: left; width: 80%; margin-top: 2px; }
+.wNews { float: left; width: 100%; margin-top: 2px; }
 .wNews span { display: block; line-height: 14px; margin-top: 4px; }
 .wNews > .headline { float: left; margin-right: 14px; }
 .wNews .announce > a { font-weight: bold; line-height: 18px; }

@@ -249,29 +249,28 @@ namespace Referee.Controllers
             }
             int LeagueId = 0;
             List<Guid> ConflictedReferees = new List<Guid>();
-            if (FunctionId == 1001 || FunctionId == 2002)
+            
+            //pobierz tylko odpowiednich sędziów                
+            if (Type == "game")
             {
-                //pobierz tylko odpowiednich sędziów                
-                if (Type == "game")
-                {
-                    var game = Unit.GameRepository.GetById(GameId);
-                    LeagueId = game.LeagueId;
-                    DateTime minDate = game.DateAndTime.AddHours(-2);
-                    DateTime maxDate = game.DateAndTime.AddHours(2);
-                    ConflictedReferees = this.GetConflictReferees(minDate, maxDate);
-                }
-                else if (Type == "tournament")
-                {
-                    var tournament = Unit.TournamentRepository.GetById(TournamentId);
-                    if (tournament.LeagueId != null)
-                    {
-                        LeagueId = (int)tournament.LeagueId;
-                    }
-                    DateTime minDate = tournament.StartDate;
-                    DateTime maxDate = tournament.EndDate != null ? tournament.EndDate : tournament.StartDate;
-                    ConflictedReferees = this.GetConflictReferees(minDate, maxDate);
-                }
+                var game = Unit.GameRepository.GetById(GameId);
+                LeagueId = game.LeagueId;
+                DateTime minDate = game.DateAndTime.AddHours(-2);
+                DateTime maxDate = game.DateAndTime.AddHours(2);
+                ConflictedReferees = this.GetConflictReferees(minDate, maxDate);
             }
+            else if (Type == "tournament")
+            {
+                var tournament = Unit.TournamentRepository.GetById(TournamentId);
+                if (tournament.LeagueId != null)
+                {
+                    LeagueId = (int)tournament.LeagueId;
+                }
+                DateTime minDate = tournament.StartDate;
+                DateTime maxDate = tournament.EndDate != null ? tournament.EndDate : tournament.StartDate;
+                ConflictedReferees = this.GetConflictReferees(minDate, maxDate);
+            }
+            
             
             var Referees = Unit.RefereeRepository.Get(filter: r => !ConflictedReferees.Contains(r.Id));
             if ((FunctionId == 1001 || FunctionId == 2002) && LeagueId > 0)

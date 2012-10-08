@@ -75,7 +75,7 @@
                 </div>
                 <div class="grid6">
                     @Html.EditorFor(model => model.Note)
-                    @Html.ValidationMessageFor(model => model.Note)
+                    @Html.ValidationMessageFor(model => model.Note)                                     
                 </div>
                 <div class="clear"></div>
             </div>
@@ -102,29 +102,20 @@
         <div class="grid3">
             <div class="widget">
                 <div class="whead"><h6>Zajęci sędziowie</h6><div class="clear"></div></div>
-                    <ul class="messagesOne">                    
+                    <ul class="updates">                    
                         @foreach (var conflict in Conflicts)
                         {
-                            i++;
-                            <li class="@((i % 2 == 0 ) ? "by_user": "by_me")">
-                                <a href="#" title=""><img src="@Url.Content(conflict.Photo)" alt="" /></a>
-                                <div class="messageArea">
-                                    <span class="aro"></span>
-                                    <div class="infoRow">
-                                        <span class="name"><strong>@conflict.Referee</strong> sędziuje:</span>
-                                        <div class="clear"></div>
-                                    </div>
-                                    <strong>Co: </strong>@conflict.Event <br />
-                                    <strong>Kiedy: </strong>@conflict.Period <br />
-                                    <div class="bottom">
-                                        @Html.AuthLink("Nominacja", "Edit", "Nomination", new { @Id = conflict.NominationId }, new { }, HelperRoles.RefereatObsad) | 
-                                        @Html.AuthLink("Profil sędziego", "Details", "Referee", new { @Id = conflict.RefereeId }, new { }, HelperRoles.Sedzia)
+                            photoPath = String.IsNullOrEmpty(conflict.Photo) ? photoPath : conflict.Photo;
+                            <li>
+                                <div class="wNews">
+                                    <a href="#" title="" class="headline"><img src="@Url.Content(photoPath)" alt="" width="37" height="36" /></a>
+                                    <div class="announce">
+                                        @Html.AuthLink(conflict.Referee, "Details", "Referee", new { @Id = conflict.RefereeId }, new { }, HelperRoles.Sedzia)
+                                        <span>@conflict.Event</span>
                                     </div>
                                 </div>
-                                <div class="clear"></div>
-                                @conflict.Period
+                                <span class="clear"></span>
                             </li>
-                            <li class="divider"><span></span></li>
                         }
                     </ul>
             </div>
