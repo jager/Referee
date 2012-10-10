@@ -298,11 +298,18 @@ namespace Referee.Controllers
             return PartialView();
         }
 
-
+        /// <summary>
+        /// List of conflicts ViewModel which is created to represent view of conflicted referees
+        /// </summary>
+        /// <param name="minDate">DateTime - minimal date of event - startDate - 2 hours</param>
+        /// <param name="maxDate">DateTime - maximal date of event - startDate + 2 hours or EndDate in case of Tournaments</param>
+        /// <returns>List of type Conflicts</returns>
         private List<Conflicts> GetConflictNominations(DateTime minDate, DateTime maxDate)
         {
             var Nominations = GetConflicts(minDate, maxDate);
+            //var NotAvailabilities = GetAvailability(minDate, maxDate);
             List<Conflicts> ConflictedNominations = new List<Conflicts>();
+            
             foreach (var Nomination in Nominations)
             {
                 foreach (var Nominated in Nomination.Nominateds)
@@ -318,13 +325,34 @@ namespace Referee.Controllers
                     });
                 }
             }
+            /*
+            foreach (var nAv in NotAvailabilities)
+            {
+                ConflictedNominations.Add(new Conflicts()
+                {
+                    Referee = nAv.Referee.FullName,
+                    Photo = FileUploader.GetUserPhotoPath(String.Format("{0}{1}", nAv.Referee.DestinationFolder, nAv.Referee.Photo)),
+                    Event = "Niedyspozycyjność",
+                    Period = String.Format("{0} - {1}", nAv.DateStart, nAv.DateEnd),
+                    NominationId = 0,
+                    RefereeId = Guid.Parse(nAv.RefereeId)
+                });
+            }
+             * */
             return ConflictedNominations;
         }
 
+        /// <summary>
+        /// Returns list of IDs of referees who referee other event
+        /// </summary>
+        /// <param name="minDate">DateTime - minimal date of event - startDate - 2 hours</param>
+        /// <param name="maxDate">DateTime - maximal date of event - startDate + 2 hours or EndDate in case of Tournaments</param>
+        /// <returns>List of type Guids</returns>
         private List<Guid> GetConflictReferees(DateTime minDate, DateTime maxDate)
         {
             List<Guid> Conflicts = new List<Guid>();
             var Nominations = GetConflicts(minDate, maxDate);
+            
             foreach (var Nomination in Nominations)
             {
                 foreach (var Nominated in Nomination.Nominateds)
@@ -332,14 +360,34 @@ namespace Referee.Controllers
                     Conflicts.Add(Nominated.RefereeId);                   
                 }
             }
-            return Conflicts;
+            var AvailabilityConflicts = this.GetAvailability(minDate, maxDate)
+                                            .Select(s => Guid.Parse(s.RefereeId));
+            return Conflicts.Union(AvailabilityConflicts).ToList<Guid>();
         }
 
+        /// <summary>
+        /// Returns conflicted other nominations
+        /// </summary>
+        /// <param name="minDate">DateTime - minimal date of event - startDate - 2 hours</param>
+        /// <param name="maxDate">DateTime - maximal date of event - startDate + 2 hours or EndDate in case of Tournaments</param>
+        /// <returns>IEnumerable of type Nomination</returns>
         private IEnumerable<Nomination> GetConflicts(DateTime minDate, DateTime maxDate)
         {
             return Unit.NominationRepository.Get(
                 n => (n.GameId != null && n.Game.DateAndTime > minDate && n.Game.DateAndTime < maxDate) ||
                      (n.TournamentId != null && n.Tournament.StartDate > minDate && n.Tournament.StartDate < maxDate));
+        }
+
+        /// <summary>
+        /// Returns IDs of referees who can not referee the match due to being not available
+        /// </summary>
+        /// <param name="minDate">DateTime - minimal date of event - startDate - 2 hours</param>
+        /// <param name="maxDate">DateTime - maximal date of event - startDate + 2 hours or EndDate in case of Tournaments</param>
+        /// <returns>List of type Availability</returns>
+        private List<Availability> GetAvailability(DateTime minDate, DateTime maxDate)
+        {
+            return Unit.AvailabilityRepository.Get(filter: a => (a.DateStart <= minDate && minDate <= a.DateEnd) ||
+                                                                  (a.DateStart <= maxDate && maxDate <= a.DateEnd)).ToList<Availability>();
         }
 
         //
