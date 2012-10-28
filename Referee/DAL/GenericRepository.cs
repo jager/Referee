@@ -66,6 +66,11 @@ namespace Referee.DAL
             db.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
+        public virtual void UpdateProfile(TEntity newEntity, TEntity oldEntity)
+        {
+            db.Entry(oldEntity).CurrentValues.SetValues(newEntity);
+        }
+
         public virtual void Delete(object id)
         {
             TEntity entityToDelete = dbSet.Find(id);

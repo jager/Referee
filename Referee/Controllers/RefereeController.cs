@@ -307,7 +307,7 @@ namespace Referee.Controllers
             {
                 selectedRoles = Request.Form["Roles"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             }
-
+            
             string Password = HashString.SHA1(String.Format("{0}{1}", refereeentity.Mailadr, DateTime.Now.ToUniversalTime().ToLongDateString())).Substring(0, 8);
             ///Trzeba to zmienić w wersji docelowej.
             //Password = "qawseD123";
@@ -317,7 +317,14 @@ namespace Referee.Controllers
                 selectedRoles.Count() > 0 && 
                 AssignRole(refereeentity.Mailadr, selectedRoles))
             {
-                Unit.RefereeRepository.Update(refereeentity);
+                if (refereeentity.Id == CurrentReferee.Id)
+                {
+                    Unit.RefereeRepository.UpdateProfile(refereeentity, CurrentReferee);
+                }
+                else
+                {
+                    Unit.RefereeRepository.Update(refereeentity);
+                }
                 Unit.Save();                
                 return RedirectToAction("Index");
             }
