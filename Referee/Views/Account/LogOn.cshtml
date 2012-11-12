@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     <div class="loginPic">
-        <a href="#" title=""><img src="@Url.Content("~/Content/themes/aquincum/images/userLogin2.png")" alt="" /></a>
+        <a href="#" title=""><img src="@Url.Content("~/Content/themes/aquincum/images/userLogin2.png")" alt="" id="LoginImg" /></a>
         <span>Witaj, czy jesteś sędzią?</span>
         <div class="loginActions">
             <div><a href="#" title="Change user" class="logleft flip"></a></div>
@@ -30,3 +30,23 @@
         <div class="clear"></div>
     </div>
 }
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("input.loginEmail").bind("blur", function () {
+            var username = $(this).val();
+            if (username != "") {
+                $.ajax({
+                    url: "/Account/GetPhoto",
+                    data: { "u": username },
+                    dataType: "json",
+                    type: "POST"
+                })
+                .done(function (data) {
+                    if (typeof (data) != undefined && data.photo != "") {
+                        $("img#LoginImg").attr("src", data.photo);
+                    }
+                });
+            }
+        });
+    });
+</script>

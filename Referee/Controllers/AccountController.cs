@@ -8,6 +8,7 @@ using System.Web.Security;
 using Referee.Models;
 using Referee.Controllers.Base;
 using Referee.Helpers;
+using Referee.Models.Domain;
 
 namespace Referee.Controllers
 {
@@ -51,6 +52,14 @@ namespace Referee.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpPost]
+        public JsonResult GetPhoto(string u)
+        {
+            var Referee = Unit.RefereeRepository.Get(filter: r => r.Mailadr == u.Trim()).FirstOrDefault<RefereeEntity>();
+            var User = new UserDomain(Referee);
+            return Json(User.GetPhotoAndFullName());
         }
 
         //

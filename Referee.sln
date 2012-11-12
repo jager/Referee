@@ -1,7 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Web Developer Express 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Web
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Referee", "Referee\Referee.csproj", "{402FAB94-7692-4C89-BE86-6636589CB0E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RefereeTest", "RefereeTest\RefereeTest.csproj", "{EB88EB21-42D7-42F0-81C0-9A15A0A1C8BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{402FAB94-7692-4C89-BE86-6636589CB0E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{402FAB94-7692-4C89-BE86-6636589CB0E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{402FAB94-7692-4C89-BE86-6636589CB0E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB88EB21-42D7-42F0-81C0-9A15A0A1C8BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB88EB21-42D7-42F0-81C0-9A15A0A1C8BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB88EB21-42D7-42F0-81C0-9A15A0A1C8BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB88EB21-42D7-42F0-81C0-9A15A0A1C8BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
