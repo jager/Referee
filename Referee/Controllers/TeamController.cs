@@ -77,12 +77,6 @@ namespace Referee.Controllers
             }
         }
 
-        private string SetTeamName(Team team)
-        {
-            string clubName = Unit.ClubRepository.GetById(team.ClubId).Name;
-            return !team.Name.Contains(clubName) ? String.Format("{0} {1}", clubName, team.Name) : team.Name;
-        }
-
         //
         // GET: /Team/Create
         [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
@@ -119,7 +113,6 @@ namespace Referee.Controllers
         {
             if (ModelState.IsValid)
             {
-                team.Name = SetTeamName(team);
                 Unit.TeamRepository.Insert(team);
                 
                 if (!String.IsNullOrEmpty(Request.Form["selectedLeagues"]))
@@ -174,7 +167,6 @@ namespace Referee.Controllers
         {
             if (ModelState.IsValid)
             {
-                team.Name = SetTeamName(team);
                 Unit.TeamRepository.Update(team);
                 if (!String.IsNullOrEmpty(Request.Form["selectedLeagues"]))
                 {

@@ -50,6 +50,9 @@
                     Nazwa drużyny
                 </th>
                 <th>
+                    Ligi
+                </th>
+                <th>
                     Płeć
                 </th>
                 <th>
@@ -70,6 +73,9 @@
                 <a href="#" title="">
                     @Html.DisplayFor(modelItem => item.Name)
                 </a>
+            </td>
+            <td>
+                @TeamHelper.GetEnrollmentsNames(item.Enrollments.ToList(), ", ")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Gender)

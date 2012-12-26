@@ -1,0 +1,37 @@
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	modified:   Referee.sln
+#	modified:   Referee/Controllers/TeamController.cs
+#	modified:   Referee/Models/Game.cs
+#	modified:   Referee/Models/Team.cs
+#	modified:   Referee/Referee.csproj
+#	modified:   Referee/ViewModels/ClubDetails.cs
+#	modified:   Referee/Views/Account/ChangePasswordSuccess.cshtml
+#	modified:   Referee/Views/Club/Details.cshtml
+#	modified:   Referee/packages.config
+#	modified:   Referee/storage/logs/action.log
+#	deleted:    RefereeTest/Controllers/UnitTest1.cs
+#	modified:   RefereeTest/RefereeTest.csproj
+#	modified:   RefereeTest/ViewModels/NominationMessageTest.cs
+#	modified:   packages/repositories.config
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	.nuget/
+#	Referee/Controllers/VoluntaryController.cs
+#	Referee/Helpers/TeamHelper.cs
+#	Referee/Views/Voluntary/
+#	RefereeTest/Controllers/
+#	RefereeTest/ViewModels/EventTest.cs
+#	RefereeTest/packages.config
+#	packages/xunit.1.9.1/
+#	packages/xunit.extensions.1.9.1/
+#	packages/xunit.runners.1.9.1/
+#	xUnitTestLibrary/
+

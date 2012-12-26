@@ -36,19 +36,19 @@ namespace Referee.Models
         [Required(ErrorMessage="To pole jest wymagane")]
         public Guid ClubId { get; set; }
 
-        [Display(Name = "Imię i nazwisko trenera/opiekuna.")]
+        [Display(Name = "Imię i nazwisko osoby kontaktowej.")]
         [Required(ErrorMessage = "To pole jest wymagane")]
         [MaxLength(150)]
         public string Coach { get; set; }
 
-        [Display(Name = "Telefon kontaktowy do trenera")]
-        [RegularExpression(@"[0-9 \-]{11,14}", ErrorMessage = "Proszę wpisać poprawny numer telefonu (xx xxx xx xx).")]
+        [Display(Name = "Telefon kontaktowy do osoby kontaktowej.")]
+        [RegularExpression(@"[0-9 \-]{11,14}", ErrorMessage = "Proszę wpisać poprawny numer telefonu.")]
         public string CoachPhone { get; set; }
 
         [Display(Name = "Telefon publiczny?")]
         public bool? CoachPhoneVisible { get; set; }
 
-        [Display(Name = "Adres mailowy do trenera")]
+        [Display(Name = "Adres mailowy do osoby kontaktowej.")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Proszę wpisać poprawny adres mailowy")]
         public string CoachMailAdress { get; set; }
 

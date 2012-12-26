@@ -15,6 +15,10 @@ namespace Referee.Models
         [Key]
         public int Id { get; set; }
 
+        [Display(Name="Numer meczu")]
+        [Required(ErrorMessage = "To pole jest wymagane")]
+        public string GameNo { get; set; }
+
         [HiddenInput(DisplayValue=false)]
         public string Venue { get; set; }
 

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Referee.Models.Voluntary>
+@using Referee.Helpers
+@Html.Partial("_ContentTop", ViewData)
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+
+
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
+<div class="wrapper">
+        <div class="widget">
+    <div class="whead">
+        <h6>Lista klubów</h6>
+        <div class="clear"></div>
+    </div>
+    <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
+    <thead>
+        <tr>
+            <td>
+                Nazwa
+            </td>
+            <td>
+                Rodzaj
+            </td>
+            <td>
+                Data
+            </td>
+            <td>
+                Ilość sędziów (zgłoszonych/potrzebnych)
+            </td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Game != null ? item.Game.Name : item.Tournament.Name)
+            </td>
+            <td>                
+                @Html.DisplayFor(modelItem => item.Game != null ? "Mecz" : "Turniej")               
+            </td>
+            <td>                
+                @Html.DisplayFor(modelItem => item.Game != null ? item.Game.DateAndTime.ToString() : item.Tournament.StartDate.ToString())               
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => String.Format("{0}/{1}", item.VoluntaryReferees.Count(), item.AmountOfReferees))
+            </td>
+            <td></td>
+        </tr>
+        
+    }
+    </tbody>
+    </table>
+</div>

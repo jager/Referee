@@ -3,7 +3,7 @@ using Referee.ViewModels;
 using Referee.Models;
 using Xunit;
 
-namespace RefereeTest.ViewModels
+namespace xUnitTestLibrary.ViewModels
 {
     
     public class NominationMessageTest

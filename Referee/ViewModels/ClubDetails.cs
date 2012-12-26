@@ -11,4 +11,7 @@ namespace Referee.ViewModels
         public Club Club { get; set; }
         public ICollection<Team> Teams { get; set; }
     }
+
+
+
 }
