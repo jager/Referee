@@ -65,6 +65,9 @@
             <thead>
                 <tr>
                     <td>
+                        Numer
+                    </td>
+                    <td>
                         Mecz
                     </td>
                     <td>
@@ -87,6 +90,9 @@
             if ((User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.WydzialGieriEwidencji)) || item.Published)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GameNo)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.HostTeam)
                     -

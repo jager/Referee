@@ -24,12 +24,22 @@
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
-    @Html.HiddenFor(model => model.LeagueId);
-    @Html.HiddenFor(model => model.SeasonId);
-    @Html.HiddenFor(model => model.Id);
+    @Html.HiddenFor(model => model.LeagueId)
+    @Html.HiddenFor(model => model.SeasonId)
+    @Html.HiddenFor(model => model.Id)
     <fieldset>
         <div class="widget fluid">
             <div class="whead"><h6>Edytuj mecz</h6><div class="clear"></div></div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.GameNo)
+                    </div>
+                    <div class="grid9">
+                        @Html.TextBoxFor(model => model.GameNo) 
+                        @Html.ValidationMessageFor(model => model.GameNo)                     
+                    </div>
+                    <div class="clear"></div>
+                </div>
                 <div class="formRow">
                     <div class="grid3">
                         @Html.LabelFor(model => model.HostTeamId)

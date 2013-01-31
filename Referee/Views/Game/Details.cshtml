@@ -13,11 +13,15 @@
     <div class="fluid">
         <div class="widget grid12">
             <div class="whead">
-                <h6>@Html.DisplayFor(model => model.Name)</h6>
+                <h6>@(String.Format("Mecz nr: {0}. {1}", Model.GameNo, Model.Name))</h6>
                 <div class="clear"></div>
             </div>
             <div class="grid4">
                 <ul class="updates">
+                    <li>
+                        <strong>Numer meczu:</strong>
+                        @Model.GameNo
+                    </li>
                     <li>
                         <a href="#">@Model.Name</a>
                     </li>

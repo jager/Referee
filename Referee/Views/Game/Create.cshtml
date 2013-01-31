@@ -30,6 +30,16 @@
             <div class="whead"><h6>Dodaj nowy mecz</h6><div class="clear"></div></div>
                 <div class="formRow">
                     <div class="grid3">
+                        @Html.LabelFor(model => model.GameNo)
+                    </div>
+                    <div class="grid9">
+                        @Html.TextBoxFor(model => model.GameNo)
+                        @Html.ValidationMessageFor(model => model.GameNo)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
                         @Html.LabelFor(model => model.HostTeamId)
                     </div>
                     <div class="grid9">

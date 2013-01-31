@@ -9,108 +9,223 @@
 <div class="wrapper">
     <div class="fluid">
         <div class="widget grid12">
-            <div class="whead">
-                <h6>@Html.DisplayFor(model => model.LastName), @Html.DisplayFor(model => model.FirstName)</h6>
-                @if (User.IsInRole(HelperRoles.RefereatObsad))
-                {
-                <div class="titleOpt">
-                    <a href="#" data-toggle="dropdown"><span class="icos-cog3"></span><span class="clear"></span></a>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a href="/referee/edit/@Html.DisplayFor(model => model.Id)" class=""><span class="icos-pencil"></span>Edytuj</a></li>
-                        <li><a href="/referee/delete/@Html.DisplayFor(model => model.Id)" class="openableDialogContenerButton"><span class="icos-trash"></span>Usuń dane</a></li>                    
-                        <li><a href="/avail/index/@Html.DisplayFor(model => model.Id)" class="openableDialogContenerButton"><span class="icos-chart"></span>Pokaż niedyspozycyjności</a></li>
-                        <li><a href="#" class=""><span class="icos-uc"></span>Pokaż kary</a></li>
-                    </ul>
-                </div>
-                }
-                <div class="clear"></div>
-            </div>
-
-            <div class="grid2">
-                <ul class="updates">
-                    <li>
-                        @if (String.IsNullOrEmpty(Model.Photo))
-                        {
-                            <img width="108px" height="110px" src="@Url.Content("~/Content/themes/aquincum/images/userLogin2.png")" alt="" />
-                        }
-                        else
-                        {
-                            <img width="108px" height="110px" src="@Url.Content(FileUploader.GetUserPhotoPath(String.Format("{0}{1}",Model.DestinationFolder, Model.Photo)))?id=@DateTime.Now.Millisecond.ToString()" alt="" />            
-                        }
-                    </li>                    
-                </ul>
-            </div>
-            <div class="grid3">
-                <ul class="updates">
-                    <li>
-                        <a href="#">@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</a>
-                        <span>
-                            @Html.DisplayFor(model => model.Zip) @Html.DisplayFor(model => model.City), @Html.DisplayFor(model => model.Address)
-                        </span>
-                    </li>
-                    <li>
-                        <span>
-                            Data urodzenia: @Model.DOB.ToShortDateString()
-                        </span>
-                        <span>
-                            Data ukończenia kursu: @Model.DateOfEnrollment
-                        </span>
-                    </li>
-                </ul>
-            </div>
-            <div class="grid3">
-                <ul class="updates">
-                    <li>
-                        <a href="#">@Html.DisplayFor(model => model.Mailadr)</a>
-                        <span>
-                            Nr telefonu: @Html.DisplayFor(model => model.Phone)<br />
-                            Nr telefonu komórkowego: @Html.DisplayFor(model => model.Mobile)
-                        </span>
-                    </li>
-                </ul>
-            </div>
-            <div class="grid2">
-                <ul class="updates">
-                    <li>                        
-                        <span>
-                            Klasa sędziowska: @Html.DisplayFor(model => model.RefClass.Name)<br />
-                            Poziom uprawnień: @Html.DisplayFor(model => model.Authorization.Name)
-                        </span>
-                    </li>
-                </ul>
-            </div>
-            <div class="clear"></div>
-            <div class="grid8">
-            @if (User.IsInRole(HelperRoles.RefereatObsad) || (User.IsInRole(HelperRoles.Sedzia) && User.Identity.Name == Model.Mailadr))
-            {
-                using (Html.BeginForm("ChangePhoto", "Referee", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
-                    @Html.HiddenFor(model => model.Id)
-                    <div class="formRow">                                
-                        <div class="grid5">
-                            <input type="file" class="fileInput" id="fileInput" name="Photo" />
-                        </div>
-                        <div class="grid2"><input class="buttonS bGreen" type="submit" value="Zmień zdjęcie" /></div>
-                        <div class="grid2">                            
-                            @if ((Model.Mailadr == User.Identity.Name) && User.IsInRole(HelperRoles.Sedzia))
-                            {
-                                @Html.AuthLink("Zmień hasło", "ChangePassword", "Account", new { }, new { @class = "buttonS bBlue openableDialogContenerButton" })    
-                            }
-                            else if (User.IsInRole(HelperRoles.RefereatObsad) && (Model.Mailadr != User.Identity.Name)) 
-                            {
-                                @Html.AuthLink("Zmień hasło", "RemindPassword", "Account", new { @id = Model.Id }, new { @class = "buttonS bBlue openableDialogContenerButton" })    
-                            }
-                        </div>
-                        <div class="grid3">                            
-                            @Html.AuthLink("Zmień adres mailowy", "ChangeMailadr", "Referee", new { @id = Model.Id }, new { @class = "buttonS bBlue openableDialogContenerButton" }, HelperRoles.RefereatObsad)
-                        </div>
-                        <div class="clear"></div>
+            <ul class="tabs">
+                <li><a href="#daneosobowe">Dane osobowe</a></li>
+                <li><a href="#nominacjesedziego">Nominacje sędziego</a></li>
+            </ul>
+            <div class="tab_container">
+                <div id="daneosobowe" class="tab_content">
+                    <div class="grid2">
+                        <ul class="updates">
+                            <li>
+                                @if (String.IsNullOrEmpty(Model.Photo))
+                                {
+                                    <img width="108px" height="110px" src="@Url.Content("~/Content/themes/aquincum/images/userLogin2.png")" alt="" />
+                                }
+                                else
+                                {
+                                    <img width="108px" height="110px" src="@Url.Content(FileUploader.GetUserPhotoPath(String.Format("{0}{1}",Model.DestinationFolder, Model.Photo)))?id=@DateTime.Now.Millisecond.ToString()" alt="" />            
+                                }
+                            </li>                    
+                        </ul>
                     </div>
-                }
-            }
-            </div>
-            
+                    <div class="grid3">
+                        <ul class="updates">
+                            <li>
+                                <a href="#">@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</a>
+                                <span>
+                                    @Html.DisplayFor(model => model.Zip) @Html.DisplayFor(model => model.City), @Html.DisplayFor(model => model.Address)
+                                </span>
+                            </li>
+                            <li>
+                                <span>
+                                    Data urodzenia: @Model.DOB.ToShortDateString()
+                                </span>
+                                <span>
+                                    Data ukończenia kursu: @Model.DateOfEnrollment
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="grid3">
+                        <ul class="updates">
+                            <li>
+                                <a href="#">@Html.DisplayFor(model => model.Mailadr)</a>
+                                <span>
+                                    Nr telefonu: @Html.DisplayFor(model => model.Phone)<br />
+                                    Nr telefonu komórkowego: @Html.DisplayFor(model => model.Mobile)
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="grid2">
+                        <ul class="updates">
+                            <li>                        
+                                <span>
+                                    Klasa sędziowska: @Html.DisplayFor(model => model.RefClass.Name)<br />
+                                    Poziom uprawnień: @Html.DisplayFor(model => model.Authorization.Name)
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="grid8">
+                    @if (User.IsInRole(HelperRoles.RefereatObsad) || (User.IsInRole(HelperRoles.Sedzia) && User.Identity.Name == Model.Mailadr))
+                    {
+                        using (Html.BeginForm("ChangePhoto", "Referee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.HiddenFor(model => model.Id)
+                            <div class="formRow">                                
+                                <div class="grid5">
+                                    <input type="file" class="fileInput" id="fileInput" name="Photo" />
+                                </div>
+                                <div class="grid2"><input class="buttonS bGreen" type="submit" value="Zmień zdjęcie" /></div>
+                                <div class="grid2">                            
+                                    @if ((Model.Mailadr == User.Identity.Name) && User.IsInRole(HelperRoles.Sedzia))
+                                    {
+                                        @Html.AuthLink("Zmień hasło", "ChangePassword", "Account", new { }, new { @class = "buttonS bBlue openableDialogContenerButton" })    
+                                    }
+                                    else if (User.IsInRole(HelperRoles.RefereatObsad) && (Model.Mailadr != User.Identity.Name)) 
+                                    {
+                                        @Html.AuthLink("Zmień hasło", "RemindPassword", "Account", new { @id = Model.Id }, new { @class = "buttonS bBlue openableDialogContenerButton" })    
+                                    }
+                                </div>
+                                <div class="grid3">                            
+                                    @Html.AuthLink("Zmień adres mailowy", "ChangeMailadr", "Referee", new { @id = Model.Id }, new { @class = "buttonS bBlue openableDialogContenerButton" }, HelperRoles.RefereatObsad)
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        }
+                    }
+                    </div>
+                    <div class="clear"></div>   
+                    <div class="grid8">
+                        @if (User.IsInRole(HelperRoles.RefereatObsad))
+                        {
+                            <a href="/referee/edit/@Html.DisplayFor(model => model.Id)" class="buttonS bBlue">Edytuj</a>
+                            <a href="/referee/delete/@Html.DisplayFor(model => model.Id)" class="buttonS bRed openableDialogContenerButton">Usuń dane</a>
+                            <a href="/avail/index/@Html.DisplayFor(model => model.Id)" class="buttonS bBlue openableDialogContenerButton">Pokaż niedyspozycyjności</a>
+                            <a href="#" class="buttonS bBlue">Pokaż kary</a>
+                        }
+                        <div class="clear"></div>
+                    </div>   
+                    <div class="clear"></div>  
+                </div>
+                <div id="nominacjesedziego" class="tab_content">
+                    <!-- Obsady sędziowskie -->
+                    <div class="widget">
+                        
+                        <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        Mecz/Turniej
+                                    </td>
+                                    <td>
+                                        Data
+                                    </td>
+                                    <td>
+                                        Godzina
+                                    </td>                
+                                    <td>
+                                        Obsada sędziowska
+                                    </td>
+                                    @if (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad))
+                                    {
+                                        <td>
+                                            Opublikowana
+                                        </td>   
+                                    }                  
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    @{
+                        var Games = (List<Referee.ViewModels.NominationDetails>)ViewBag.Games;
+                    }
+                    @foreach (var item in Games)
+                    {
+                        if (item.Nomination.Published)
+                        {
+                                <tr>
+                                    <td>
+                                        @item.Event.Name
+                                    </td>
+                                    <td>
+                                        @item.Event.Date
+                                    </td>
+                                    <td>
+                                        @item.Event.Time
+                                    </td>
+                                    <td>
+                                        @if (item.NominatedReferees.Count() > 0)
+                                        {
+                                            foreach (var referee in item.NominatedReferees)
+                                            {
+                                                if (referee.RefereeId != Model.Id)
+                                                {
+                                                    if (referee.Confirmed) 
+                                                    {
+                                                        @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
+                                                                       "Details",
+                                                                       "Referee",
+                                                                       new { @id = referee.RefereeId },
+                                                                       new { @class = "greenBack" },
+                                                                       HelperRoles.Sedzia)
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
+                                                                       "Details",
+                                                                       "Referee",
+                                                                       new { @id = referee.RefereeId },
+                                                                       new { },
+                                                                       HelperRoles.Sedzia)
+                                                    }
+                                                } 
+                                                else 
+                                                {
+                                                    if (referee.Confirmed) 
+                                                    {
+                                                        <span class="greenBack" style="font-weight: bold">@String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName)</span>
+                                                    } 
+                                                    else 
+                                                    {
+                                                        <span style="font-weight: bold">@String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName)</span>
+                                                    }
+                                                }
+                                                <br />
+                                            }
+                                        }        
+                                    </td>
+                                    @if (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad))
+                                    {
+                                        <td>
+                                            @if (item.Nomination.Published)
+                                            {
+                                                <span class="fileSuccess"></span>
+                                                @item.Nomination.PublishDate
+                                            }
+                                            else
+                                            {
+                                                <span class="fileError"></span>
+                                            }
+                                        </td>  
+                                    }
+                                    <td class="tableActs" align="center">
+                                        @Html.AuthLink("Pokaż szczegóły", "Details", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" })                   
+                                    </td>
+                                </tr>
+                        }
+                    }
+                            </tbody>
+                        </table>
+                </div>
+                </div>
+            </div>	
             <div class="clear"></div>
+
+            
         </div>
 
         <div id="openableDialogContener" class="dialog" title=""></div>
@@ -119,115 +234,4 @@
 
 
     
-        <div class="widget">
-    <div class="whead">
-        <h6>Obsady sędziowskie</h6>
-        <div class="clear"></div>
-    </div>
-    <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
-        <thead>
-            <tr>
-                <td>
-                    Mecz/Turniej
-                </td>
-                <td>
-                    Data
-                </td>
-                <td>
-                    Godzina
-                </td>                
-                <td>
-                    Obsada sędziowska
-                </td>
-                @if (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad))
-                {
-                    <td>
-                        Opublikowana
-                    </td>   
-                }                  
-                <td></td>
-            </tr>
-        </thead>
-        <tbody>
-@{
-    var Games = (List<Referee.ViewModels.NominationDetails>)ViewBag.Games;
-}
-@foreach (var item in Games)
-{
-    if (item.Nomination.Published)
-    {
-            <tr>
-                <td>
-                    @item.Event.Name
-                </td>
-                <td>
-                    @item.Event.Date
-                </td>
-                <td>
-                    @item.Event.Time
-                </td>
-                <td>
-                    @if (item.NominatedReferees.Count() > 0)
-                    {
-                        foreach (var referee in item.NominatedReferees)
-                        {
-                            if (referee.RefereeId != Model.Id)
-                            {
-                                if (referee.Confirmed) 
-                                {
-                                    @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
-                                                   "Details",
-                                                   "Referee",
-                                                   new { @id = referee.RefereeId },
-                                                   new { @class = "greenBack" },
-                                                   HelperRoles.Sedzia)
-                                }
-                                else
-                                {
-                                    @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
-                                                   "Details",
-                                                   "Referee",
-                                                   new { @id = referee.RefereeId },
-                                                   new { },
-                                                   HelperRoles.Sedzia)
-                                }
-                            } 
-                            else 
-                            {
-                                if (referee.Confirmed) 
-                                {
-                                    <span class="greenBack" style="font-weight: bold">@String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName)</span>
-                                } 
-                                else 
-                                {
-                                    <span style="font-weight: bold">@String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName)</span>
-                                }
-                            }
-                            <br />
-                        }
-                    }        
-                </td>
-                @if (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad))
-                {
-                    <td>
-                        @if (item.Nomination.Published)
-                        {
-                            <span class="fileSuccess"></span>
-                            @item.Nomination.PublishDate
-                        }
-                        else
-                        {
-                            <span class="fileError"></span>
-                        }
-                    </td>  
-                }
-                <td class="tableActs" align="center">
-                    @Html.AuthLink("Pokaż szczegóły", "Details", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" })                   
-                </td>
-            </tr>
-    }
-}
-        </tbody>
-    </table>
-    </div>
 </div>
