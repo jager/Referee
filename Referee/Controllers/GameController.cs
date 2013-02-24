@@ -180,6 +180,7 @@ namespace Referee.Controllers
         {
             var HostTeam = Unit.TeamRepository.GetById(game.HostTeamId);
             var League = Unit.LeagueRepository.GetById(game.LeagueId);
+            
             if (game.GuestTeam == null)
             {
                 var GuestTeam = Unit.TeamRepository.GetById(game.GuestTeamId);
@@ -194,10 +195,19 @@ namespace Referee.Controllers
             game.LeagueName = League.Name;
             game.Score = String.IsNullOrEmpty(game.Score) ? "brak" : game.Score;
             game.HostTeam = HostTeam.Name;
-            
-            game.Venue = HostTeam.Venue;
+
+            if (String.IsNullOrEmpty(form["Venue"].Trim()))
+            {
+                game.Venue = HostTeam.Venue;
+            }
             DateTime.TryParse(String.Format("{0} {1}", form["dtDate"], form["dtTime"]), out dtDate);
             game.DateAndTime = dtDate;
+            game.NominationCreated = false;
+            if (game.Id > 0)
+            {
+                var NominationExists = Unit.NominationRepository.Get(filter: n => n.GameId == game.Id).Count() == 1 ? true : false;
+                game.NominationCreated = NominationExists;
+            }
             return game;
         }
         

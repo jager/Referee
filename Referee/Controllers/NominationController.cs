@@ -31,15 +31,42 @@ namespace Referee.Controllers
         //
         // GET: /Nomination/
         [Authorize(Roles = HelperRoles.Sedzia)]
-        public ViewResult Index()
+        public ViewResult Index(string dtStart = "", string dtEnd = "", int league = 0)
         {
+
             var Nominations = Unit.NominationRepository.Get();
+            ViewBag.Leagues = new SelectList(Unit.LeagueRepository.Get(filter: l => l.Visible), "Id", "Name", league);
+            DateTime DateStart;
+            DateTime DateEnd;
+            
+            if (!String.IsNullOrEmpty(dtStart) && DateTime.TryParse(Convert.ToString(dtStart), out DateStart))
+            {
+                Nominations = Nominations.Where(n => (n.Game != null && n.Game.DateAndTime >= DateStart) 
+                                        || (n.Tournament != null && n.Tournament.StartDate >= DateStart));
+                ViewBag.dtStart = dtStart;
+            }
+
+            if (!String.IsNullOrEmpty(dtEnd) && DateTime.TryParse(Convert.ToString(dtEnd), out DateEnd))
+            {
+                Nominations = Nominations.Where(n => (n.Game != null && n.Game.DateAndTime <= DateEnd)
+                                        || (n.Tournament != null && n.Tournament.StartDate <= DateEnd));
+                ViewBag.dtEnd = dtEnd;
+
+            }
+
+            if ((int)league > 0)
+            {
+                Nominations = Nominations.Where(n => n.Game != null && n.Game.LeagueId == league);
+                ViewBag.league = league;
+            }
+
             List<NominationDetails> NominationEvents = new List<NominationDetails>();
             foreach (Nomination _nomination in Nominations)
             {
                 Event _event = new Event();
                 if (_nomination.GameId != null)
                 {
+                    
                     _event.Parse(_nomination.Game, "game");
                 }
                 else if (_nomination.TournamentId != null)
@@ -52,7 +79,7 @@ namespace Referee.Controllers
                 }
                 NominationEvents.Add(new NominationDetails {  Event = _event, Nomination = _nomination, NominatedReferees = _nomination.Nominateds } );
             }
-            return View("ListNominations", NominationEvents);
+            return View("ListNominations", NominationEvents.OrderByDescending(x => x.Event.Date));
         }
 
         //
@@ -249,14 +276,15 @@ namespace Referee.Controllers
             }
             int LeagueId = 0;
             List<Guid> ConflictedReferees = new List<Guid>();
-            
+            DateTime minDate = DateTime.Now;
+            DateTime maxDate = DateTime.Now;
             //pobierz tylko odpowiednich sędziów                
             if (Type == "game")
             {
                 var game = Unit.GameRepository.GetById(GameId);
                 LeagueId = game.LeagueId;
-                DateTime minDate = game.DateAndTime.AddHours(-2);
-                DateTime maxDate = game.DateAndTime.AddHours(2);
+                minDate = game.DateAndTime;
+                maxDate = game.DateAndTime;
                 ConflictedReferees = this.GetConflictReferees(minDate, maxDate);
             }
             else if (Type == "tournament")
@@ -266,13 +294,14 @@ namespace Referee.Controllers
                 {
                     LeagueId = (int)tournament.LeagueId;
                 }
-                DateTime minDate = tournament.StartDate;
-                DateTime maxDate = tournament.EndDate != null ? tournament.EndDate : tournament.StartDate;
+                minDate = tournament.StartDate;
+                maxDate = tournament.EndDate != null ? tournament.EndDate : tournament.StartDate;
                 ConflictedReferees = this.GetConflictReferees(minDate, maxDate);
             }
             
             
             var Referees = Unit.RefereeRepository.Get(filter: r => !ConflictedReferees.Contains(r.Id));
+            var Availibility = this.GetAvailability(minDate, maxDate);
             if ((FunctionId == 1001 || FunctionId == 2002) && LeagueId > 0)
             {
                 var RefereeAuthorization = Unit.RefRoleRepository.Get(
@@ -284,18 +313,41 @@ namespace Referee.Controllers
                     {
                         auths.Add(item.AuthorizationId);
                     }
-                    ViewBag.RefereeId = new SelectList(Referees.Where(r => auths.Contains(r.AuthorizationId)) , "Id", "FullName");
+                    ViewBag.RefereeId = new SelectList(
+                        this.FilterRefereesWithAvailability(Referees.Where(r => auths.Contains(r.AuthorizationId)), Availibility)
+                        , "Id", "FullName"
+                        );
+                }
+            }
+            ViewBag.RefereeId = new SelectList(this.FilterRefereesWithAvailability(Referees, Availibility), "Id", "FullName");
+            return PartialView();
+        }
+
+        /// <summary>
+        /// Filters available referees to check wheather they have or not, booked terms
+        /// </summary>
+        /// <param name="Referees">List of referees for the match or tournament</param>
+        /// <param name="Availabilities">List of avilabilities for the event</param>
+        /// <returns></returns>
+        public List<AvailableReferee> FilterRefereesWithAvailability(IEnumerable<RefereeEntity> Referees, List<Availability> Availabilities)
+        {
+            List<AvailableReferee> AvailableReferees = new List<AvailableReferee>();
+            foreach (RefereeEntity Referee in Referees)
+            {
+                AvailableReferee AvailableReferee = new AvailableReferee();
+                AvailableReferee.Id = Referee.Id;
+                var Ref = Availabilities.Where(r => Guid.Parse(r.RefereeId) == Referee.Id).FirstOrDefault<Availability>();
+                if (Ref != null)
+                {
+                    AvailableReferee.Fullname = String.Format("{0}  ({1} - {2})", Referee.FullName, Ref.DateStart.ToString("dd/MM/yy H:mm"), Ref.DateEnd.ToString("dd/MM/yy H:mm"));
                 }
                 else
                 {
-                    ViewBag.RefereeId = new SelectList(Referees, "Id", "FullName");
+                    AvailableReferee.Fullname = Referee.FullName;
                 }
+                AvailableReferees.Add(AvailableReferee);
             }
-            else
-            {
-                ViewBag.RefereeId = new SelectList(Referees, "Id", "FullName");
-            }
-            return PartialView();
+            return AvailableReferees;
         }
 
         /// <summary>
@@ -360,9 +412,12 @@ namespace Referee.Controllers
                     Conflicts.Add(Nominated.RefereeId);                   
                 }
             }
+            /*
             var AvailabilityConflicts = this.GetAvailability(minDate, maxDate)
                                             .Select(s => Guid.Parse(s.RefereeId));
             return Conflicts.Union(AvailabilityConflicts).ToList<Guid>();
+             */
+            return Conflicts;
         }
 
         /// <summary>
@@ -403,6 +458,7 @@ namespace Referee.Controllers
             nomination.Emailed = nomination.Published;
             nomination.EmailDate = DateTime.Now;
             nomination.PublishDate = DateTime.Now;
+            
             foreach (var Nominated in nomination.Nominateds)
             {
                 Nominated.Confirmed = false;
@@ -413,6 +469,7 @@ namespace Referee.Controllers
             {
                 nomination.HashConfirmation = nomination.GetCode();                
                 Unit.NominationRepository.Insert(nomination);
+                this.InformGameAboutNomination(nomination);
                 Unit.Save();
                 if (nomination.Emailed && this.GetConfigValue("SendEmails") == "1" && this.GetConfigValue("SendNominationsEmail") == "1")
                 {
@@ -542,6 +599,7 @@ namespace Referee.Controllers
                     NewNomination.PublishDate = DateTime.Now;
                 }
                 Unit.NominationRepository.Update(NewNomination);
+                this.InformGameAboutNomination(nomination);
                 Unit.Save();
                 if (NewNomination.Emailed)
                 {
@@ -552,6 +610,21 @@ namespace Referee.Controllers
             //ViewBag.TournamentId = new SelectList(db.Tournaments, "Id", "Name", nomination.TournamentId);
             
             return View(nomination);
+        }
+
+        /// <summary>
+        /// Sends information to Game object that nomination is created or not
+        /// </summary>
+        /// <param name="nomination">Nomination object</param>
+        /// <param name="isCreated">true - if nomination is created, false - if nomination is deleted</param>
+        private void InformGameAboutNomination(Nomination nomination, Boolean isCreated = true)
+        {
+            if (nomination.GameId != null)
+            {
+                var Game = Unit.GameRepository.GetById(nomination.GameId);
+                Game.NominationCreated = isCreated;
+                Unit.GameRepository.Update(Game);
+            }
         }
 
         //
@@ -569,7 +642,8 @@ namespace Referee.Controllers
         [Authorize(Roles = HelperRoles.RefereatObsad)]
         public ActionResult DeleteConfirmed(int id)
         {
-            Unit.NominationRepository.Delete(id);
+            this.InformGameAboutNomination(Unit.NominationRepository.GetById(id), false);
+            Unit.NominationRepository.Delete(id);            
             Unit.Save();
             return RedirectToAction("Index");
         }

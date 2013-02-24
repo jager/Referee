@@ -16,8 +16,8 @@
         <div class="grid3 selectFunctionIdContainer">
             @Html.DropDownList("FunctionId", Functions, String.Empty, new { @class = "selectReferee" })              
         </div>
-        <div class="grid3 RefereesSelectBoxContainer" >
-            @Html.DropDownList("RefereeId", Referees, String.Empty, new { @class = "RefereesNominated" })
+        <div class="grid3 RefereesSelectBoxContainer searchDrop" >
+            @Html.DropDownList("RefereeId", Referees, String.Empty, new { @class = "RefereesNominated select" })
         </div>
             <div class="grid3">
                 <a href="#" class="deleteRow buttonS bRed">Usuń sędziego</a>
@@ -42,8 +42,7 @@
                 dest.html(html);
                 dest.children("select").attr("id", "nominateds_" + guid + "__RefereeId");
                 dest.children("select").attr("name", "nominateds[" + guid + "].RefereeId");
-                dest.children("select").uniform();
-
+                dest.children("select").chosen();
             }
         });
     });

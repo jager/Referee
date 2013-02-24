@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using Referee.Repositories;
 
 namespace Referee.Models
 {
@@ -55,6 +56,9 @@ namespace Referee.Models
         [Required(ErrorMessage="To pole jest wymagane")]
         public int LeagueId { get; set; }
         public string LeagueName { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public bool NominationCreated { get; set; }
 
         public virtual Season Season { get; set; }
 

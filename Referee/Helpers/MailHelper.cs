@@ -82,5 +82,33 @@ namespace Referee.Helpers
                 MailHelper.ErrorMessage = MailBox.ErrorMessage;
             }
         }
+
+        public static void RestorePasswordMessage(string Mailadr, string Token)
+        {
+            Message _message = new Message();
+            string _txt = @"Ktoś wysłał prośbę o zmianę hasła dla konta w {0}.
+                            Jeżeli to NIE byłeś ty to zignoruj tą wiadomość.
+                            Jeżeli natomiast to ty wypełniłeś formularz zmiany hasła, to kliknij w poniższy link lub przeklej
+                            go do paska adresu przeglądarki i postępuj wg zaleceń na stronie {1}.
+                            
+                            Link: {2}
+                            
+                            {3}";
+            string _subject = String.Format("[{0}] Zmiana hasła.", MailHelper._systemName);
+            string _link = String.Format("http://{0}/Account/RestorePassword/{1}", MailHelper._systemUrl, Token);
+            _message.Txt = String.Format(_txt, 
+                            MailHelper._systemName, 
+                            MailHelper._systemName, 
+                            _link, 
+                            MailHelper._mailSignature);
+            if (MailBox.Send(Mailadr, MailHelper._mailFrom, _subject, _message))
+            {
+                MailHelper.ErrorMessage = MailHelper._success;
+            }
+            else
+            {
+                MailHelper.ErrorMessage = MailBox.ErrorMessage;
+            }
+        }
     }
 }

@@ -72,6 +72,14 @@
                     <div class="clear"></div>
                 </div>
                 <div class="formRow">
+                    <div class="grid3"><label>Adres:</label></div>
+                    <div class="grid9">
+                        @Html.TextBoxFor(model => model.Venue)
+                        @Html.ValidationMessageFor(model => model.Venue)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
                     <div class="grid3">
                         @Html.LabelFor(model => model.Published)
                     </div>

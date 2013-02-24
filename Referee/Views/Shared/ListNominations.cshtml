@@ -5,11 +5,38 @@
 @Html.Partial("_CustomBreadcrumbBar", ViewData)
 <script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
 <div class="wrapper">
+    @using (Html.BeginForm("Index", "Nomination", FormMethod.Get ))
+    {
+        <div class="widget fluid">
+        <div class="whead"><h6>Wyszukaj obsad</h6><div class="clear"></div></div>
+        <div class="formRow">
+            <div class="grid1"><label>OD:</label></div>
+            <div class="grid2">
+                @Html.TextBox("dtStart", (string)ViewBag.dtStart, new { @class = "datepicker"})
+            </div>
+            <div class="grid1"><label>DO:</label></div>
+            <div class="grid2">
+                
+                @Html.TextBox("dtEnd", (string)ViewBag.dtEnd, new { @class = "datepicker"})
+            </div>
+            <div class="grid2">
+                @Html.DropDownList("league", (SelectList)ViewBag.Leagues, "Wybierz ligę")                
+            </div>
+            <div class="grid2">
+                <input type="submit" value="Wyszukaj obsad" name="SearchSubmit" class="buttonS bBlue" />
+            </div>
+            <div class="grid2">
+                <a href="/Nomination" class="buttonS bGold" >Pokaż wszystkie obsady</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    }
     <div class="widget">
     <div class="whead">
         <h6>Obsady sędziowskie</h6>
         <div class="clear"></div>
-    </div>
+    </div>    
     <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
         <thead>
             <tr>

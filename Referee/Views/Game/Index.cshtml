@@ -94,9 +94,22 @@
                         @Html.DisplayFor(modelItem => item.GameNo)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.HostTeam)
-                    -
-                        @Html.DisplayFor(modelItem => item.GuestTeam)
+                        @if (item.NominationCreated) 
+                        {
+                            <strong>
+                                @Html.DisplayFor(modelItem => item.HostTeam)
+                                -
+                                @Html.DisplayFor(modelItem => item.GuestTeam)
+                            </strong>
+                        } 
+                        else 
+                        {
+                            <span>
+                                @Html.DisplayFor(modelItem => item.HostTeam)
+                            -
+                                @Html.DisplayFor(modelItem => item.GuestTeam)
+                            </span>
+                        }
                     </td>
                     <td>
                         @item.DateAndTime.ToShortDateString()

@@ -43,5 +43,26 @@ namespace Referee.Helpers
         {
             return (double)(dt - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime()).TotalSeconds;
         }
+
+        public static MvcHtmlString CustomValidationSummary(this HtmlHelper helper, string validationMessage = "")
+        {
+            string retVal = "";
+            if (helper.ViewData.ModelState.IsValid)
+            {
+                return new MvcHtmlString("");
+            }
+            retVal += "<div class='nNote nFailure'>";
+            if (!String.IsNullOrEmpty(validationMessage))
+            {
+                retVal += validationMessage;
+            }
+            foreach (var key in helper.ViewData.ModelState.Keys)
+            {
+                foreach (var err in helper.ViewData.ModelState[key].Errors)
+                    retVal += String.Format("<p>{0}</p>", err.ErrorMessage);
+            }
+            retVal += "</div>";
+            return new MvcHtmlString(retVal);
+        }
     }
 }

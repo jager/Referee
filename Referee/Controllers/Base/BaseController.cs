@@ -105,7 +105,7 @@ namespace Referee.Controllers.Base
         {
             if (CurrentReferee != null)
             {
-                var NewNominations = Unit.NominatedRepository.Get(filter: n => n.RefereeId == CurrentReferee.Id && !n.Confirmed);
+                var NewNominations = Unit.NominatedRepository.Get(filter: n => n.RefereeId == CurrentReferee.Id && !n.Confirmed && n.Nomination.Published);
                 if (NewNominations != null)
                 {
                     NewNominationsAmount = NewNominations.Count();

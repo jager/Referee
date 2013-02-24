@@ -126,47 +126,54 @@ namespace Referee.Controllers
             string Password = SetPassword(refereeentity);
             ///Trzeba to zmienić w wersji docelowej.
             //Password = "qawseD123";
-
-            if (ModelState.IsValid &&
-                CreateUser(refereeentity.Mailadr, Password, Password, out NewUserGuid) &&
-                selectedRoles.Count() > 0 &&
-                AssignRole(refereeentity.Mailadr, selectedRoles))
-            {
-
-                refereeentity.Id = NewUserGuid;
-                DateTime dtDOB;
-                DateTime.TryParse(String.Format("{0}-{1}-{2}", form["DOBYear"], form["DOBmonth"], form["DOBday"]), out dtDOB);
-                refereeentity.DOB = dtDOB;
-                ///Upload Referee Photo               
-                if (Photo != null)
+            try {
+                if (ModelState.IsValid)
                 {
-                    refereeentity.DestinationFolder = String.Format("{0}{1}/", FileUploader.DestinationFolder, HashString.SHA1(refereeentity.Id.ToString()));
-                    refereeentity.Photo = UploadRefereePhoto(Photo, refereeentity.DestinationFolder);
-                }
-                else
-                {
-                    refereeentity.DestinationFolder = "";
-                    refereeentity.Photo = "";
-                }
-                
-                Unit.RefereeRepository.Insert(refereeentity);
-                Unit.Save();
-                if (this.GetConfigValue("SendEmails") == "1" && this.GetConfigValue("SendNewAccountEmail") == "1")
-                {
-                    MailHelper.CreateNewAccountMessage(refereeentity.Mailadr, Password);
-                    if (MailHelper.ErrorMessage != MailHelper._success)
+                    CreateUser(refereeentity.Mailadr, Password, Password, out NewUserGuid);
+                    AssignRole(refereeentity.Mailadr, selectedRoles);
+                    refereeentity.Id = NewUserGuid;
+                    DateTime dtDOB;
+                    DateTime.TryParse(String.Format("{0}-{1}-{2}", form["DOBYear"], form["DOBmonth"], form["DOBday"]), out dtDOB);
+                    refereeentity.DOB = dtDOB;
+                    ///Upload Referee Photo               
+                    if (Photo != null)
                     {
-                        ///TODO: logowanie błędów
+                        refereeentity.DestinationFolder = String.Format("{0}{1}/", FileUploader.DestinationFolder, HashString.SHA1(refereeentity.Id.ToString()));
+                        refereeentity.Photo = UploadRefereePhoto(Photo, refereeentity.DestinationFolder);
                     }
-                }
-                return RedirectToAction("Index");  
-            }
+                    else
+                    {
+                        refereeentity.DestinationFolder = "";
+                        refereeentity.Photo = "";
+                    }
 
+                    Unit.RefereeRepository.Insert(refereeentity);
+                    Unit.Save();
+                    if (this.GetConfigValue("SendEmails") == "1" && this.GetConfigValue("SendNewAccountEmail") == "1")
+                    {
+                        MailHelper.CreateNewAccountMessage(refereeentity.Mailadr, Password);
+                        if (MailHelper.ErrorMessage != MailHelper._success)
+                        {
+                            ///TODO: logowanie błędów
+                        }
+                    }
+                    return RedirectToAction("Index");
+                }
+            } 
+            catch(Exception e)
+            {
+                if (NewUserGuid != Guid.Empty)
+                {
+                    Membership.DeleteUser(refereeentity.Mailadr);
+                }
+                ModelState.AddModelError(String.Empty, e.Message);
+            }
+      
             PopulateDropDowns(refereeentity);
             return View(refereeentity);
         }
 
-        private bool CreateUser(string Mailadr, string Password, string PasswordConfirmed, out Guid UserID )
+        private void CreateUser(string Mailadr, string Password, string PasswordConfirmed, out Guid UserID )
         {
             UserID = Guid.Empty;
             RegisterModel NewUser = new RegisterModel { Email = Mailadr, Password = Password, ConfirmPassword = PasswordConfirmed, UserName = Mailadr };
@@ -177,10 +184,16 @@ namespace Referee.Controllers
                 if (createStatus == MembershipCreateStatus.Success)
                 {
                     UserID = (Guid)Membership.GetUser(Mailadr).ProviderUserKey;
-                    return true;
+                }
+                else
+                {                    
+                    throw new Exception("Użytkownik o podanym adresie mailowym już istnieje w bazie danych!");
                 }
             }
-            return false;
+            else
+            {
+                throw new Exception("Błąd podczas dodawania danych autoryzacyjnych sędziego");
+            }
         }
 
         private bool CreateUser(string Mailadr, string Password)
@@ -201,7 +214,7 @@ namespace Referee.Controllers
         private string UploadRefereePhoto(HttpPostedFileBase Photo, string DestinationFolder)
         {
             string PhotoName = "";
-            FileUploader fu = new FileUploader();
+            FileUploader fu = new FileUploader();            
             fu.Folder = DestinationFolder;
             fu.File = Photo;
             PhotoName = fu.Run();
@@ -221,8 +234,12 @@ namespace Referee.Controllers
             return PhotoName;
         }
 
-        private bool AssignRole(string UserName, string[] SelectedRoles)
+        private void AssignRole(string UserName, string[] SelectedRoles)
         {
+            if (SelectedRoles.Count() == 0)
+            {
+                throw new Exception("Nie wybrano żadnych ról dla sędziego.");
+            }
             var User = Membership.GetUser(UserName);
             if (User != null)
             {
@@ -232,9 +249,11 @@ namespace Referee.Controllers
                     Roles.RemoveUserFromRoles(UserName, ExistingRoles);
                 }
                 Roles.AddUserToRoles(UserName, SelectedRoles);
-                return true;
             }
-            return false;
+            else
+            {
+                throw new Exception("Nie można dodać ról do pustego użytkownika.");
+            }
         }
 
         [HttpPost]
@@ -242,6 +261,10 @@ namespace Referee.Controllers
         public ActionResult ChangePhoto(Guid Id, HttpPostedFileBase Photo)
         {
             var Referee = Unit.RefereeRepository.GetById(Id);
+            if (String.IsNullOrEmpty(Referee.DestinationFolder))
+            {
+                Referee.DestinationFolder = String.Format("{0}{1}/", FileUploader.DestinationFolder, HashString.SHA1(DateTime.Now.ToString()));
+            }
             ///Upload Referee Photo
             Referee.Photo = UploadRefereePhoto(Photo, Referee.DestinationFolder);
             
@@ -263,9 +286,9 @@ namespace Referee.Controllers
 
             if (refereeentity != null)
             {
-                ViewBag.Year = refereeentity.DOB.Year;
-                ViewBag.Month = refereeentity.DOB.Month;
-                ViewBag.Day = refereeentity.DOB.Day;
+                ViewBag.DOBYear = refereeentity.DOB.Year;
+                ViewBag.DOBmonth = refereeentity.DOB.Month;
+                ViewBag.DOBday = refereeentity.DOB.Day;
             }
         }
         //
@@ -312,21 +335,26 @@ namespace Referee.Controllers
             ///Trzeba to zmienić w wersji docelowej.
             //Password = "qawseD123";
             AddCredentialsIfNotExists(refereeentity.Mailadr, Password);
-
-            if (ModelState.IsValid && 
-                selectedRoles.Count() > 0 && 
-                AssignRole(refereeentity.Mailadr, selectedRoles))
+            try
             {
-                if (refereeentity.Id == CurrentReferee.Id)
+                if (ModelState.IsValid)
                 {
-                    Unit.RefereeRepository.UpdateProfile(refereeentity, CurrentReferee);
+                    AssignRole(refereeentity.Mailadr, selectedRoles);
+                    if (refereeentity.Id == CurrentReferee.Id)
+                    {
+                        Unit.RefereeRepository.UpdateProfile(refereeentity, CurrentReferee);
+                    }
+                    else
+                    {
+                        Unit.RefereeRepository.Update(refereeentity);
+                    }
+                    Unit.Save();
+                    return RedirectToAction("Index");
                 }
-                else
-                {
-                    Unit.RefereeRepository.Update(refereeentity);
-                }
-                Unit.Save();                
-                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(String.Empty, e.Message);
             }
             PopulateDropDowns(refereeentity);
             return View(refereeentity);

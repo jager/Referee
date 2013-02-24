@@ -29,6 +29,9 @@ namespace Referee.Controllers
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
+            FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
+            return RedirectToAction("Index", "Home");
+
             if (ModelState.IsValid)
             {
                 if (Membership.ValidateUser(model.UserName, model.Password))
@@ -199,6 +202,48 @@ namespace Referee.Controllers
             return PartialView();
         }
 
+        [HttpGet]
+        public ViewResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ForgotPassword(string Mailadr)
+        {
+            if (String.IsNullOrEmpty(Mailadr))
+            {
+                ViewBag.Message = "Pusty adres mailowy";
+                return View();
+            }
+            var securityUser = Membership.GetUser(Mailadr);
+            if (securityUser == null)
+            {
+                ViewBag.Message = "Użytkownik o podanym adresie nie istnieje w systemie.";
+                return View();
+            }
+            if (this.GetConfigValue("SendEmails") == "1")
+            {
+                MailHelper.RestorePasswordMessage(Mailadr, Convert.ToString(securityUser.ProviderUserKey));
+
+                ViewBag.Message = "Hasło zostało wysłane na adres mailowy sędziego.";
+
+                if (MailHelper.ErrorMessage != MailHelper._success)
+                {
+                    ViewBag.Message = MailHelper.ErrorMessage;
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Wysyłanie maili zostało zablokowane. Skontaktuj sie z administratorem w celu odblokowania możliwości wysyłania maili.";
+            }
+            return View();
+        }
+        [HttpGet]
+        public ActionResult RestorePassword(Guid Id)
+        {
+            return View();
+        }
         #region Status Codes
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
         {
