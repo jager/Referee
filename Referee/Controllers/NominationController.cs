@@ -647,6 +647,40 @@ namespace Referee.Controllers
             Unit.Save();
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = HelperRoles.Sedzia)]
+        public JsonResult GetCurrentNominations()
+        {
+
+            var Nomination = Unit.NominatedRepository.Get(n => n.RefereeId == this.CurrentReferee.Id && n.Nomination.Published)
+                                                     .Select(n => n.Nomination)
+                                                     .OrderByDescending(o => o.Id)
+                                                     .ToList<Nomination>();
+            if (Nomination.Count() == 0)
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+            List<Event> ev = new List<Event>();
+            foreach (var _nomination in Nomination)
+            {
+                EventWithScore _event = new EventWithScore();
+                if (_nomination.GameId != null)
+                {
+
+                    _event.Parse(_nomination.Game, "game");
+                }
+                else if (_nomination.TournamentId != null)
+                {
+                    _event.Parse(_nomination.Tournament, "tournament");
+                }
+                else
+                {
+                    throw new Exception("Brak typu nominacji");
+                }
+                ev.Add(_event);
+            }
+            return Json(ev, JsonRequestBehavior.AllowGet);
+        }
         
         protected override void Dispose(bool disposing)
         {
