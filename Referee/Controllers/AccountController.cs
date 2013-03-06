@@ -30,7 +30,7 @@ namespace Referee.Controllers
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
             FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-            return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Index", "Home");
 
             if (ModelState.IsValid)
             {
@@ -239,9 +239,44 @@ namespace Referee.Controllers
             }
             return View();
         }
+
         [HttpGet]
         public ActionResult RestorePassword(Guid Id)
         {
+            if (Id == Guid.Empty)
+            {
+                return RedirectToAction("ForgotPassword");
+            }
+
+            var User = Membership.GetUser(Id);
+
+            if (User == null)
+            {
+                return RedirectToAction("ForgotPassword");
+            }
+
+            ViewBag.Token = Id;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RestorePassword(Guid Token, string NewPassword, string NewPasswordRepeated)
+        {
+            try
+            {
+                var User = Membership.GetUser(Token);
+                string NewTemporaryPassword = User.ResetPassword();
+                if (NewPassword.Trim() == NewPasswordRepeated.Trim() 
+                    &&  User.ChangePassword(NewTemporaryPassword, NewPassword.Trim()))
+                {
+                   return RedirectToAction("LogOn");
+                }
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("ForgotPassword");
+            }
             return View();
         }
         #region Status Codes
