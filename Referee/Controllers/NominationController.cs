@@ -660,7 +660,7 @@ namespace Referee.Controllers
             {
                 return Json(null, JsonRequestBehavior.AllowGet);
             }
-            List<Event> ev = new List<Event>();
+            List<EventWithScore> ev = new List<EventWithScore>();
             foreach (var _nomination in Nomination)
             {
                 EventWithScore _event = new EventWithScore();

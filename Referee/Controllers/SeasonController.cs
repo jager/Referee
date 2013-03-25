@@ -72,6 +72,10 @@ namespace Referee.Controllers
                 Season updatedSeason = DeactivateOtherSeasons(season);
                 Unit.SeasonRepository.Update(updatedSeason);
                 Unit.Save();
+                if (Session["CurrentSeason"] != null)
+                {
+                    Session.Remove("CurrentSeason");
+                }
                 return RedirectToAction("Index");
             }
             return View(season);

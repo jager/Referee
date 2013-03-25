@@ -130,7 +130,7 @@ namespace Referee.Controllers.Base
             if (this.Configuration != null)
             {
                 var Config = this.Configuration.Where(c => c.Key == key).FirstOrDefault();
-                return Config.Key;
+                return Config.Value;
             }
             return String.Empty;
         }

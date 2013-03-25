@@ -1,0 +1,7 @@
+﻿<form action="/Game/SaveScore" method="post">
+    @Html.Hidden("GameId", (int)ViewBag.GameId)
+    <label>Podaj wynik:</label>
+    <input type="text" name="Score" class="clear" placeholder="Podaj Wynik" />
+    <div class="divider"><span></span></div>
+    <input type="submit" value="Zapisz" class="buttonS bGreen" />
+</form>

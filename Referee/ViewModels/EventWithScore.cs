@@ -13,7 +13,7 @@ namespace Referee.ViewModels
         public void Parse(object Event, string Type)
         {
             base.Parse(Event, Type);
-            if (Type == "Game")
+            if (Type == "game")
             {
                 this.Score = ((Game)Event).Score;
             }

@@ -3,6 +3,10 @@
 @Html.Partial("_ContentTop", ViewData)
 
 @Html.Partial("_CustomBreadcrumbBar", ViewData)
+
+@{
+    bool CanConfirm = false;
+}
 <script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
 <div class="wrapper">
     @using (Html.BeginForm("Index", "Nomination", FormMethod.Get ))
@@ -65,6 +69,7 @@
 
 @foreach (var item in Model)
 {
+    CanConfirm = false;
     if (item.Nomination.Published || (User.Identity.IsAuthenticated && User.IsInRole(HelperRoles.RefereatObsad)))
     {
             <tr>
@@ -82,7 +87,7 @@
                     {
                         foreach (var referee in item.NominatedReferees)
                         {
-                            
+                            CanConfirm = ((Referee.Models.RefereeEntity)ViewBag.CurrentReferee).Id == referee.RefereeId || CanConfirm ? true : false;
                             if (referee.Confirmed) 
                             {
                                 @Html.AuthLink(String.Format("Sędzia {0}: {1}", referee.Function.Name, referee.Referee.FullName),
@@ -122,7 +127,7 @@
                 }    
                 <td class="tableActs" align="center">
                     @Html.AuthLink("Pokaż", "Details", "Nomination", new { id = item.Nomination.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż szczegóły" }, HelperRoles.Sedzia)
-                    @if (ViewBag.CurrentReferee != null) 
+                    @if (ViewBag.CurrentReferee != null && CanConfirm) 
                     {
                         @Html.AuthLink("Potwierdź", "Confirm", "Nomination", new { id = item.Nomination.Id, rid = ((Referee.Models.RefereeEntity)ViewBag.CurrentReferee).Id }, new { @class = "tablectrl_small bDefault tipS confirmButton", @title = "Potwierdź nominacje" }, HelperRoles.Sedzia)
                     }

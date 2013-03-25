@@ -327,6 +327,27 @@ namespace Referee.Controllers
             return Json(Message);
         }
 
+
+        [HttpGet]
+        public PartialViewResult SaveScore(int Id)
+        {
+            ViewBag.GameId = Id;
+            return PartialView();
+        }
+
+        [HttpPost]
+        public ActionResult SaveScore(int GameId, string Score)
+        {
+            Game Game = Unit.GameRepository.GetById(GameId);
+            if (Game != null)
+            {
+                Game.Score = Score;
+                Unit.GameRepository.Update(Game);
+                Unit.Save();
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
         protected override void Dispose(bool disposing)
         {
             Unit.Dispose();
