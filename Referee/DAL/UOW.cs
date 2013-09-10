@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Referee.Models;
+using Referee.Repositories;
 
 namespace Referee.DAL
 {
@@ -246,6 +247,19 @@ namespace Referee.DAL
                     this.configRepository = new GenericRepository<AppConfig>(db);
                 }
                 return this.configRepository;
+            }
+        }
+
+        private ChangePasswordRepository changePasswordRepository;
+        public ChangePasswordRepository ChangePasswordRepository
+        {
+            get
+            {
+                if (this.changePasswordRepository == null)
+                {
+                    this.changePasswordRepository = new ChangePasswordRepository(db);
+                }
+                return this.changePasswordRepository;
             }
         }
 

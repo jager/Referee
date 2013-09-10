@@ -5,6 +5,7 @@ using System.Web;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using Referee.Models;
+using System.Data.Entity.Infrastructure;
 
 namespace Referee.DAL
 {
@@ -28,6 +29,7 @@ namespace Referee.DAL
         public DbSet<Voluntary> Voluntaries { get; set; }
         public DbSet<VoluntaryReferee> VoluntaryReferees { get; set; }
         public DbSet<AppConfig> AppConfigs { get; set; }
+        public DbSet<ChangePassword> ChangePasswords { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

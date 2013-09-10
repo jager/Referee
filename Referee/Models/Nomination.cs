@@ -45,9 +45,11 @@ namespace Referee.Models
         [Display(Name="Mecz")]
         public int? GameId { get; set; }
         public int? TournamentId { get; set; }
+        public int? SeasonId { get; set; }
 
         public virtual Game Game { get; set; }
         public virtual Tournament Tournament { get; set; }
+        public virtual Season Season { get; set; }
         public virtual ICollection<Nominated> Nominateds { get; set; }
 
         public string GetCode()

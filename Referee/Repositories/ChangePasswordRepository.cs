@@ -2,31 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebVolleyballManager.Models;
+using Referee.Models;
+using Referee.DAL;
 
 
-namespace WebVolleyballManager.Repositories
+namespace Referee.Repositories
 {
     public class ChangePasswordRepository : GenericRepository<ChangePassword>
     {
-
-        public ChangePasswordRepository(ManagerContext context) : base(context)
+        private ChangePassword _password;
+        public ChangePassword Password
+        {
+            get
+            {
+                return _password;   
+            }
+        }
+        public ChangePasswordRepository(RefereeContext context) : base(context)
         {            
         }
 
-
-
         /// <summary>
-        /// Creates and saves new ChangePasswod object 
+        /// Creates and saves new ChangePassword object 
         /// </summary>
-        /// <param name="UserId"></param>
-        public void Create(string UserId)
+        /// <param name="UserId">User indentifier</param>
+        /// <returns>Returns new created token</returns>
+        public string Create(string UserId)
         {
             ChangePassword Password = new ChangePassword();
             Password.Added = DateTime.Now;
             Password.Token = Password.GenKey();
             Password.UserId = UserId;
             this.Insert(Password);
+            return Password.Token;
         }
 
 
@@ -48,8 +56,13 @@ namespace WebVolleyballManager.Repositories
         /// <returns></returns>
         public bool Check(string Token)
         {
-            ChangePassword Password = this.GetToken(Token);
-            return Password.isValid();
+            ChangePassword Pass = this.GetToken(Token);
+            if (Pass != null && Pass.isValid())
+            {
+                _password = Pass;
+                return true;
+            }
+            return false;
         }
 
         /// <summary>

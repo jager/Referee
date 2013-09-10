@@ -24,5 +24,6 @@ namespace Referee.Models
         [Display(Name="Widoczny")]
         public bool Visible { get; set; }
         public virtual ICollection<Game> Games { get; set; }
+        public virtual ICollection<Nomination> Nominations { get; set; }
     }
 }

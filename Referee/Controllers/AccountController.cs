@@ -222,40 +222,53 @@ namespace Referee.Controllers
                 ViewBag.Message = "Użytkownik o podanym adresie nie istnieje w systemie.";
                 return View();
             }
-            if (this.GetConfigValue("SendEmails") == "1")
+
+            string Token = Unit.ChangePasswordRepository.Create(Convert.ToString(securityUser.ProviderUserKey));
+
+            if (!String.IsNullOrEmpty(Token))
             {
-                MailHelper.RestorePasswordMessage(Mailadr, Convert.ToString(securityUser.ProviderUserKey));
-
-                ViewBag.Message = "Hasło zostało wysłane na adres mailowy sędziego.";
-
-                if (MailHelper.ErrorMessage != MailHelper._success)
+                if (this.GetConfigValue("SendEmails") == "1")
                 {
-                    ViewBag.Message = MailHelper.ErrorMessage;
+                    MailHelper.RestorePasswordMessage(Mailadr, Token);
+
+                    ViewBag.Message = "Hasło zostało wysłane na adres mailowy sędziego.";
+
+                    if (MailHelper.ErrorMessage != MailHelper._success)
+                    {
+                        ViewBag.Message = MailHelper.ErrorMessage;
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "Wysyłanie maili zostało zablokowane. Skontaktuj sie z administratorem w celu odblokowania możliwości wysyłania maili.";
                 }
             }
             else
             {
-                ViewBag.Message = "Wysyłanie maili zostało zablokowane. Skontaktuj sie z administratorem w celu odblokowania możliwości wysyłania maili.";
+                ViewBag.Message = "Błąd podczas generowania tokenu. Zgłoś się proszę do administratora systemu.";
             }
             return View();
         }
 
         [HttpGet]
-        public ActionResult RestorePassword(Guid Id)
+        public ActionResult RestorePassword(string Token)
         {
-            if (Id == Guid.Empty)
+            if (String.IsNullOrEmpty(Token))
             {
                 return RedirectToAction("ForgotPassword");
             }
 
-            var User = Membership.GetUser(Id);
-
-            if (User == null)
+            if (Unit.ChangePasswordRepository.Check(Token))
             {
-                return RedirectToAction("ForgotPassword");
+                var Password = Unit.ChangePasswordRepository.Password;
+                var User = Membership.GetUser(Guid.Parse(Password.UserId));
+                if (User == null)
+                {
+                    return RedirectToAction("ForgotPassword");
+                }
+                ViewBag.Token = Guid.Parse(Password.UserId);
+                Unit.ChangePasswordRepository.Change(Token);
             }
-
-            ViewBag.Token = Id;
 
             return View();
         }

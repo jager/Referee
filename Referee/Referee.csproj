@@ -129,6 +129,7 @@
     <Compile Include="Models\Authorization.cs" />
     <Compile Include="Models\Availability.cs" />
     <Compile Include="Models\CalendarEvent.cs" />
+    <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\Domain\UserDomain.cs" />
     <Compile Include="Models\Domain\UserStatisticsDomain.cs" />
     <Compile Include="Models\Enrollment.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Models\Voluntary.cs" />
     <Compile Include="Models\VoluntaryReferee.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ChangePasswordRepository.cs" />
     <Compile Include="Repositories\GamesNominatedRepository.cs" />
     <Compile Include="ViewModels\AvailableReferee.cs" />
     <Compile Include="ViewModels\ClubDetails.cs" />
