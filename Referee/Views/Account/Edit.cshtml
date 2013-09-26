@@ -1,0 +1,128 @@
+﻿@model Referee.Models.RefereeEntity
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@Html.Partial("_ContentTop", ViewData)
+
+@Html.Partial("_CustomBreadcrumbBar", ViewData)
+
+<div class="wrapper">
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(Model => Model.Id)
+        @Html.HiddenFor(Model => Model.Latitude)
+        @Html.HiddenFor(Model => Model.Longitude)
+        @Html.HiddenFor(Model => Model.Photo)
+        @Html.HiddenFor(Model => Model.DestinationFolder)
+        @Html.HiddenFor(Model => Model.Mailadr)
+        @Html.HiddenFor(Model => Model.AuthorizationId)
+        @Html.HiddenFor(Model => Model.RefClassId)  
+        @Html.ValidationSummary(true)
+        <fieldset>
+            <div class="widget fluid">
+                <div class="whead"><h6>Edytuj dane sędziego</h6><div class="clear"></div></div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.FirstName)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.FirstName)
+                        @Html.ValidationMessageFor(model => model.FirstName)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.LastName)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.LastName)
+                        @Html.ValidationMessageFor(model => model.LastName)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.Zip)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.Zip)
+                        @Html.ValidationMessageFor(model => model.Zip)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.City)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.City)
+                        @Html.ValidationMessageFor(model => model.City)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.Address)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.Address)
+                        @Html.ValidationMessageFor(model => model.Address)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.Phone)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.Phone)
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.Mobile)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.Mobile)
+                        @Html.ValidationMessageFor(model => model.Mobile)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+               
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.DOB)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.DOB, "DOB")
+                        @Html.ValidationMessageFor(model => model.DOB)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        @Html.LabelFor(model => model.DateOfEnrollment)
+                    </div>
+                    <div class="grid9">
+                        @Html.EditorFor(model => model.DateOfEnrollment)
+                        @Html.ValidationMessageFor(model => model.DateOfEnrollment)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                
+                
+                <div class="formRow">
+                    <div class="grid3"></div>
+                    <div class="grid9">
+                        <input class="buttonS bGreen" type="submit" value="Zapisz" />                
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </fieldset>
+    }
+</div>

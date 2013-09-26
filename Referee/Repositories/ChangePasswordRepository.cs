@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Referee.Models;
 using Referee.DAL;
+using Referee.Lib.Security;
 
 
 namespace Referee.Repositories
@@ -31,8 +32,9 @@ namespace Referee.Repositories
         {
             ChangePassword Password = new ChangePassword();
             Password.Added = DateTime.Now;
-            Password.Token = Password.GenKey();
+            Password.Updated = DateTime.Now;
             Password.UserId = UserId;
+            Password.Token = HashString.SHA1(Password.Added.ToString());            
             this.Insert(Password);
             return Password.Token;
         }
@@ -72,8 +74,8 @@ namespace Referee.Repositories
         public void Change(string Token)
         {
             ChangePassword Password = this.GetToken(Token);
-            Password.Token = Password.GenKey();
             Password.Updated = DateTime.Now;
+            Password.Token = HashString.SHA1(Password.Updated.ToString());            
             this.Update(Password);
         }
     }

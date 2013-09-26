@@ -125,7 +125,7 @@ namespace Referee.Controllers
         }
 
         [Authorize]
-        public ActionResult NewNominations()
+        public ActionResult NewNominations(string dtStart = "", string dtEnd = "", int league = 0)
         {
             ViewData["PageTitle"] = "Twoje nowe nominacje";
             ((List<BreadcrumbHelper>)ViewData["breadcrumbs"]).Add(
@@ -140,6 +140,9 @@ namespace Referee.Controllers
                     RefNominationsIDS.Add(nominated.NominationId);
                 }
                 var Nominations = Unit.NominationRepository.Get(n => n.Published && RefNominationsIDS.Contains(n.Id), n => n.OrderByDescending(o => o.PublishDate));
+
+                FillSearchNominationsForm(Nominations, dtStart, dtEnd, league);
+                
                 List<NominationDetails> NominationEvents = new List<NominationDetails>();
                 foreach (Nomination _nomination in Nominations)
                 {

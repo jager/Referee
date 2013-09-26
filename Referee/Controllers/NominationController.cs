@@ -35,6 +35,8 @@ namespace Referee.Controllers
         {
 
             var Nominations = Unit.NominationRepository.Get();
+
+            /*
             ViewBag.Leagues = new SelectList(Unit.LeagueRepository.Get(filter: l => l.Visible), "Id", "Name", league);
             DateTime DateStart;
             DateTime DateEnd;
@@ -59,6 +61,8 @@ namespace Referee.Controllers
                 Nominations = Nominations.Where(n => n.Game != null && n.Game.LeagueId == league);
                 ViewBag.league = league;
             }
+            */
+            FillSearchNominationsForm(Nominations, dtStart, dtEnd, league);
 
             List<NominationDetails> NominationEvents = new List<NominationDetails>();
             foreach (Nomination _nomination in Nominations)

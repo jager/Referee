@@ -7,7 +7,7 @@ using Referee.Models;
 
 namespace Referee.DAL
 {
-    public class RefInitializer : DropCreateDatabaseIfModelChanges<RefereeContext>
+    public class RefInitializer : CreateDatabaseIfNotExists<RefereeContext>
     {
         protected override void Seed(RefereeContext context)
         {

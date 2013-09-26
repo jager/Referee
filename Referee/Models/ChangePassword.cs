@@ -29,21 +29,6 @@ namespace Referee.Models
         }
 
         /// <summary>
-        /// Generates hash string.
-        /// </summary>
-        /// <returns>string</returns>
-        public string GenKey()
-        {
-            byte[] data = new byte[100];
-            byte[] result;
-            using (SHA256 shaM = new SHA256Managed())
-            {
-                result = shaM.ComputeHash(data);
-            }
-            return System.Text.UTF8Encoding.UTF8.GetString(result);
-        }
-
-        /// <summary>
         /// Chcecks whether token is still valid
         /// </summary>
         /// <returns>bool</returns>

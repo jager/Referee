@@ -1,0 +1,48 @@
+﻿@{
+    int maxYear = DateTime.Now.Year - 15;
+    int minYear = 1930;
+}
+<select name="DOBYear">
+    <option value="">--wybierz rok--</option>
+    @for (int i = maxYear; i >= minYear; i--)
+    {
+        if ((int)ViewBag.DOBYear == i)
+        {
+            <option selected="selected" value="@(i.ToString())">@i.ToString()</option>
+        }
+        else
+        {
+            <option value="@(i.ToString())">@i.ToString()</option>
+        }
+    }
+</select>
+<select name="DOBmonth">
+    <option value="">--wybierz miesiąc--</option>
+    <option @(((int)ViewBag.DOBmonth == 01) ? "selected='selected'" : "") value="01">Styczeń</option>
+    <option @(((int)ViewBag.DOBmonth == 02) ? "selected='selected'" : "") value="02">Luty</option>
+    <option @(((int)ViewBag.DOBmonth == 03) ? "selected='selected'" : "") value="03">Marzec</option>
+    <option @(((int)ViewBag.DOBmonth == 04) ? "selected='selected'" : "") value="04">Kwiecień</option>
+    <option @(((int)ViewBag.DOBmonth == 05) ? "selected='selected'" : "") value="05">Maj</option>
+    <option @(((int)ViewBag.DOBmonth == 06) ? "selected='selected'" : "") value="06">Czerwiec</option>
+    <option @(((int)ViewBag.DOBmonth == 07) ? "selected='selected'" : "") value="07">Lipiec</option>
+    <option @(((int)ViewBag.DOBmonth == 08) ? "selected='selected'" : "") value="08">Sierpień</option>
+    <option @(((int)ViewBag.DOBmonth == 09) ? "selected='selected'" : "") value="09">Wrzesień</option>
+    <option @(((int)ViewBag.DOBmonth == 10) ? "selected='selected'" : "") value="10">Październik</option>
+    <option @(((int)ViewBag.DOBmonth == 11) ? "selected='selected'" : "") value="11">Listopad</option>
+    <option @(((int)ViewBag.DOBmonth == 12) ? "selected='selected'" : "") value="12">Grudzień</option>
+</select>
+<select name="DOBday">
+    <option value="">--wybierz dzień--</option>
+    @for (int i = 1; i <= 31; i++)
+    {
+        if ((int)ViewBag.DOBday == i)
+        {
+            <option selected="selected" value="@i.ToString()">@i.ToString()</option>
+        }
+        else
+        {
+            <option value="@i.ToString()">@i.ToString()</option>
+        }
+        
+    }
+</select>

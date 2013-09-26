@@ -26,7 +26,12 @@ namespace Referee
             routes.MapRoute(
                 "Availability", // Route name
                 "avail/create/{RefereeId}", // URL with parameters
-                new { controller = "Avail", action = "Create", RefereeId = UrlParameter.Optional } // Parameter defaults
+                new { controller = "Avail", action = "Create", Token = UrlParameter.Optional } // Parameter defaults
+            );
+            routes.MapRoute(
+                "RestorePassword", // Route name
+                "Account/RestorePassword/{Token}", // URL with parameters
+                new { controller = "Account", action = "RestorePassword", Token = UrlParameter.Optional } // Parameter defaults
             );
             routes.MapRoute(
                 "Default", // Route name

@@ -173,43 +173,7 @@ namespace Referee.Controllers
             return View(refereeentity);
         }
 
-        private void CreateUser(string Mailadr, string Password, string PasswordConfirmed, out Guid UserID )
-        {
-            UserID = Guid.Empty;
-            RegisterModel NewUser = new RegisterModel { Email = Mailadr, Password = Password, ConfirmPassword = PasswordConfirmed, UserName = Mailadr };
-            if (ModelState.IsValid)
-            {
-                MembershipCreateStatus createStatus;
-                Membership.CreateUser(NewUser.UserName, NewUser.Password, NewUser.Email, null, null, true, null, out createStatus);
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    UserID = (Guid)Membership.GetUser(Mailadr).ProviderUserKey;
-                }
-                else
-                {                    
-                    throw new Exception("Użytkownik o podanym adresie mailowym już istnieje w bazie danych!");
-                }
-            }
-            else
-            {
-                throw new Exception("Błąd podczas dodawania danych autoryzacyjnych sędziego");
-            }
-        }
-
-        private bool CreateUser(string Mailadr, string Password)
-        {
-            RegisterModel NewUser = new RegisterModel { Email = Mailadr, Password = Password, ConfirmPassword = Password, UserName = Mailadr };
-            if (ModelState.IsValid)
-            {
-                MembershipCreateStatus createStatus;
-                Membership.CreateUser(NewUser.UserName, NewUser.Password, NewUser.Email, null, null, true, null, out createStatus);
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        
 
         private string UploadRefereePhoto(HttpPostedFileBase Photo, string DestinationFolder)
         {
@@ -234,27 +198,7 @@ namespace Referee.Controllers
             return PhotoName;
         }
 
-        private void AssignRole(string UserName, string[] SelectedRoles)
-        {
-            if (SelectedRoles.Count() == 0)
-            {
-                throw new Exception("Nie wybrano żadnych ról dla sędziego.");
-            }
-            var User = Membership.GetUser(UserName);
-            if (User != null)
-            {
-                var ExistingRoles = Roles.GetRolesForUser(UserName);
-                if (ExistingRoles.Count() > 0)
-                {
-                    Roles.RemoveUserFromRoles(UserName, ExistingRoles);
-                }
-                Roles.AddUserToRoles(UserName, SelectedRoles);
-            }
-            else
-            {
-                throw new Exception("Nie można dodać ról do pustego użytkownika.");
-            }
-        }
+        
 
         [HttpPost]
         [Authorize(Roles = HelperRoles.Sedzia)]
@@ -274,23 +218,7 @@ namespace Referee.Controllers
         }
 
 
-        private void PopulateDropDowns(RefereeEntity refereeentity = null)
-        {
-            ViewBag.RefClassId = new SelectList(Unit.RClassRepository.Get(), "Id", "Name", refereeentity == null ? 0 : refereeentity.RefClassId);
-            ViewBag.AuthorizationId = new SelectList(Unit.AuthorizationRepository.Get(), "Id", "Name", refereeentity == null ? 0 : refereeentity.AuthorizationId);
-            ViewBag.UserRoles = new string[] { };
-            if (refereeentity != null)
-            {
-                ViewBag.UserRoles = Roles.GetRolesForUser(refereeentity.Mailadr);
-            }
-
-            if (refereeentity != null)
-            {
-                ViewBag.DOBYear = refereeentity.DOB.Year;
-                ViewBag.DOBmonth = refereeentity.DOB.Month;
-                ViewBag.DOBday = refereeentity.DOB.Day;
-            }
-        }
+        
         //
         // GET: /Referee/Edit/5
         [Authorize(Roles = HelperRoles.RefereatObsad)]

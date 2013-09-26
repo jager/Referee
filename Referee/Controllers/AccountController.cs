@@ -9,12 +9,25 @@ using Referee.Models;
 using Referee.Controllers.Base;
 using Referee.Helpers;
 using Referee.Models.Domain;
+using Referee.Lib.Security;
 
 namespace Referee.Controllers
 {
     public class AccountController : BaseController
     {
-
+        protected override void Initialize(System.Web.Routing.RequestContext requestContext)
+        {
+            base.Initialize(requestContext);
+            ViewBag.DOBYear = 0;
+            ViewBag.DOBmonth = 0;
+            ViewBag.DOBday = 0;
+            ViewData["IconName"] = "icon-user-2";
+            ViewData["breadcrumbs"] = new List<BreadcrumbHelper>
+            {
+                new BreadcrumbHelper { Href = "/", Text = "Pulpit" },
+                new BreadcrumbHelper { Href = "/Referee", Text = "Profil" }
+            };
+        }
         //
         // GET: /Account/LogOn
 
@@ -29,9 +42,6 @@ namespace Referee.Controllers
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
-            FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-            //return RedirectToAction("Index", "Home");
-
             if (ModelState.IsValid)
             {
                 if (Membership.ValidateUser(model.UserName, model.Password))
@@ -139,10 +149,11 @@ namespace Referee.Controllers
                 try
                 {
                     MembershipUser currentUser = Membership.GetUser(User.Identity.Name, true /* userIsOnline */);
+                    //var p = currentUser.ResetPassword();
                     changePasswordSucceeded = currentUser.ChangePassword(model.OldPassword, model.NewPassword);
                 }
                 catch (Exception)
-                {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  {
                     changePasswordSucceeded = false;
                 }
 
@@ -224,6 +235,7 @@ namespace Referee.Controllers
             }
 
             string Token = Unit.ChangePasswordRepository.Create(Convert.ToString(securityUser.ProviderUserKey));
+            Unit.Save();
 
             if (!String.IsNullOrEmpty(Token))
             {
@@ -257,7 +269,8 @@ namespace Referee.Controllers
             {
                 return RedirectToAction("ForgotPassword");
             }
-
+            /// Ten kawałek kodu jest do przepisania do następnej metody po POST
+            /// Nie wiem czemu do bazy danych się nie zapisuje tylko
             if (Unit.ChangePasswordRepository.Check(Token))
             {
                 var Password = Unit.ChangePasswordRepository.Password;
@@ -268,13 +281,14 @@ namespace Referee.Controllers
                 }
                 ViewBag.Token = Guid.Parse(Password.UserId);
                 Unit.ChangePasswordRepository.Change(Token);
+                Unit.Save();
             }
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult RestorePassword(Guid Token, string NewPassword, string NewPasswordRepeated)
+        public ActionResult RestorePassword(string Token, string NewPassword, string NewPasswordRepeated)
         {
             try
             {
@@ -292,6 +306,83 @@ namespace Referee.Controllers
             }
             return View();
         }
+
+
+        [Authorize]
+        public ActionResult Edit(Guid id)
+        {
+            if (id != CurrentReferee.Id)
+            {
+                return RedirectToAction("Profile", "Home");
+            }
+            RefereeEntity refereeentity = Unit.RefereeRepository.GetById(id);
+            ViewData["PageTitle"] = String.Format("Edycja danych sędziego: {0} {1}", refereeentity.FirstName, refereeentity.LastName);
+
+            ((List<BreadcrumbHelper>)ViewData["breadcrumbs"]).Add(
+                new BreadcrumbHelper { Href = "#", Text = refereeentity.FirstName + " " + refereeentity.LastName }
+            );
+            ViewData["breadlinks"] = new List<BreadcrumbHelper> 
+            { 
+                new BreadcrumbHelper { Href = "/Referee", Text = "Listuj sędziów" },
+                new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego" }
+            };
+            ViewBag.DOBYear = refereeentity.DOB.Year;
+            ViewBag.DOBmonth = refereeentity.DOB.Month;
+            ViewBag.DOBday = refereeentity.DOB.Day;
+
+            PopulateDropDowns(refereeentity);
+            return View(refereeentity);
+        }
+        
+        [HttpPost]
+        [Authorize]
+        public ActionResult Edit(RefereeEntity refereeentity, FormCollection form)
+        {
+            if (refereeentity.Id != CurrentReferee.Id)
+            {
+                return RedirectToAction("Profile", "Home");
+            }
+            DateTime dtDOB;
+            DateTime.TryParse(String.Format("{0}-{1}-{2}", form["DOBYear"], form["DOBmonth"], form["DOBday"]), out dtDOB);
+            refereeentity.DOB = dtDOB;
+            string[] selectedRoles = Roles.GetRolesForUser(refereeentity.Mailadr);
+            string Password = HashString.SHA1(String.Format("{0}{1}", refereeentity.Mailadr, DateTime.Now.ToUniversalTime().ToLongDateString())).Substring(0, 8);
+            AddCredentialsIfNotExists(refereeentity.Mailadr, Password);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    AssignRole(refereeentity.Mailadr, selectedRoles);
+                    if (refereeentity.Id == CurrentReferee.Id)
+                    {
+                        Unit.RefereeRepository.UpdateProfile(refereeentity, CurrentReferee);
+                    }
+                    else
+                    {             
+                        Unit.RefereeRepository.Update(refereeentity);
+                    }
+                    Unit.Save();
+                    return RedirectToAction("Profile", "Home");
+                }
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError(String.Empty, e.Message);
+            }
+            PopulateDropDowns(refereeentity);
+            return View(refereeentity);
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            Unit.Dispose();
+            base.Dispose(disposing);
+        }
+
+
+
+
         #region Status Codes
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
         {

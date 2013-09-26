@@ -134,5 +134,160 @@ namespace Referee.Controllers.Base
             }
             return String.Empty;
         }
+
+
+        /// <summary>
+        /// Prepares data to search form used in HomeController and NominationController
+        /// </summary>
+        /// <param name="Nominations">List of nominations</param>
+        /// <param name="dtStart">Search start date</param>
+        /// <param name="dtEnd">Search End date</param>
+        /// <param name="league">League name where nominations are search</param>
+        protected void FillSearchNominationsForm(IEnumerable<Nomination> Nominations, string dtStart = "", string dtEnd = "", int league = 0)
+        {
+            ViewBag.Leagues = new SelectList(Unit.LeagueRepository.Get(filter: l => l.Visible), "Id", "Name", league);
+            DateTime DateStart;
+            DateTime DateEnd;
+
+            if (!String.IsNullOrEmpty(dtStart) && DateTime.TryParse(Convert.ToString(dtStart), out DateStart))
+            {
+                Nominations = Nominations.Where(n => (n.Game != null && n.Game.DateAndTime >= DateStart)
+                                        || (n.Tournament != null && n.Tournament.StartDate >= DateStart));
+                ViewBag.dtStart = dtStart;
+            }
+
+            if (!String.IsNullOrEmpty(dtEnd) && DateTime.TryParse(Convert.ToString(dtEnd), out DateEnd))
+            {
+                Nominations = Nominations.Where(n => (n.Game != null && n.Game.DateAndTime <= DateEnd)
+                                        || (n.Tournament != null && n.Tournament.StartDate <= DateEnd));
+                ViewBag.dtEnd = dtEnd;
+
+            }
+
+            if ((int)league > 0)
+            {
+                Nominations = Nominations.Where(n => n.Game != null && n.Game.LeagueId == league);
+                ViewBag.league = league;
+            }
+        }
+
+
+        /// <summary>
+        /// Populates dropdowns inf create and edit referee form
+        /// </summary>
+        /// <param name="refereeentity">Referee Entity object</param>
+        protected void PopulateDropDowns(RefereeEntity refereeentity = null)
+        {
+            ViewBag.RefClassId = new SelectList(Unit.RClassRepository.Get(), "Id", "Name", refereeentity == null ? 0 : refereeentity.RefClassId);
+            ViewBag.AuthorizationId = new SelectList(Unit.AuthorizationRepository.Get(), "Id", "Name", refereeentity == null ? 0 : refereeentity.AuthorizationId);
+            ViewBag.UserRoles = new string[] { };
+            if (refereeentity != null)
+            {
+                ViewBag.UserRoles = Roles.GetRolesForUser(refereeentity.Mailadr);
+            }
+
+            if (refereeentity != null)
+            {
+                ViewBag.DOBYear = refereeentity.DOB.Year;
+                ViewBag.DOBmonth = refereeentity.DOB.Month;
+                ViewBag.DOBday = refereeentity.DOB.Day;
+            }
+        }
+
+
+        /// <summary>
+        /// Assign role to referee entity
+        /// </summary>
+        /// <param name="UserName"</param>
+        /// <param name="SelectedRoles">Roles that are selected to referee entity</param>
+        protected void AssignRole(string UserName, string[] SelectedRoles)
+        {
+            if (SelectedRoles.Count() == 0)
+            {
+                throw new Exception("Nie wybrano żadnych ról dla sędziego.");
+            }
+            var User = Membership.GetUser(UserName);
+            if (User != null)
+            {
+                var ExistingRoles = Roles.GetRolesForUser(UserName);
+                if (ExistingRoles.Count() > 0)
+                {
+                    Roles.RemoveUserFromRoles(UserName, ExistingRoles);
+                }
+                Roles.AddUserToRoles(UserName, SelectedRoles);
+            }
+            else
+            {
+                throw new Exception("Nie można dodać ról do pustego użytkownika.");
+            }
+        }
+
+
+        /// <summary>
+        /// Creates credentials if they don't exist
+        /// </summary>
+        /// <param name="Mailadr"></param>
+        /// <param name="Password"></param>
+        protected void AddCredentialsIfNotExists(string Mailadr, string Password)
+        {
+            var NewUser = Membership.GetUser(Mailadr);
+            if (NewUser == null)
+            {
+                CreateUser(Mailadr, Password);
+            }
+        }
+
+
+        /// <summary>
+        /// Creates new user
+        /// </summary>
+        /// <param name="Mailadr"></param>
+        /// <param name="Password"></param>
+        /// <param name="PasswordConfirmed"></param>
+        /// <param name="UserID"></param>
+        protected void CreateUser(string Mailadr, string Password, string PasswordConfirmed, out Guid UserID)
+        {
+            UserID = Guid.Empty;
+            RegisterModel NewUser = new RegisterModel { Email = Mailadr, Password = Password, ConfirmPassword = PasswordConfirmed, UserName = Mailadr };
+            if (ModelState.IsValid)
+            {
+                MembershipCreateStatus createStatus;
+                Membership.CreateUser(NewUser.UserName, NewUser.Password, NewUser.Email, null, null, true, null, out createStatus);
+                if (createStatus == MembershipCreateStatus.Success)
+                {
+                    UserID = (Guid)Membership.GetUser(Mailadr).ProviderUserKey;
+                }
+                else
+                {
+                    throw new Exception("Użytkownik o podanym adresie mailowym już istnieje w bazie danych!");
+                }
+            }
+            else
+            {
+                throw new Exception("Błąd podczas dodawania danych autoryzacyjnych sędziego");
+            }
+        }
+
+
+        /// <summary>
+        /// Creates new user
+        /// </summary>
+        /// <param name="Mailadr"></param>
+        /// <param name="Password"></param>
+        /// <returns></returns>
+        protected bool CreateUser(string Mailadr, string Password)
+        {
+            RegisterModel NewUser = new RegisterModel { Email = Mailadr, Password = Password, ConfirmPassword = Password, UserName = Mailadr };
+            if (ModelState.IsValid)
+            {
+                MembershipCreateStatus createStatus;
+                Membership.CreateUser(NewUser.UserName, NewUser.Password, NewUser.Email, null, null, true, null, out createStatus);
+                if (createStatus == MembershipCreateStatus.Success)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

@@ -26,7 +26,13 @@
                                 {
                                     <img width="108px" height="110px" src="@Url.Content(FileUploader.GetUserPhotoPath(String.Format("{0}{1}",Model.DestinationFolder, Model.Photo)))?id=@DateTime.Now.Millisecond.ToString()" alt="" />            
                                 }
-                            </li>                    
+                            </li>   
+                            @if ((Model.Mailadr == User.Identity.Name) && User.IsInRole(HelperRoles.Sedzia)) 
+                            {
+                                <li>
+                                    @Html.AuthLink("Edytuj profil", "Edit", "Account", new { @Id = Model.Id }, new { @class = "buttonS bRed" })        
+                                </li> 
+                            }                
                         </ul>
                     </div>
                     <div class="grid3">
@@ -83,7 +89,7 @@
                                 <div class="grid2">                            
                                     @if ((Model.Mailadr == User.Identity.Name) && User.IsInRole(HelperRoles.Sedzia))
                                     {
-                                        @Html.AuthLink("Zmień hasło", "ChangePassword", "Account", new { }, new { @class = "buttonS bBlue openableDialogContenerButton" })    
+                                        @Html.AuthLink("Zmień hasło", "ChangePassword", "Account", new { }, new { @class = "buttonS bBlue openableDialogContenerButton" })
                                     }
                                     else if (User.IsInRole(HelperRoles.RefereatObsad) && (Model.Mailadr != User.Identity.Name)) 
                                     {
