@@ -71,12 +71,10 @@ namespace Referee.Repositories
         /// Changes Token
         /// </summary>
         /// <param name="Token"></param>
-        public void Change(string Token)
+        public void Delete(string Token)
         {
             ChangePassword Password = this.GetToken(Token);
-            Password.Updated = DateTime.Now;
-            Password.Token = HashString.SHA1(Password.Updated.ToString());            
-            this.Update(Password);
+            this.Delete(Password);
         }
     }
 }
