@@ -268,21 +268,8 @@ namespace Referee.Controllers
             if (String.IsNullOrEmpty(Token))
             {
                 return RedirectToAction("ForgotPassword");
-            }
-            /// Ten kawałek kodu jest do przepisania do następnej metody po POST
-            /// Nie wiem czemu do bazy danych się nie zapisuje tylko
-            if (Unit.ChangePasswordRepository.Check(Token))
-            {
-                var Password = Unit.ChangePasswordRepository.Password;
-                var User = Membership.GetUser(Guid.Parse(Password.UserId));
-                if (User == null)
-                {
-                    return RedirectToAction("ForgotPassword");
-                }
-                ViewBag.Token = Guid.Parse(Password.UserId);
-                Unit.ChangePasswordRepository.Change(Token);
-                Unit.Save();
-            }
+            }            
+            ViewBag.Token = Token;
 
             return View();
         }
@@ -292,16 +279,32 @@ namespace Referee.Controllers
         {
             try
             {
-                var User = Membership.GetUser(Token);
-                string NewTemporaryPassword = User.ResetPassword();
-                if (NewPassword.Trim() == NewPasswordRepeated.Trim() 
-                    &&  User.ChangePassword(NewTemporaryPassword, NewPassword.Trim()))
+                /// Ten kawałek kodu jest do przepisania do następnej metody po POST
+                /// Nie wiem czemu do bazy danych się nie zapisuje tylko
+                if (Unit.ChangePasswordRepository.Check(Token))
                 {
-                   return RedirectToAction("LogOn");
+                    var Password = Unit.ChangePasswordRepository.Password;
+                    var User = Membership.GetUser(Guid.Parse(Password.UserId));
+                    if (User == null)
+                    {
+                        return RedirectToAction("ForgotPassword");
+                    }
+                    
+                    if (User.IsLockedOut)
+                    {
+                        User.UnlockUser();
+                    }
+                    
+                    string NewTemporaryPassword = User.ResetPassword();
+                    if (NewPassword.Trim() == NewPasswordRepeated.Trim()
+                        && User.ChangePassword(NewTemporaryPassword, NewPassword.Trim()))
+                    {
+                        return RedirectToAction("LogOn");
+                    }
                 }
             }
             catch (Exception e)
-            {
+            {      
                 return RedirectToAction("ForgotPassword");
             }
             return View();
