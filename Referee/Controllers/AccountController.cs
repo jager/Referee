@@ -279,8 +279,6 @@ namespace Referee.Controllers
         {
             try
             {
-                /// Ten kawałek kodu jest do przepisania do następnej metody po POST
-                /// Nie wiem czemu do bazy danych się nie zapisuje tylko
                 if (Unit.ChangePasswordRepository.Check(Token))
                 {
                     var Password = Unit.ChangePasswordRepository.Password;
@@ -299,6 +297,8 @@ namespace Referee.Controllers
                     if (NewPassword.Trim() == NewPasswordRepeated.Trim()
                         && User.ChangePassword(NewTemporaryPassword, NewPassword.Trim()))
                     {
+                        Unit.ChangePasswordRepository.Delete(Password);
+                        Unit.Save();
                         return RedirectToAction("LogOn");
                     }
                 }
