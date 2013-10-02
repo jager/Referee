@@ -124,7 +124,7 @@
             <td>
                 @Html.AuthLink("Pokaż", "Details", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Pokaż sędziego" }, HelperRoles.Sedzia)
                 @Html.AuthLink("Edytuj", "Edit", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS", @title = "Edytuj dane sędziego" }, HelperRoles.RefereatObsad)
-                @Html.AuthLink("Usuń", "Delete", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń sędziego" }, HelperRoles.RefereatObsad)
+                @Html.AuthLink("Usuń", "Delete", "Referee", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS openableDialogContenerButton", @title = "Usuń sędziego" }, HelperRoles.Administrator)
             </td>
             }
         </tr>

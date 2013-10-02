@@ -130,13 +130,20 @@
                         @Html.ValidationMessageFor(model => model.AuthorizationId)
                     </div>
                     <div class="clear"></div>
-                </div>
+                </div>                
                 <div class="formRow">
                     <div class="grid3">
                         Uprawnienia w systemie
                     </div>
                     <div class="grid9">
-                        @{ Html.RenderPartial("EditorTemplates/Roles"); }
+                        @if (User.IsInRole(Referee.Helpers.HelperRoles.Administrator))
+                        {
+                            Html.RenderPartial("EditorTemplates/Roles");
+                        }
+                        else
+                        {
+                            @String.Join(", ", ((string[])ViewBag.UserRoles))
+                        }
                     </div>
                     <div class="clear"></div>
                 </div>
