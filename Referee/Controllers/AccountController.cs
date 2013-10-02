@@ -59,7 +59,7 @@ namespace Referee.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                    ModelState.AddModelError("", "Nazwa użytkownika i/lub hasło są nieprawidłowe.");
                 }
             }
 
