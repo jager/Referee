@@ -24,7 +24,7 @@
             $.each(data, function (key, val) {
                 var row = '<td>' + val.Ident + '</td><td>' + val.Name + '</td><td>' + val.Venue + '</td><td>' + val.Date + '</td><td>' + val.Time + '</td>';
                 if (val.Type == "game") {
-                    if (val.Score != "") {
+                    if (val.Score != "" && val.Score != "brak") {
                         row += '<td>' + val.Score + '</td>';
                     } else {
                         row += '<td><a href="/Game/SaveScore/' + val.Ident + '" class="buttonS bBlue openSaveScorePopup">Dodaj wynik</a></td>';
