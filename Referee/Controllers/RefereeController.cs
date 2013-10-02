@@ -41,7 +41,7 @@ namespace Referee.Controllers
             ViewData["PageTitle"] = "Sędziowie MWZPS";
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
-                new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego", Role = HelperRoles.RefereatObsad }
+                new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego", Role = HelperRoles.Administrator }
             };
             return View(Unit.RefereeRepository.Get(orderBy: l => l.OrderBy(r => r.LastName)));
         }
@@ -59,7 +59,7 @@ namespace Referee.Controllers
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
                 new BreadcrumbHelper { Href = "/Referee", Text = "Listuj sędziów" },
-                new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego", Role = HelperRoles.RefereatObsad }
+                new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego", Role = HelperRoles.Administrator }
             };
             //GamesNominatedRepository GNRepository = new GamesNominatedRepository(id);
             var NominatedReferees = Unit.NominatedRepository.Get(filter: n => n.RefereeId == id); //GNRepository.Get();
@@ -93,7 +93,7 @@ namespace Referee.Controllers
 
         //
         // GET: /Referee/Create
-        //[Authorize(Roles=HelperRoles.RefereatObsad)]
+        [Authorize(Roles=HelperRoles.Administrator)]
         public ActionResult Create()
         {
             ViewData["PageTitle"] = "Dodaj nowego sędziego";
@@ -112,7 +112,7 @@ namespace Referee.Controllers
         // POST: /Referee/Create
 
         [HttpPost]
-        //[Authorize(Roles = HelperRoles.RefereatObsad)]
+        [Authorize(Roles = HelperRoles.Administrator)]
         public ActionResult Create(RefereeEntity refereeentity, FormCollection form, HttpPostedFileBase Photo)
         {
             Guid NewUserGuid = Guid.Empty;
@@ -233,7 +233,7 @@ namespace Referee.Controllers
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
                 new BreadcrumbHelper { Href = "/Referee", Text = "Listuj sędziów" },
-                new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego" }
+                new BreadcrumbHelper { Href = "/Referee/Create", Text = "Dodaj sędziego", Role = HelperRoles.Administrator }
             };
             ViewBag.DOBYear = refereeentity.DOB.Year;
             ViewBag.DOBmonth = refereeentity.DOB.Month;
