@@ -67,7 +67,7 @@ namespace Referee.Helpers
             string _txt = @"Zostałeś nominowany na {0}
                             Sprawdź poniższy link:
                             
-                            http://{1}/Nomination/Confirmation/?NominationId={2}&amp;HashConf={3}&amp;RefereeId={4}
+                            http://{1}/Nomination/Confirmation/?NominationId={2}&HashConf={3}&RefereeId={4}
 
                             {5}
                             ";
