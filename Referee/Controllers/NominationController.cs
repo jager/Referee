@@ -251,7 +251,8 @@ namespace Referee.Controllers
                     Nominated.Confirmed = true;
                     Nominated.ConfirmedDate = DateTime.Now;
                     Unit.NominatedRepository.Update(Nominated);
-                    Unit.Save();
+                    Unit.Save();                    
+                    return View("Details", Nominated.Nomination);
                 }
                 else
                 {
@@ -262,8 +263,8 @@ namespace Referee.Controllers
             {
                 ViewBag.Class = "redBack";
                 ViewBag.Message = ex.Message;
-            }
-            return View("ConfirmFromEmail");
+                return View("ConfirmFromEmail");
+            }            
         }
 
 

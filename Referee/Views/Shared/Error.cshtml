@@ -1,11 +1,12 @@
 ﻿@model System.Web.Mvc.HandleErrorInfo
 
 @{
-    ViewBag.Title = "Error";     
+    ViewBag.Title = "Ooops, coś jednak poszło nie po naszej myśli";     
 }
-
-<h2>
-    Sorry, an error occurred while processing your request.
-    
-</h2>
-<h3>@Model.Exception.Message</h3>
+<div class="wrapper">
+    <div class="widget fluid">
+        <div class="body" style="text-align: center">
+                <h2>Ooops, coś jednak poszło nie po naszej myśli!</h2>               
+        </div>
+    </div>    
+</div>

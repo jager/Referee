@@ -16,6 +16,12 @@
 {
   
         <div class="widget fluid" id="refereeNominations">
+            @if (ViewBag.Message != null)
+            {
+                <div class="body" align="center">
+                    <span class="@ViewBag.Class">@ViewBag.Message</span>
+                </div> 
+            }
             <div class="whead">
                 <h6>Obsada</h6>
                 <div class="clear"></div>
