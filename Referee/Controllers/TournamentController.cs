@@ -80,13 +80,20 @@ namespace Referee.Controllers
         public ActionResult Create(Tournament tournament)
         {
             tournament.SeasonId = CurrentSeason.Id;
+            if (tournament.LeagueId == 0)
+            {
+                tournament.LeagueId = null;
+                tournament.LeagueName = null;
+                tournament.Type = "Random";
+            }
+
             if (tournament.Type == "League")
             {
                 var league = Unit.LeagueRepository.GetById(tournament.LeagueId);
                 tournament.LeagueName = league.Name;
             }
             if (ModelState.IsValid)
-            {
+            {                
                 Unit.TournamentRepository.Insert(tournament);
                 Unit.Save();
                 if (tournament.Type == "League")
@@ -133,6 +140,14 @@ namespace Referee.Controllers
         [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult Edit(Tournament tournament)
         {
+
+            if (tournament.LeagueId == 0)
+            {
+                tournament.LeagueId = null;
+                tournament.LeagueName = null;
+                tournament.Type = "Random";
+            }
+
             if (tournament.Type == "League")
             {
                 var league = Unit.LeagueRepository.GetById(tournament.LeagueId);
@@ -141,8 +156,10 @@ namespace Referee.Controllers
             else
             {
                 tournament.LeagueName = "";
-                tournament.LeagueId = 0;
+                tournament.LeagueId = null;
             }
+
+
             if (ModelState.IsValid)
             {
                 Unit.TournamentRepository.Update(tournament);
