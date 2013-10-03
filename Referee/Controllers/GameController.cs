@@ -273,7 +273,15 @@ namespace Referee.Controllers
         [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult DeleteConfirmed(int id)
         {
-            Game game = Unit.GameRepository.GetById(id);
+            var nomination = Unit.NominationRepository.Get(filter: n => n.GameId == id);
+            if (nomination != null && nomination.Count() > 0)
+            {
+                foreach (var n in nomination)
+                {
+                    Unit.NominationRepository.Delete(n);
+                }
+            }
+            Game game = Unit.GameRepository.GetById(id);            
             int LeagueId = game.LeagueId;
             Unit.GameRepository.Delete(game);
             Unit.Save();
