@@ -1,7 +1,68 @@
 ﻿<form action="/Game/SaveScore" method="post">
     @Html.Hidden("GameId", (int)ViewBag.GameId)
     <label>Podaj wynik:</label>
+
+
+    <!-- nowa implementacja podawania wyniku -->
+    <select name="HostSetScore" id="HostSetScoreID">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+    </select>
+    <select name="GuestSetScore" id="GuestSetScoreID">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+    </select>
+    <div id="PointsContainer"></div>
+    <!-- koniec nowej implementacji --->
+
+
     <input type="text" name="Score" class="clear" placeholder="Podaj Wynik" />
     <div class="divider"><span></span></div>
     <input type="submit" value="Zapisz" class="buttonS bGreen" />
 </form>
+
+
+
+<script type="text/javascript">
+    $().ready(function () {
+        var hostSets = $("#HostSetScoreID").val();
+        var guestSets = $("#GuestSetScoreID").val();
+
+        function SetPointsContainer(hostScore, guestScore, pointsContainer) {
+            if (hostScore == 0 && guestScore) {
+                return;
+            }
+            if (hostScore == guestScore) {
+                return;
+            }
+            pointsContainer.html("");
+            var input = $("<input type=\"text\" name=\"points\" value=\"0\" class=\"points\" />");
+            var sumSets = hostScore + guestScore;
+            for (var i = 1; i <= sumSets; i++) {
+                input.attr("id", "hostId_" + i).attr("name", "hostPoints_" + i).attr();
+                pointsContainer.append(input);
+                input.attr("id", "guestId_" + i).attr("name", "guestPoints_" + i).attr();
+                pointsContainer.append(input);
+            }
+
+        }
+
+        $("#HostSetScoreID").live("change", function () {
+            hostSets = $(this).val();
+            guestSets = $("#GuestSetScoreID").val();
+            SetPointsContainer(hostSets, guestSets, $("#PointsContainer"));
+        });
+
+        $("#GuestSetScoreID").live("change", function () {
+            guestSets = $(this).val();
+            hostSets = $("#HostSetScoreID").val();
+            SetPointsContainer(hostSets, guestSets, $("#PointsContainer"));
+        });
+    });
+
+
+</script>
