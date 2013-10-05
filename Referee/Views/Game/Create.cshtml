@@ -25,6 +25,7 @@
     @Html.ValidationSummary(true)
     @Html.Hidden("LeagueId", (int)ViewBag.LeagueId);
     @Html.Hidden("SeasonId", (int)ViewBag.SeasonId);
+    @Html.Hidden("Move", "Game", new { @id = "hiddenMove" } );
     <fieldset>
         <div class="widget fluid">
             <div class="whead"><h6>Dodaj nowy mecz</h6><div class="clear"></div></div>
@@ -93,7 +94,7 @@
                 <div class="grid3"></div>
                 <div class="grid9">
                     <input class="buttonS bGreen" type="submit" value="Dodaj mecz" />                
-                    <input class="buttonS bBlue" type="submit" value="Dodaj mecz i przejdź do obsad" />                
+                    <input class="buttonS bBlue" type="submit" value="Dodaj mecz i przejdź do obsad" id="moveToNomination" />                
                     @Html.ActionLink("Anuluj", "Index", "Game", new { LeagueId = (int)ViewBag.LeagueId }, new { @class = "buttonS bRed" })                 
                 </div>
                 <div class="clear"></div>
@@ -102,3 +103,11 @@
     </fieldset>
 }
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("input#moveToNomination").live("click", function () {
+            $("input#hiddenMove").val("Nomination");
+        });
+    })
+
+</script>

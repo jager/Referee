@@ -138,6 +138,10 @@ namespace Referee.Controllers
             {
                 Unit.GameRepository.Insert(game);
                 Unit.Save();
+                if (form["Move"] != null && !String.IsNullOrEmpty(form["Move"]) && form["Move"] == "Nomination")
+                {
+                    return RedirectToAction("Create", "Nomination", new { EventId = game.Id, @Type = "game" });
+                }
                 return RedirectToAction("Index", new { LeagueId = game.LeagueId });
             }
             
