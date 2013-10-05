@@ -1420,6 +1420,7 @@
     <Content Include="Views\Game\SaveScore.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\EditorTemplates\DOB.cshtml" />
+    <Content Include="Views\Shared\ListNominationsUnauthorized.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

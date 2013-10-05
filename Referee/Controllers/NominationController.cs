@@ -30,39 +30,10 @@ namespace Referee.Controllers
 
         //
         // GET: /Nomination/
-        [Authorize(Roles = HelperRoles.Sedzia)]
+        //[Authorize(Roles = HelperRoles.Sedzia)]
         public ViewResult Index(string dtStart = "", string dtEnd = "", int league = 0)
         {
-
-            var Nominations = Unit.NominationRepository.Get();
-
-            /*
-            ViewBag.Leagues = new SelectList(Unit.LeagueRepository.Get(filter: l => l.Visible), "Id", "Name", league);
-            DateTime DateStart;
-            DateTime DateEnd;
-            
-            if (!String.IsNullOrEmpty(dtStart) && DateTime.TryParse(Convert.ToString(dtStart), out DateStart))
-            {
-                Nominations = Nominations.Where(n => (n.Game != null && n.Game.DateAndTime >= DateStart) 
-                                        || (n.Tournament != null && n.Tournament.StartDate >= DateStart));
-                ViewBag.dtStart = dtStart;
-            }
-
-            if (!String.IsNullOrEmpty(dtEnd) && DateTime.TryParse(Convert.ToString(dtEnd), out DateEnd))
-            {
-                Nominations = Nominations.Where(n => (n.Game != null && n.Game.DateAndTime <= DateEnd)
-                                        || (n.Tournament != null && n.Tournament.StartDate <= DateEnd));
-                ViewBag.dtEnd = dtEnd;
-
-            }
-
-            if ((int)league > 0)
-            {
-                Nominations = Nominations.Where(n => n.Game != null && n.Game.LeagueId == league);
-                ViewBag.league = league;
-            }
-            */
-            FillSearchNominationsForm(Nominations, dtStart, dtEnd, league);
+            var Nominations = FillSearchNominationsForm(Unit.NominationRepository.Get(), dtStart, dtEnd, league);
 
             List<NominationDetails> NominationEvents = new List<NominationDetails>();
             foreach (Nomination _nomination in Nominations)
@@ -82,6 +53,10 @@ namespace Referee.Controllers
                     throw new Exception("Brak typu nominacji");
                 }
                 NominationEvents.Add(new NominationDetails {  Event = _event, Nomination = _nomination, NominatedReferees = _nomination.Nominateds } );
+            }
+            if (!Request.IsAuthenticated)
+            {
+                return View("ListNominationsUnauthorized", NominationEvents.OrderByDescending(x => x.Event.Date));
             }
             return View("ListNominations", NominationEvents.OrderByDescending(x => x.Event.Date));
         }
