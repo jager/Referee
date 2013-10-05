@@ -13,5 +13,7 @@ namespace Referee.ViewModels
         public string Period { get; set; }
         public int NominationId { get; set; }
         public Guid RefereeId { get; set; }
+        public string Time { get; set; }
+        public string League { get; set; }
     }
 }

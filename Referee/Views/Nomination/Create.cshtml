@@ -112,7 +112,13 @@
                                     <a href="#" title="" class="headline"><img src="@Url.Content(photoPath)" alt="" width="37" height="36" /></a>
                                     <div class="announce">
                                         @Html.AuthLink(conflict.Referee, "Details", "Referee", new { @Id = conflict.RefereeId }, new { }, HelperRoles.Sedzia)
-                                        <span>@conflict.Event</span>
+                                        <span>
+                                            @conflict.Event <br />
+                                            <span style="margin-left: 51px">
+                                                <strong class="red">@conflict.League</strong>
+                                                <strong class="green">@conflict.Time</strong>
+                                            </span>
+                                        </span>
                                     </div>
                                 </div>
                                 <span class="clear"></span>

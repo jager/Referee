@@ -378,7 +378,9 @@ namespace Referee.Controllers
                         Event = (Nomination.GameId != null ? Nomination.Game.Name : Nomination.Tournament.Name),
                         Period = (Nomination.GameId != null ? Nomination.Game.DateAndTime : Nomination.Tournament.StartDate).ToString(),
                         NominationId = Nomination.Id,
-                        RefereeId = Nominated.RefereeId
+                        RefereeId = Nominated.RefereeId,
+                        Time = Nomination.Game.DateAndTime.ToShortTimeString(),
+                        League = Nomination.Game.LeagueName
                     });
                 }
             }
