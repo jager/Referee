@@ -32,7 +32,7 @@ namespace Referee.Controllers
 
         public ViewResult Index()
         {
-            var tournaments = Unit.TournamentRepository.Get(filter: t => t.LeagueId == null);
+            var tournaments = Unit.TournamentRepository.Get(filter: t => t.LeagueId == null, orderBy: t => t.OrderByDescending(o => o.Id));
             ViewData["PageTitle"] = "Turnieje MWZPS";
             ViewData["breadlinks"] = new List<BreadcrumbHelper> 
             { 
@@ -196,6 +196,14 @@ namespace Referee.Controllers
         [Authorize(Roles = HelperRoles.WydzialGieriEwidencji)]
         public ActionResult DeleteConfirmed(int id)
         {
+            var nomination = Unit.NominationRepository.Get(filter: n => n.TournamentId == id);
+            if (nomination != null && nomination.Count() > 0)
+            {
+                foreach (var n in nomination)
+                {
+                    Unit.NominationRepository.Delete(n);
+                }
+            }
             Unit.TournamentRepository.Delete(id);
             Unit.Save();
             return RedirectToAction("Index");
