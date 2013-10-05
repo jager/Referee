@@ -12,7 +12,8 @@
 @{
     List<Referee.ViewModels.Conflicts> Conflicts = (List<Referee.ViewModels.Conflicts>)ViewBag.Conflicts;
     int i = 0;
-    string photoPath = "~/Content/themes/aquincum/images/userLogin2.png";
+    string defaultPhotoPath = "~/Content/themes/aquincum/images/userLogin2.png";
+    string photoPath = defaultPhotoPath;
 }
 <div class="wrapper">
     <div class="fluid">
@@ -105,7 +106,7 @@
                     <ul class="updates">                    
                         @foreach (var conflict in Conflicts)
                         {
-                            photoPath = String.IsNullOrEmpty(conflict.Photo) ? photoPath : conflict.Photo;
+                            photoPath = String.IsNullOrEmpty(conflict.Photo) ? defaultPhotoPath : conflict.Photo;
                             <li>
                                 <div class="wNews">
                                     <a href="#" title="" class="headline"><img src="@Url.Content(photoPath)" alt="" width="37" height="36" /></a>
