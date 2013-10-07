@@ -1,54 +1,97 @@
 ﻿<form action="/Game/SaveScore" method="post">
-    @Html.Hidden("GameId", (int)ViewBag.GameId)
-    <label>Podaj wynik:</label>
+   
+        <div class="fluid">
+            <div class="widget grid12">
+                <div class="whead"><h6>Podaj wynik meczu</h6><div class="clear"></div></div>
+                <div class="formRow">
+                    <div class="grid12">
+                        @((string)ViewBag.GameTitle)
+                    </div>
+                </div>
+                <div class="formRow" style="padding-bottom: 35px">
+                    <div class="grid6">
+                        <select name="HostSetScore" id="HostSetScoreID" class="select" style="font-size: 14px">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                    <div class="grid6">
+                        <select name="GuestSetScore" id="GuestSetScoreID" class="select" style="font-size: 14px">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="PointsContainer"></div>
+            </div>
+        </div>
+        @Html.Hidden("GameId", (int)ViewBag.GameId)
+        
+    
 
 
-    <!-- nowa implementacja podawania wyniku -->
-    <select name="HostSetScore" id="HostSetScoreID">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-    </select>
-    <select name="GuestSetScore" id="GuestSetScoreID">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-    </select>
-    <div id="PointsContainer"></div>
-    <!-- koniec nowej implementacji --->
-
-
-    <input type="text" name="Score" class="clear" placeholder="Podaj Wynik" />
-    <div class="divider"><span></span></div>
-    <input type="submit" value="Zapisz" class="buttonS bGreen" />
+        <input type="hidden" name="Score" value="brak" id="hiddenScore" />
+        <div class="divider"><span></span></div>
+        <input type="submit" value="Zapisz" class="buttonS bGreen" id="Zapisz"/>
+    
 </form>
-
 
 
 <script type="text/javascript">
     $().ready(function () {
+        
+
+        $('.onlyNums input').autotab_magic().autotab_filter('numeric');
+
+
         var hostSets = $("#HostSetScoreID").val();
         var guestSets = $("#GuestSetScoreID").val();
 
         function SetPointsContainer(hostScore, guestScore, pointsContainer) {
-            if (hostScore == 0 && guestScore) {
+            if (hostScore == 0 && guestScore == 0) {
                 return;
             }
             if (hostScore == guestScore) {
                 return;
             }
+            hostScore = parseInt(hostScore);
+            guestScore = parseInt(guestScore);
             pointsContainer.html("");
-            var input = $("<input type=\"text\" name=\"points\" value=\"0\" class=\"points\" />");
             var sumSets = hostScore + guestScore;
-            for (var i = 1; i <= sumSets; i++) {
-                input.attr("id", "hostId_" + i).attr("name", "hostPoints_" + i).attr();
-                pointsContainer.append(input);
-                input.attr("id", "guestId_" + i).attr("name", "guestPoints_" + i).attr();
-                pointsContainer.append(input);
+            var setInputs;
+            for (var i = 1; i <= sumSets; i++) {                
+                setInputs = "<div class=\"formRow\">" 
+                    + "<div class=\"grid3\"><label style=\"padding-top: 10px\">Set " + i + "</label> </div>"
+                    + "<div class=\"grid9 moreFields onlyNums\">"
+                    + "<ul>"
+                    + "      <li style=\"width: 20%\"><input type=\"text\" id=\"hostId_" + i + "\" name=\"hostPoints_" + i + "\" class=\"points\" maxlength=\"2\" /></li>"
+                    + "      <li class=\"sep\" style=\"width: 20%\">:</li>"
+                    + "      <li style=\"width: 20%\"><input type=\"text\" id=\"guestId_" + i + "\" name=\"guestPoints_" + i + "\" class=\"points\" maxlength=\"2\" /></li>"
+                    +   "</ul>"
+                    +   "<div class=\"clear\"></div>"
+                    + "</div>"
+                    + "<div class=\"clear\"></div>"
+                    + "</div>";
+                pointsContainer.append(setInputs);
+                inputGuest = null;
+                inputHost = null;
             }
+        }
 
+        function createScore(setsScore, setsNo) {
+            var returnScore = setsScore + " ";
+            var smallPointsScore = "(";
+            for(var i = 1; i <= setsNo; i++) {
+                if ($("#hostId_" + i).val() != undefined && $("#guestId_" + i).val() != undefined) {
+                    smallPointsScore += $("#hostId_" + i).val() + " : " + $("#guestId_" + i).val() + ", ";
+                 }
+            }
+            returnScore += smallPointsScore.substring(0, smallPointsScore.length - 2) + ")";
+            return returnScore;
         }
 
         $("#HostSetScoreID").live("change", function () {
@@ -62,6 +105,13 @@
             hostSets = $("#HostSetScoreID").val();
             SetPointsContainer(hostSets, guestSets, $("#PointsContainer"));
         });
+
+        $("input#Zapisz").live("click", function () {
+            var score = $("#HostSetScoreID").val() + " : " + $("#GuestSetScoreID").val();
+            var setsNo = parseInt($("#HostSetScoreID").val()) + parseInt($("#GuestSetScoreID").val());
+            score = createScore(score, setsNo);
+            $("#hiddenScore").val(score);
+        })
     });
 
 

@@ -344,6 +344,8 @@ namespace Referee.Controllers
         public PartialViewResult SaveScore(int Id)
         {
             ViewBag.GameId = Id;
+            Game Game = Unit.GameRepository.GetById(Id);
+            ViewBag.GameTitle = String.Format("{0} - {1}", Game.HostTeam, Game.GuestTeam);
             return PartialView();
         }
 

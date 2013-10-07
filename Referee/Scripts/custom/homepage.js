@@ -6,7 +6,7 @@
         $.ajax({
             url: URL,
             success: function (data) {
-                $("#openableDialogContener").html(data).dialog();
+                $("#openableDialogContener").html(data).dialog( { width: 500 } );
             }
         });
         return false;
@@ -25,7 +25,7 @@
                 var row = '<td>' + val.Ident + '</td><td>' + val.Name + '</td><td>' + val.Venue + '</td><td>' + val.Date + '</td><td>' + val.Time + '</td>';
                 if (val.Type == "game") {
                     if (val.Score != "" && val.Score != "brak") {
-                        row += '<td>' + val.Score + '</td>';
+                        row += '<td>' + val.Score + '&nbsp;&nbsp;<a href="/Game/SaveScore/' + val.Ident + '" class="buttonS bBlue openSaveScorePopup">Zmień wynik</a></td>';
                     } else {
                         row += '<td><a href="/Game/SaveScore/' + val.Ident + '" class="buttonS bBlue openSaveScorePopup">Dodaj wynik</a></td>';
                     }
