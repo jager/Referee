@@ -110,8 +110,11 @@
                         {
                             <a href="/referee/edit/@Html.DisplayFor(model => model.Id)" class="buttonS bBlue">Edytuj</a>
                             <a href="/referee/delete/@Html.DisplayFor(model => model.Id)" class="buttonS bRed openableDialogContenerButton">Usuń dane</a>
-                            <a href="/avail/index/@Html.DisplayFor(model => model.Id)" class="buttonS bBlue openableDialogContenerButton">Pokaż niedyspozycyjności</a>
                             <a href="#" class="buttonS bBlue">Pokaż kary</a>
+                        }
+                        @if (User.IsInRole(HelperRoles.Sedzia))
+                        {
+                            <a href="/avail/index/@Html.DisplayFor(model => model.Id)" class="buttonS bBlue openableDialogContenerButton">Pokaż niedyspozycyjności</a>
                         }
                         <div class="clear"></div>
                     </div>   

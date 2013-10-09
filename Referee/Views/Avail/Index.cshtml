@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Referee.Models.Availability>
+@using Referee.Helpers
 
 <table cellpadding="0" cellspacing="0" width="100%" class="tAlt wGeneral">
     <tr>
@@ -17,7 +18,8 @@
         <td></td>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.DateStart)
@@ -31,8 +33,15 @@
         <td>
             @Html.DisplayFor(modelItem => item.Valid)
         </td>
-        <td>            
-            @Html.ActionLink("Usuń", "Delete", new { id=item.Id }, new { @class = "tablectrl_small bDefault tipS deleteConfirm" } )
+        <td>  
+            @if (DateTime.Now < item.DateStart)
+            {
+                @Html.ActionLink("Usuń", "Delete", "Avail", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS deleteConfirm" })                
+            } 
+            else 
+            {
+                @Html.AuthLink("Usuń", "Delete", "Avail", new { id = item.Id }, new { @class = "tablectrl_small bDefault tipS deleteConfirm" }, HelperRoles.RefereatObsad)
+            }        
         </td>
     </tr>
 }
