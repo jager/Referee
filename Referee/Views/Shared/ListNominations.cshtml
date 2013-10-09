@@ -48,6 +48,9 @@
                     Mecz/Turniej
                 </td>
                 <td>
+                    Liga
+                </td>
+                <td>
                     Data
                 </td>
                 <td>
@@ -75,6 +78,13 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Event.Name)
+                </td>
+                <td>
+                    @if(!String.IsNullOrEmpty(item.Event.League)) 
+                    {
+                        @Html.DisplayFor(modelItem => item.Event.League)
+                        //@Html.ActionLink(item.Event.League, "Index", "Game", new { LeagueId = item.Event.LeagueId })
+                    }   
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Event.Date)

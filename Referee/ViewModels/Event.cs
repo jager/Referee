@@ -17,6 +17,8 @@ namespace Referee.ViewModels
         public string Details { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
+        public string League { get; set; }
+        public string LeagueId { get; set; }
 
         public void Parse(object NewEvent, string Type)
         {
@@ -39,6 +41,13 @@ namespace Referee.ViewModels
                 this.Time = ((Tournament)NewEvent).StartTime;
                 this.MinDate = dtStart;
                 this.MaxDate = dtEnd;
+                this.League = "";
+                this.LeagueId = "";
+                if (((Tournament)NewEvent).Type == "League")
+                {
+                    this.League = ((Tournament)NewEvent).LeagueName;
+                    this.LeagueId = ((Tournament)NewEvent).LeagueId.ToString();
+                }
             }
             else if (Type == "game")
             {
@@ -50,6 +59,8 @@ namespace Referee.ViewModels
                 this.Time = ((Game)NewEvent).DateAndTime.ToShortTimeString();
                 this.MinDate = ((Game)NewEvent).DateAndTime.AddHours(-2);
                 this.MaxDate = ((Game)NewEvent).DateAndTime.AddHours(2);
+                this.League = ((Game)NewEvent).LeagueName;
+                this.LeagueId = ((Game)NewEvent).LeagueId.ToString();
             }
         }
     }
