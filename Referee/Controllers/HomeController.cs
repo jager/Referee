@@ -38,7 +38,7 @@ namespace Referee.Controllers
 
             //Pobieram ligi
             ViewBag.Leagues = Unit.LeagueRepository.Get(
-                filter: l => l.Id < 200);
+                filter: l => l.Id < 1000 && l.Visible);
 
 
 
