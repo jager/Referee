@@ -11,7 +11,13 @@
         <div class="widget grid12">
             <ul class="tabs">
                 <li><a href="#daneosobowe">Dane osobowe</a></li>
-                <li><a href="#nominacjesedziego">Nominacje sędziego</a></li>
+                <li><a href="#nominacjesedziego">Nominacje</a></li>
+                @if (User.IsInRole(HelperRoles.Sedzia))
+                {
+                    <li>
+                        <a href="/avail/index/@Html.DisplayFor(model => model.Id)" data-target="availabilityTable" class="tabs">Niedyspozycyjności</a>
+                    </li>
+                }
             </ul>
             <div class="tab_container">
                 <div id="daneosobowe" class="tab_content">
@@ -112,10 +118,6 @@
                             <a href="/referee/delete/@Html.DisplayFor(model => model.Id)" class="buttonS bRed openableDialogContenerButton">Usuń dane</a>
                             <a href="#" class="buttonS bBlue">Pokaż kary</a>
                         }
-                        @if (User.IsInRole(HelperRoles.Sedzia))
-                        {
-                            <a href="/avail/index/@Html.DisplayFor(model => model.Id)" class="buttonS bBlue openableDialogContenerButton">Pokaż niedyspozycyjności</a>
-                        }
                         <div class="clear"></div>
                     </div>   
                     <div class="clear"></div>  
@@ -129,6 +131,9 @@
                                 <tr>
                                     <td>
                                         Mecz/Turniej
+                                    </td>
+                                    <td>
+                                        Liga
                                     </td>
                                     <td>
                                         Data
@@ -159,6 +164,9 @@
                                 <tr>
                                     <td>
                                         @item.Event.Name
+                                    </td>
+                                    <td>
+                                        @item.Event.League
                                     </td>
                                     <td>
                                         @item.Event.Date
@@ -231,6 +239,7 @@
                         </table>
                 </div>
                 </div>
+                <div id="availabilityTable" class="tab_content">...</div>
             </div>	
             <div class="clear"></div>
 
@@ -248,6 +257,7 @@
     $().ready(function () {
         $("#ChangePhotoButton").live("click", function () {
             if ($("input#fileInput").val() == null || $("input#fileInput").val() == "") {
+                alert("Wybierz najpierw fote z dysku!");
                 return false;
             }
         });

@@ -496,6 +496,20 @@ $(function() {
 			$(this).addClass("activeTab"); //Add "active" class to selected tab
 			$(this).parent().parent().find(".tab_content").hide(); //Hide all tab content
 			var activeTab = $(this).find("a").attr("href"); //Find the rel attribute value to identify the active tab + content
+			if (activeTab.substring(0, 1) != "#") {
+			    var target = "#" + $(this).find("a").attr("data-target");
+			    $.ajax({
+			        url: activeTab,
+			        cache: false,
+			        success: function (html) {
+			            $(target).html(html).show();
+			        },
+			        error: function (error) {
+			            $(target).html("Wyst¹pi³ b³¹d. Skontaktuj sie z administratorem.").show();
+			        }
+			    });
+			    return false;
+			}
 			$(activeTab).show(); //Fade in the active content
 			return false;
 		});
