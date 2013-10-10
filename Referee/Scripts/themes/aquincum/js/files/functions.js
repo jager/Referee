@@ -919,7 +919,7 @@ $(function() {
 
 	//===== Form elements styling =====//
 	
-	$("select, .check, .check :checkbox, input:radio, input:file").uniform();
+	$("select, .check, .check :checkbox, input:radio, input:file").uniform({ fileDefaultText: "Wybierz fote z dysku!" });
 
 	
 });

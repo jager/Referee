@@ -85,7 +85,7 @@
                                 <div class="grid5">
                                     <input type="file" class="fileInput" id="fileInput" name="Photo" />
                                 </div>
-                                <div class="grid2"><input class="buttonS bGreen" type="submit" value="Zmień zdjęcie" /></div>
+                                <div class="grid2"><input class="buttonS bGreen" type="submit" value="Zmień zdjęcie" id="ChangePhotoButton" /></div>
                                 <div class="grid2">                            
                                     @if ((Model.Mailadr == User.Identity.Name) && User.IsInRole(HelperRoles.Sedzia))
                                     {
@@ -244,3 +244,12 @@
 
     
 </div>
+<script type="text/javascript">
+    $().ready(function () {
+        $("#ChangePhotoButton").live("click", function () {
+            if ($("input#fileInput").val() == null || $("input#fileInput").val() == "") {
+                return false;
+            }
+        });
+    });
+</script>
