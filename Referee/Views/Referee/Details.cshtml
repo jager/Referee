@@ -12,7 +12,7 @@
             <ul class="tabs">
                 <li><a href="#daneosobowe">Dane osobowe</a></li>
                 <li><a href="#nominacjesedziego">Nominacje</a></li>
-                @if (User.IsInRole(HelperRoles.Sedzia))
+                @if (User.IsInRole(HelperRoles.RefereatObsad) || (User.IsInRole(HelperRoles.Sedzia) && User.Identity.Name == Model.Mailadr))
                 {
                     <li>
                         <a href="/avail/index/@Html.DisplayFor(model => model.Id)" data-target="availabilityTable" class="tabs">Niedyspozycyjności</a>
