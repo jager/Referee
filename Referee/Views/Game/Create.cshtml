@@ -3,6 +3,7 @@
 @{ 
     ViewData["PageTitle"] = "Dodaj nowy mecz";
     ViewData["IconName"] = "icon-user-2";
+    IEnumerable<Referee.Models.RefereeEntity> RO = (IEnumerable<Referee.Models.RefereeEntity>)ViewBag.RO;
 }
 
 @Html.Partial("_ContentTop", ViewData)
@@ -87,6 +88,23 @@
                     <div class="grid9">
                         @Html.EditorFor(model => model.Published)
                         @Html.ValidationMessageFor(model => model.Published)
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="formRow">
+                    <div class="grid3">
+                        Wybierz członków Komisji Obsad, których powiadomić o meczu:
+                    </div>
+                    <div class="grid9 check">
+                        @if (RO != null)
+                        {
+                            <select data-placeholder="Komisja Obsad" class="fullwidth select" multiple="multiple" name="RO">
+                            @foreach (var referee in RO)
+                            {
+                                <option value="@referee.Mailadr">@referee.FullName</option>
+                            }
+                            </select>
+                        }
                     </div>
                     <div class="clear"></div>
                 </div>

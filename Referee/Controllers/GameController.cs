@@ -9,6 +9,7 @@ using Referee.Models;
 using Referee.DAL;
 using Referee.Controllers.Base;
 using Referee.Helpers;
+using System.Web.Security;
 
 namespace Referee.Controllers
 { 
@@ -121,6 +122,8 @@ namespace Referee.Controllers
             var teams = Unit.EnrollmentRepository.Get(e => e.LeagueId == LeagueId, e => e.OrderBy(o => o.TeamId), "Team");
             ViewBag.HostTeamsId = new SelectList(teams, "TeamId", "Team.Name");
             ViewBag.GuestTeamsId = new SelectList(teams, "TeamId", "Team.Name");
+            var RO = GetRefereesFromRO();
+            ViewBag.RO = RO;
             return View();
         } 
 
@@ -134,10 +137,26 @@ namespace Referee.Controllers
             game = PrepareGame(game, form);
             ModelState.Remove("HostTeam");
             ModelState.Remove("GuestTeam");
+            string GameTeams = "";
+            string[] selectedRO = new string[] { };
+            if (!String.IsNullOrEmpty(Request.Form["RO"]))
+            {
+                selectedRO = Request.Form["RO"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            }
+
             if (ModelState.IsValid)
             {
                 Unit.GameRepository.Insert(game);
+                GameTeams = String.Format("{0} vs. {1} ({2})", game.HostTeam, game.GuestTeam, game.LeagueName);
                 Unit.Save();
+                if (selectedRO.Count() > 0 && this.GetConfigValue("SendEmails") == "1")
+                {
+                    //wyślij maila do każdego
+                    foreach (var mailadr in selectedRO)
+                    {
+                        MailHelper.CreateNewGameMessage(mailadr, GameTeams);
+                    }
+                }
                 if (form["Move"] != null && !String.IsNullOrEmpty(form["Move"]) && form["Move"] == "Nomination")
                 {
                     return RedirectToAction("Create", "Nomination", new { EventId = game.Id, @Type = "game" });
@@ -214,6 +233,16 @@ namespace Referee.Controllers
             }
             return game;
         }
+        /// <summary>
+        /// Gets all referees from Nomination Commitee
+        /// </summary>
+        /// <returns>List of RefereeEntities</returns>
+        private IEnumerable<RefereeEntity> GetRefereesFromRO() 
+        {
+            string[] UsersFromRO = Roles.GetUsersInRole(HelperRoles.RefereatObsad);
+            IEnumerable<RefereeEntity> RO = Unit.RefereeRepository.Get(r => UsersFromRO.Contains(r.Mailadr));
+            return RO;
+        }
         
         //
         // GET: /Game/Edit/5
@@ -226,6 +255,7 @@ namespace Referee.Controllers
             ViewBag.dtDate = game.DateAndTime.ToShortDateString();
             ViewBag.dtTime = game.DateAndTime.ToShortTimeString();
             var teams = Unit.EnrollmentRepository.Get(e => e.LeagueId == game.LeagueId, e => e.OrderBy(o => o.TeamId), "Team");
+            
             ViewBag.HostTeamsId = new SelectList(teams, "TeamId", "Team.Name", game.HostTeamId);
             ViewBag.GuestTeamsId = new SelectList(teams, "TeamId", "Team.Name", game.GuestTeamId);
             if (game.GuestTeamId != 0)

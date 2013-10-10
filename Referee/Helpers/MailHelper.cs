@@ -110,5 +110,26 @@ namespace Referee.Helpers
                 MailHelper.ErrorMessage = MailBox.ErrorMessage;
             }
         }
+
+        public static void CreateNewGameMessage(string Mailadr, string GameInfo)
+        {
+            Message _message = new Message();
+            string _txt = @"W aplikacji {0} został dodany nowy mecz: {1}.
+                            Osoba, która dodawała mecz zaznaczyła ciebie jako członka Referatu Obsad jako odpowiedzialnego
+                            za nominowanie sędziów na mecz.
+
+                            {2}
+                            ";
+            string _subject = String.Format("[{0}] Nowy mecz.", MailHelper._systemName);
+            _message.Txt = String.Format(_txt, MailHelper._systemName, GameInfo, MailHelper._mailSignature);
+            if (MailBox.Send(Mailadr, MailHelper._mailFrom, _subject, _message))
+            {
+                MailHelper.ErrorMessage = MailHelper._success;
+            }
+            else
+            {
+                MailHelper.ErrorMessage = MailBox.ErrorMessage;
+            }
+        }
     }
 }
