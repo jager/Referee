@@ -149,6 +149,11 @@ namespace Referee.Controllers.Base
             DateTime DateStart;
             DateTime DateEnd;
 
+            if (dtStart == dtEnd)
+            {
+                dtEnd += " 23:59:59";
+            }
+
             if (!String.IsNullOrEmpty(dtStart) && DateTime.TryParse(Convert.ToString(dtStart), out DateStart))
             {
                 Nominations = Nominations.Where(n => (n.Game != null && n.Game.DateAndTime >= DateStart)
