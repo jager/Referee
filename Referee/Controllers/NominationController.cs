@@ -67,6 +67,12 @@ namespace Referee.Controllers
         public ViewResult Details(int id)
         {
             Nomination nomination = Unit.NominationRepository.GetById(id);
+            ViewBag.Event = this.CreateEvent(nomination);
+            return View(nomination);
+        }
+
+        private Event CreateEvent(Nomination nomination)
+        {
             Event Event = new Event();
             if (nomination.GameId != null)
             {
@@ -76,8 +82,7 @@ namespace Referee.Controllers
             {
                 Event.Parse(nomination.Tournament, "tournament");
             }
-            ViewBag.Event = Event;
-            return View(nomination);
+            return Event;
         }
 
         //
@@ -226,7 +231,8 @@ namespace Referee.Controllers
                     Nominated.Confirmed = true;
                     Nominated.ConfirmedDate = DateTime.Now;
                     Unit.NominatedRepository.Update(Nominated);
-                    Unit.Save();                    
+                    Unit.Save();
+                    ViewBag.Event = this.CreateEvent(Nominated.Nomination);
                     return View("Details", Nominated.Nomination);
                 }
                 else
