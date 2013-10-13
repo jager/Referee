@@ -279,6 +279,10 @@ namespace Referee.Controllers
             {
                 Unit.GameRepository.Update(game);
                 Unit.Save();
+                if (this.GetConfigValue("SendEmails") == "1")
+                {
+                    this.NoticeRefereesAboutChanges(game);
+                }
                 return RedirectToAction("Index", new { LeagueId = game.LeagueId });
             }
             
@@ -290,6 +294,25 @@ namespace Referee.Controllers
             ViewBag.HostTeamsId = new SelectList(teams, "TeamId", "Team.Name", game.HostTeamId);
             ViewBag.GuestTeamsId = new SelectList(teams, "TeamId", "Team.Name", game.GuestTeamId);
             return View(game);
+        }
+
+        private void NoticeRefereesAboutChanges(Game game)
+        {
+            var Nomination = Unit.NominationRepository.Get(filter: n => n.GameId == game.Id).FirstOrDefault<Nomination>();
+            if (Nomination == null)
+            {
+                return;
+            }
+
+            if (Nomination.Nominateds == null || Nomination.Nominateds.Count() == 0)
+            {
+                return;
+            }
+
+            foreach (var NominatedReferee in Nomination.Nominateds)
+            {
+                MailHelper.NoticeAboutChangeInGame(NominatedReferee.Referee.Mailadr, game);
+            }
         }
 
         //

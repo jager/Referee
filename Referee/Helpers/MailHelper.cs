@@ -18,7 +18,11 @@ namespace Referee.Helpers
 
         public static string ErrorMessage = String.Empty;
 
-
+        /// <summary>
+        /// Powiadomienie o założeniu nowego konta
+        /// </summary>
+        /// <param name="Mailadr"></param>
+        /// <param name="Password"></param>
         public static void CreateNewAccountMessage(string Mailadr, string Password)
         {
             Message _message = new Message();
@@ -111,6 +115,11 @@ namespace Referee.Helpers
             }
         }
 
+        /// <summary>
+        /// Powiadomienie o nowym meczu w systemie do Referatu Obsad
+        /// </summary>
+        /// <param name="Mailadr"></param>
+        /// <param name="GameInfo"></param>
         public static void CreateNewGameMessage(string Mailadr, string GameInfo)
         {
             Message _message = new Message();
@@ -122,6 +131,28 @@ namespace Referee.Helpers
                             ";
             string _subject = String.Format("[{0}] Nowy mecz.", MailHelper._systemName);
             _message.Txt = String.Format(_txt, MailHelper._systemName, GameInfo, MailHelper._mailSignature);
+            if (MailBox.Send(Mailadr, MailHelper._mailFrom, _subject, _message))
+            {
+                MailHelper.ErrorMessage = MailHelper._success;
+            }
+            else
+            {
+                MailHelper.ErrorMessage = MailBox.ErrorMessage;
+            }
+        }
+
+        public static void NoticeAboutChangeInGame(string Mailadr, Referee.Models.Game game)
+        {
+            Message _message = new Message();
+            string _txt = @"W aplikacji {0} zmieniono dane  meczu: 
+{1},                   
+{2},
+{3},
+{4}
+                            ";
+            string _subject = String.Format("[{0}] Zmiana danych meczu.", MailHelper._systemName);
+            string GameInfo = String.Format("{0} - {1}, {2}", game.HostTeam, game.GuestTeam, game.LeagueName);
+            _message.Txt = String.Format(_txt, MailHelper._systemName, GameInfo, game.Venue, game.DateAndTime.ToString("dd-MM-yyyy hh:mm"), MailHelper._mailSignature);
             if (MailBox.Send(Mailadr, MailHelper._mailFrom, _subject, _message))
             {
                 MailHelper.ErrorMessage = MailHelper._success;
