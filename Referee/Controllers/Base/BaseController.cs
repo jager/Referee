@@ -149,8 +149,10 @@ namespace Referee.Controllers.Base
             DateTime DateStart;
             DateTime DateEnd;
 
-            
-            dtEnd += " 23:59:59";
+            if (!String.IsNullOrEmpty(dtEnd))
+            {
+                dtEnd += " 23:59:59";
+            }
             
             if (!String.IsNullOrEmpty(dtStart) && DateTime.TryParse(Convert.ToString(dtStart), out DateStart))
             {
