@@ -26,6 +26,20 @@
             <div class="grid2">
                 @Html.DropDownList("league", (SelectList)ViewBag.Leagues, "Wybierz ligę")                
             </div>
+            <div class="grid2 check">
+                @Html.CheckBox("Published", false, new { @id = "PublishedNominationsCheckbox" })
+                @Html.Label("PublishedNominationsCheckbox","Opublikowane")
+                
+            </div>
+            <div class="grid2 check">
+                @Html.CheckBox("NotPublished", false, new { @id = "NotPublishedNominationsCheckbox" })
+                @Html.Label("NotPublishedNominationsCheckbox","Nieopublikowane")
+                
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="formRow">
+            <div class="grid8">&nbsp;</div>
             <div class="grid2">
                 <input type="submit" value="Wyszukaj obsad" name="SearchSubmit" class="buttonS bBlue" />
             </div>
@@ -41,7 +55,11 @@
         <h6>Obsady sędziowskie</h6>
         <div class="clear"></div>
     </div>    
-    <table cellpadding="0" cellspacing="0" width="100%" class="tDefault">
+    <div id="dyn2" class="shownpars">
+        <a class="tOptions act" title="Options">
+            <img src="@Url.Content("~/Content/themes/aquincum/images/icons/options")" alt="" />
+        </a>
+    <table cellpadding="0" cellspacing="0" width="100%" class="tDefault tMedia dTable">
         <thead>
             <tr>
                 <td>
@@ -101,6 +119,7 @@
 }
         </tbody>
     </table>
+    </div>
     <div id="openableDialogContener" class="dialog" title=""></div>
     </div>
 </div>

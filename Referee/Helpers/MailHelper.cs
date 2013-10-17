@@ -151,7 +151,7 @@ namespace Referee.Helpers
 {4}";
             string _subject = String.Format("[{0}] Zmiana danych meczu.", MailHelper._systemName);
             string GameInfo = String.Format("{0} - {1}, {2}", game.HostTeam, game.GuestTeam, game.LeagueName);
-            _message.Txt = String.Format(_txt, MailHelper._systemName, GameInfo, game.Venue, game.DateAndTime.ToString("dd-MM-yyyy hh:mm"), MailHelper._mailSignature);
+            _message.Txt = String.Format(_txt, MailHelper._systemName, GameInfo, game.Venue, game.DateAndTime.ToString("dd-MM-yyyy HH:mm"), MailHelper._mailSignature);
             if (MailBox.Send(Mailadr, MailHelper._mailFrom, _subject, _message))
             {
                 MailHelper.ErrorMessage = MailHelper._success;
