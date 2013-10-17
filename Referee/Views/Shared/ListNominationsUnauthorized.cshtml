@@ -26,16 +26,8 @@
             <div class="grid2">
                 @Html.DropDownList("league", (SelectList)ViewBag.Leagues, "Wybierz ligę")                
             </div>
-            <div class="grid2 check">
-                @Html.CheckBox("Published", false, new { @id = "PublishedNominationsCheckbox" })
-                @Html.Label("PublishedNominationsCheckbox","Opublikowane")
-                
-            </div>
-            <div class="grid2 check">
-                @Html.CheckBox("NotPublished", false, new { @id = "NotPublishedNominationsCheckbox" })
-                @Html.Label("NotPublishedNominationsCheckbox","Nieopublikowane")
-                
-            </div>
+            <div class="grid2"></div>
+            <div class="grid2"></div>
             <div class="clear"></div>
         </div>
         <div class="formRow">
