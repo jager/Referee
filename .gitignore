@@ -163,4 +163,5 @@ pip-log.txt
 .DS_Store
 
 #Custom to project 
-Referee/storage/
+Referee/storage/*
+Referee/storage/logs/action.log
