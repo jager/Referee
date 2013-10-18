@@ -653,8 +653,24 @@ $(function() {
 			center: 'title',
 			right: 'month,agendaWeek'
 		},
+		firstDay: 1,
 		editable: false,
-		events: '/Home/CalendarEvents'
+		events: '/Home/CalendarEvents',
+		timeFormat: 'H(:mm)',
+		buttonText: {
+		    prev: '&lsaquo;', // <
+		    next: '&rsaquo;', // >
+		    prevYear: '&laquo;',  // <<
+		    nextYear: '&raquo;',  // >>
+		    today: 'Dzisiaj',
+		    month: 'Miesiac',
+		    week: 'Tydzien',
+		    day: 'Dzien'
+		},
+		monthNames: ['Styczen', 'Luty', 'Marzec', 'Kwiecien', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpien', 'Wrzesien', 'Pazdziernik', 'Listopad', 'Grudzien'],
+		monthNamesShort: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paz', 'Lis', 'Gru'],
+		dayNames: ['Niedziela', 'Poniedzialek', 'Wtorek', 'Sroda', 'Czwartek', 'Piatek', 'Sobota'],
+        dayNamesShort: ['Nie', 'Pon', 'Wto', 'Sro', 'Czw', 'Pia', 'Sob']
 	});
 
 
