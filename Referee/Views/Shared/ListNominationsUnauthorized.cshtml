@@ -24,7 +24,7 @@
                 @Html.TextBox("dtEnd", (string)ViewBag.dtEnd, new { @class = "datepicker"})
             </div>
             <div class="grid2">
-                @Html.DropDownList("league", (SelectList)ViewBag.Leagues, "Wybierz ligę")                
+                @Html.DropDownList("league", (SelectList)ViewBag.Leagues, "Wybierz ligę", new { @class = "fullwidth select", @multiple = "multiple"})                
             </div>
             <div class="grid2"></div>
             <div class="grid2"></div>

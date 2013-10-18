@@ -143,7 +143,7 @@ namespace Referee.Controllers.Base
         /// <param name="dtStart">Search start date</param>
         /// <param name="dtEnd">Search End date</param>
         /// <param name="league">League name where nominations are search</param>
-        protected IEnumerable<Nomination> FillSearchNominationsForm(IEnumerable<Nomination> Nominations, string dtStart = "", string dtEnd = "", int league = 0, bool Published = false, bool NotPublished = false)
+        protected IEnumerable<Nomination> FillSearchNominationsForm(IEnumerable<Nomination> Nominations, string dtStart = "", string dtEnd = "", string league = "0", bool Published = false, bool NotPublished = false)
         {
             ViewBag.Leagues = new SelectList(Unit.LeagueRepository.Get(filter: l => l.Visible), "Id", "Name", league);
             DateTime DateStart;
@@ -184,10 +184,13 @@ namespace Referee.Controllers.Base
                 ViewBag.dtEnd = dtEnd;
 
             }
+            string[] StringLeagues = new string[] { };
+            StringLeagues = league.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-            if ((int)league > 0)
+            int[] Leagues = StringLeagues.Select(i => Int32.Parse(i)).ToArray();
+            if (Leagues.Count() > 0)
             {
-                Nominations = Nominations.Where(n => n.Game != null && n.Game.LeagueId == league);
+                Nominations = Nominations.Where(n => n.Game != null && Leagues.Contains(n.Game.LeagueId));
                 ViewBag.league = league;
             }
             return Nominations;

@@ -125,7 +125,7 @@ namespace Referee.Controllers
         }
 
         [Authorize]
-        public ActionResult NewNominations(string dtStart = "", string dtEnd = "", int league = 0)
+        public ActionResult NewNominations(string dtStart = "", string dtEnd = "", string league = "0")
         {
             ViewData["PageTitle"] = "Twoje nowe nominacje";
             ((List<BreadcrumbHelper>)ViewData["breadcrumbs"]).Add(

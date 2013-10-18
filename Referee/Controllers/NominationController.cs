@@ -31,7 +31,7 @@ namespace Referee.Controllers
         //
         // GET: /Nomination/
         //[Authorize(Roles = HelperRoles.Sedzia)]
-        public ViewResult Index(string dtStart = "", string dtEnd = "", int league = 0, bool Published = false, bool NotPublished = false)
+        public ViewResult Index(string dtStart = "", string dtEnd = "", string league = "0", bool Published = false, bool NotPublished = false)
         {
             var Nominations = FillSearchNominationsForm(Unit.NominationRepository.Get(), dtStart, dtEnd, league, Published, NotPublished);
 
