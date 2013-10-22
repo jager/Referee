@@ -1,0 +1,17 @@
+﻿@{
+    var Leagues = (IEnumerable<Referee.Models.League>)ViewBag.Leagues;
+    var SelectedLeagues = (int[])ViewBag.SelectedLeagues;    
+}
+<select name="league" multiple="multiple" class="fullwidth select">
+    @foreach (var league in Leagues)
+    {
+        if (SelectedLeagues.Contains(league.Id))
+        {
+            <option value="@league.Id" selected="selected">@league.Name</option>
+        }
+        else
+        {
+            <option value="@league.Id">@league.Name</option>
+        }
+    }
+</select>

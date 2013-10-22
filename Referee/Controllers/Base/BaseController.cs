@@ -145,7 +145,7 @@ namespace Referee.Controllers.Base
         /// <param name="league">League name where nominations are search</param>
         protected IEnumerable<Nomination> FillSearchNominationsForm(IEnumerable<Nomination> Nominations, string dtStart = "", string dtEnd = "", string league = "0", bool Published = false, bool NotPublished = false)
         {
-            ViewBag.Leagues = new SelectList(Unit.LeagueRepository.Get(filter: l => l.Visible), "Id", "Name", league);
+            
             DateTime DateStart;
             DateTime DateEnd;
 
@@ -185,13 +185,27 @@ namespace Referee.Controllers.Base
 
             }
             string[] StringLeagues = new string[] { };
-            StringLeagues = league.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
+            if (!String.IsNullOrEmpty(Request.Form["league"]))
+            {
+                StringLeagues = Request.Form["league"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            }
             int[] Leagues = StringLeagues.Select(i => Int32.Parse(i)).ToArray();
+
+            Response.Write("league: " + Request.Form["league"] + "<br />");
+            Response.Write("StringLeagues: " + StringLeagues.Count().ToString() + "<br />");
+            Response.Write("leagues: " + Leagues.Count().ToString() + "<br /><br /><hr /><br />");
+            
+            if (Leagues.Count() == 1 && Leagues.First() == 0)
+            {
+                Leagues = new int[] { };
+            }
+
+            ViewBag.Leagues = Unit.LeagueRepository.Get(filter: l => l.Visible); 
+            ViewBag.SelectedLeagues = Leagues;
+  
             if (Leagues.Count() > 0)
             {
                 Nominations = Nominations.Where(n => n.Game != null && Leagues.Contains(n.Game.LeagueId));
-                ViewBag.league = league;
             }
             return Nominations;
         }

@@ -9,7 +9,7 @@
 }
 <script type="text/javascript" src="@Url.Content("~/Scripts/custom/custom.js")" ></script>
 <div class="wrapper">
-    @using (Html.BeginForm("Index", "Nomination", FormMethod.Get ))
+    @using (Html.BeginForm("Index", "Nomination", FormMethod.Post ))
     {
         <div class="widget fluid">
         <div class="whead"><h6>Wyszukaj obsad</h6><div class="clear"></div></div>
@@ -24,7 +24,9 @@
                 @Html.TextBox("dtEnd", (string)ViewBag.dtEnd, new { @class = "datepicker"})
             </div>
             <div class="grid2">
-                @Html.DropDownList("league", (SelectList)ViewBag.Leagues, "Wybierz ligę", new { @class = "fullwidth select", @multiple = "multiple"})                
+                @{
+                    Html.RenderPartial("LeaguesMultiSelect");
+                 }
             </div>
             <div class="grid2 check">
                 @if ((bool)ViewBag.Published)

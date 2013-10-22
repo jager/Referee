@@ -34,7 +34,6 @@ namespace Referee.Controllers
         public ViewResult Index(string dtStart = "", string dtEnd = "", string league = "0", bool Published = false, bool NotPublished = false)
         {
             var Nominations = FillSearchNominationsForm(Unit.NominationRepository.Get(), dtStart, dtEnd, league, Published, NotPublished);
-
             List<NominationDetails> NominationEvents = new List<NominationDetails>();
             foreach (Nomination _nomination in Nominations)
             {
