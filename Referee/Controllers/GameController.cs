@@ -136,27 +136,12 @@ namespace Referee.Controllers
         {
             game = PrepareGame(game, form);
             ModelState.Remove("HostTeam");
-            ModelState.Remove("GuestTeam");
-            string GameTeams = "";
-            string[] selectedRO = new string[] { };
-            if (!String.IsNullOrEmpty(Request.Form["RO"]))
-            {
-                selectedRO = Request.Form["RO"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            }
-
+            ModelState.Remove("GuestTeam");          
             if (ModelState.IsValid)
             {
-                Unit.GameRepository.Insert(game);
-                GameTeams = String.Format("{0} vs. {1} ({2})", game.HostTeam, game.GuestTeam, game.LeagueName);
+                Unit.GameRepository.Insert(game);               
                 Unit.Save();
-                if (selectedRO.Count() > 0 && this.GetConfigValue("SendEmails") == "1")
-                {
-                    //wyślij maila do każdego
-                    foreach (var mailadr in selectedRO)
-                    {
-                        MailHelper.CreateNewGameMessage(mailadr, GameTeams);
-                    }
-                }
+                this.SendMessageToRefereeComitee(game, Request.Form["RO"]);
                 if (form["Move"] != null && !String.IsNullOrEmpty(form["Move"]) && form["Move"] == "Nomination")
                 {
                     return RedirectToAction("Create", "Nomination", new { EventId = game.Id, @Type = "game" });
@@ -199,6 +184,44 @@ namespace Referee.Controllers
             return View(game);
         }
 
+        /// <summary>
+        /// Sends email message to all selected referees from Referee Comitee 
+        /// </summary>
+        /// <param name="game">Curent game</param>
+        /// <param name="Mailadr">Coma separated email adressess</param>
+        private void SendMessageToRefereeComitee(Game game, string Mailadr)
+        {
+            try
+            {
+                string GameTeams = "";
+                string[] selectedRO = new string[] { };
+                if (!String.IsNullOrEmpty(Mailadr))
+                {
+                    selectedRO = Mailadr.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                }
+                GameTeams = String.Format("{0} vs. {1} ({2})", game.HostTeam, game.GuestTeam, game.LeagueName);
+                if (selectedRO.Count() > 0 && this.GetConfigValue("SendEmails") == "1")
+                {
+                    //wyślij maila do każdego
+                    foreach (var mailadr in selectedRO)
+                    {
+                        MailHelper.CreateNewGameMessage(mailadr, GameTeams);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //log exception                
+            }
+        }
+
+
+        /// <summary>
+        /// Prepares additional data for the game
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="form"></param>
+        /// <returns></returns>
         private Game PrepareGame(Game game, FormCollection form)
         {
             var HostTeam = Unit.TeamRepository.GetById(game.HostTeamId);
@@ -258,6 +281,8 @@ namespace Referee.Controllers
             
             ViewBag.HostTeamsId = new SelectList(teams, "TeamId", "Team.Name", game.HostTeamId);
             ViewBag.GuestTeamsId = new SelectList(teams, "TeamId", "Team.Name", game.GuestTeamId);
+            var RO = GetRefereesFromRO();
+            ViewBag.RO = RO;
             if (game.GuestTeamId != 0)
             {
                 game.GuestTeam = "";
@@ -282,6 +307,7 @@ namespace Referee.Controllers
                 if (this.GetConfigValue("SendEmails") == "1")
                 {
                     this.NoticeRefereesAboutChanges(game);
+                    this.SendMessageToRefereeComitee(game, Request.Form["RO"]);
                 }
                 return RedirectToAction("Index", new { LeagueId = game.LeagueId });
             }
@@ -313,6 +339,19 @@ namespace Referee.Controllers
             {
                 MailHelper.NoticeAboutChangeInGame(NominatedReferee.Referee.Mailadr, game);
             }
+        }
+
+        private List<RefereeEntity> GetReferees(Nomination nomination)
+        {
+            List<RefereeEntity> Refs = new List<RefereeEntity>();
+            if (nomination != null)
+            {
+                foreach (var n in nomination.Nominateds)
+                {
+                    Refs.Add(n.Referee);
+                }
+            }
+            return Refs;
         }
 
         //

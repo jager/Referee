@@ -191,10 +191,6 @@ namespace Referee.Controllers.Base
             }
             int[] Leagues = StringLeagues.Select(i => Int32.Parse(i)).ToArray();
 
-            Response.Write("league: " + Request.Form["league"] + "<br />");
-            Response.Write("StringLeagues: " + StringLeagues.Count().ToString() + "<br />");
-            Response.Write("leagues: " + Leagues.Count().ToString() + "<br /><br /><hr /><br />");
-            
             if (Leagues.Count() == 1 && Leagues.First() == 0)
             {
                 Leagues = new int[] { };
