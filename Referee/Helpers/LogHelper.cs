@@ -3,74 +3,62 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.IO;
+using log4net;
+using log4net.Config;
 
 namespace Referee.Helpers
 {
-    enum LogOutput : int
+
+    /// <summary>
+    /// Severity level
+    /// </summary>
+    public enum LogOutput : int
     {
-        File = 1,
-        Database = 2
+        Information = 1,
+        Error = 2
     }
-    public class LogHelper
+
+    public static class LogHelper
     {
-        private int _output = (int)LogOutput.File;
-        private string _destinationFileName = String.Empty;
-
-        public LogHelper()
+        /// <summary>
+        /// Saves messages to log, depending on severity level
+        /// </summary>
+        /// <param name="Message"></param>
+        /// <param name="Level"></param>
+        public static void Log(string Message, int Level)
         {
-        }
-
-        public LogHelper(int output = (int)LogOutput.File)
-        {
-            this._output = output;
-        }
-
-        public LogHelper(string DestinationFileName)
-        {
-            this._output = (int)LogOutput.File;
-            this._destinationFileName = DestinationFileName;
-        }
-
-        public void Write(string OutputText)
-        {
-            switch (this._output)
+            switch (Level)
             {
-                case (int)LogOutput.Database:
-                    this.WriteToDatabase(OutputText);
+                case (int) LogOutput.Error:
+                    Error(Message);
                     break;
-                case (int)LogOutput.File:
+                case (int) LogOutput.Information:
                 default:
-                    this.WriteToFile(OutputText);
+                    Information(Message);
                     break;
+
             }
+
         }
 
-        private void WriteToFile(string Text)
+        /// <summary>
+        /// Saves to log application informations
+        /// </summary>
+        /// <param name="Message"></param>
+        public static void Information(string Message)
         {
-            if (String.IsNullOrEmpty(this._destinationFileName))
-            {
-                this._destinationFileName = HttpContext.Current.Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["LogFilePath"]);
-            }
-
-            if (String.IsNullOrEmpty(this._destinationFileName))
-            {
-                return;
-            }
-
-            string _text = String.Format("{0};{1}", DateTime.Now.ToString(), Text);
-            if (File.Exists(this._destinationFileName))
-            {
-                File.AppendAllText(this._destinationFileName, _text);
-            }
-            else
-            {
-                File.WriteAllText(this._destinationFileName, _text);
-            }
+            InformationLogger logger = new InformationLogger();
+            logger.Write(Message);
         }
 
-        private void WriteToDatabase(string Text)
+        /// <summary>
+        /// Saves to log application errors
+        /// </summary>
+        /// <param name="Message"></param>
+        public static void Error(string Message)
         {
-
+            ExceptionLogger logger = new ExceptionLogger();
+            logger.Write(Message);
         }
     }
 }
