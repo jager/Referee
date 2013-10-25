@@ -9,9 +9,7 @@ using System.Web.Routing;
 namespace Referee.Filters
 {
     public class LogActionFilter : ActionFilterAttribute
-    {
-
-        LogHelper LH = new LogHelper();
+    {        
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             var _request = context.HttpContext.Request;
@@ -33,7 +31,7 @@ namespace Referee.Filters
             var controllerName = routeData.Values["controller"];
             var actionName = routeData.Values["action"];
             string OutputData = String.Format("Controller: {0}; Action: {1}; {2} \r\n", controllerName, actionName, Message);
-            LH.Write(OutputData);
+            LogHelper.Information(OutputData);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace Referee.Helpers
         /// <param name="Message"></param>
         public static void Information(string Message)
         {
-            InformationLogger logger = new InformationLogger();
+            InformationLogger logger = InformationLogger.GetInstance();
             logger.Write(Message);
         }
 
@@ -57,7 +57,7 @@ namespace Referee.Helpers
         /// <param name="Message"></param>
         public static void Error(string Message)
         {
-            ExceptionLogger logger = new ExceptionLogger();
+            ExceptionLogger logger = ExceptionLogger.GetInstance();
             logger.Write(Message);
         }
     }

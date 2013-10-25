@@ -9,12 +9,27 @@ namespace Referee.Helpers
 {
     public class InformationLogger
     {
+        private volatile static InformationLogger instance;
         private ILog log;
+        private static Object thisLock = new Object();
 
         public InformationLogger()
         {
             this.log = LogManager.GetLogger(typeof(InformationLogger));
             XmlConfigurator.Configure();
+        }
+
+        public static InformationLogger GetInstance()
+        {
+            
+            if (instance == null)
+            {
+                lock (thisLock)
+                {
+                    instance = new InformationLogger();
+                }
+            }
+            return instance;
         }
 
         public void Write(string Message)

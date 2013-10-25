@@ -115,8 +115,10 @@
     <Compile Include="Helpers\BreadcrumbHelper.cs" />
     <Compile Include="Helpers\ConfigHelper.cs" />
     <Compile Include="Helpers\CustomHelpers.cs" />
+    <Compile Include="Helpers\ExceptionLogger.cs" />
     <Compile Include="Helpers\HelperRoles.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
+    <Compile Include="Helpers\InformationLogger.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\MailHelper.cs" />
     <Compile Include="Helpers\TeamHelper.cs" />

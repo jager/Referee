@@ -55,9 +55,9 @@ namespace Referee.Controllers
             }
             if (!Request.IsAuthenticated)
             {
-                return View("ListNominationsUnauthorized", NominationEvents.OrderByDescending(x => x.Event.Date));
+                return View("ListNominationsUnauthorized", NominationEvents.OrderByDescending(x => x.Event.MinDate));
             }
-            return View("ListNominations", NominationEvents.OrderByDescending(x => x.Event.Date));
+            return View("ListNominations", NominationEvents.OrderByDescending(x => x.Event.MinDate));
         }
 
         //
@@ -641,8 +641,9 @@ namespace Referee.Controllers
 
             var Nomination = Unit.NominatedRepository.Get(n => n.RefereeId == this.CurrentReferee.Id && n.Nomination.Published)
                                                      .Select(n => n.Nomination)
-                                                     .OrderByDescending(o => o.Id)
                                                      .ToList<Nomination>();
+
+
             if (Nomination.Count() == 0)
             {
                 return Json(null, JsonRequestBehavior.AllowGet);
@@ -666,6 +667,8 @@ namespace Referee.Controllers
                 }
                 ev.Add(_event);
             }
+
+            ev = ev.OrderByDescending(e => e.MinDate).ToList<EventWithScore>();
             return Json(ev, JsonRequestBehavior.AllowGet);
         }
         
