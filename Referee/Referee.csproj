@@ -112,16 +112,21 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AvailabilityHelper.cs" />
     <Compile Include="Helpers\BreadcrumbHelper.cs" />
     <Compile Include="Helpers\ConfigHelper.cs" />
     <Compile Include="Helpers\CustomHelpers.cs" />
     <Compile Include="Helpers\ExceptionLogger.cs" />
     <Compile Include="Helpers\HelperRoles.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
+    <Compile Include="Interfaces\ICountHours.cs" />
     <Compile Include="Helpers\InformationLogger.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\MailHelper.cs" />
     <Compile Include="Helpers\TeamHelper.cs" />
+    <Compile Include="Lib\CountHoursStrategies\CountDaysStrategy.cs" />
+    <Compile Include="Lib\CountHoursStrategies\WeekCountStrategy.cs" />
+    <Compile Include="Lib\CountHoursStrategies\WeekendCountStrategy.cs" />
     <Compile Include="Lib\EnumHelper.cs" />
     <Compile Include="Lib\FileUploader.cs" />
     <Compile Include="Lib\MailBox.cs" />
@@ -158,6 +163,7 @@
     <Compile Include="Repositories\ChangePasswordRepository.cs" />
     <Compile Include="Repositories\GamesNominatedRepository.cs" />
     <Compile Include="Repositories\StatisticsRepository.cs" />
+    <Compile Include="Services\CountAvailabilityService.cs" />
     <Compile Include="ViewModels\AvailableReferee.cs" />
     <Compile Include="ViewModels\ClubDetails.cs" />
     <Compile Include="ViewModels\Conflicts.cs" />
