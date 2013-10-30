@@ -42,6 +42,9 @@
                 <div class="grid9">
                     <ul>
                         <li>
+                            @(((Event)ViewBag.Event).League)
+                        </li>
+                        <li>
                             @(((Event)ViewBag.Event).Name)
                         </li>
                         <li>
@@ -52,6 +55,16 @@
                         </li>
                         <li>
                             @(((Event)ViewBag.Event).Time)
+                        </li>
+                        <li>
+                            @if (((Event)ViewBag.Event).Type == "game")
+                            {
+                                @Html.ActionLink("Edytuj dane meczu", "Edit", "Game", new { @Id = Event.Ident }, new { @class = "buttonS bBlue"})
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Edytuj dane turnieju", "Edit", "Tournament", new { @Id = Event.Ident }, new { @class = "buttonS bBlue"})
+                            }
                         </li>
                     </ul>
                 </div>
