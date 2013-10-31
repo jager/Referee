@@ -75,7 +75,8 @@
                             <li>                        
                                 <span>
                                     Klasa sędziowska: @Html.DisplayFor(model => model.RefClass.Name)<br />
-                                    Poziom uprawnień: @Html.DisplayFor(model => model.Authorization.Name)
+                                    Poziom uprawnień: @Html.DisplayFor(model => model.Authorization.Name)<br />
+                                    Liczba dni z brakiem dyspozycyjności: @((string)ViewBag.DaysOfNonAvilable)
                                 </span>
                             </li>
                         </ul>

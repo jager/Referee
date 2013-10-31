@@ -124,6 +124,7 @@
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\MailHelper.cs" />
     <Compile Include="Helpers\TeamHelper.cs" />
+    <Compile Include="Interfaces\IRefereeEntity.cs" />
     <Compile Include="Lib\CountHoursStrategies\CountDaysStrategy.cs" />
     <Compile Include="Lib\CountHoursStrategies\WeekCountStrategy.cs" />
     <Compile Include="Lib\CountHoursStrategies\WeekendCountStrategy.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Repositories\GamesNominatedRepository.cs" />
     <Compile Include="Repositories\StatisticsRepository.cs" />
     <Compile Include="Services\CountAvailabilityService.cs" />
+    <Compile Include="Services\RefereeEntityService.cs" />
     <Compile Include="ViewModels\AvailableReferee.cs" />
     <Compile Include="ViewModels\ClubDetails.cs" />
     <Compile Include="ViewModels\Conflicts.cs" />

@@ -13,6 +13,7 @@ using Referee.Repositories;
 using Referee.ViewModels;
 using System.Web.Security;
 using System.Diagnostics;
+using Referee.Services;
 
 namespace Referee.Controllers
 { 
@@ -52,6 +53,9 @@ namespace Referee.Controllers
         public ViewResult Details(Guid id)
         {
             RefereeEntity refereeentity = Unit.RefereeRepository.GetById(id);
+            var RefereeService = new RefereeEntityService(refereeentity);
+            ViewBag.DaysOfNonAvilable = RefereeService.DaysOfNonAvailability(refereeentity.Availabilities.ToList<Availability>());
+            
             ViewData["PageTitle"] = String.Format("Dane sędziego: {0} {1}", refereeentity.FirstName, refereeentity.LastName);
             ((List<BreadcrumbHelper>)ViewData["breadcrumbs"]).Add(
                 new BreadcrumbHelper { Href = "#", Text = refereeentity.FirstName + " " + refereeentity.LastName }

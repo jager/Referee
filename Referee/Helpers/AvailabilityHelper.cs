@@ -11,7 +11,7 @@ namespace Referee.Helpers
     {
 
         private int count = 0;
-        public int Count
+        public int Amount
         {
             get
             {
@@ -38,9 +38,16 @@ namespace Referee.Helpers
             this.doCounting();
         }
 
-        public static int Count(CountDaysStrategy cas)
+        public static int Count(ICountHours cas)
         {
-            return cas.Count();
+            try
+            {
+                return cas.Count();
+            }
+            catch (Exception e)
+            {
+                return 0;
+            }
         }
 
 

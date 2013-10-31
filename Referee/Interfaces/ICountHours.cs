@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Referee
 {
-    interface ICountHours
+    public interface ICountHours
     {
-        public int Count();
+        int Count();
     }
 }
