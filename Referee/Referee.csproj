@@ -109,6 +109,7 @@
     <Compile Include="DAL\UOW.cs" />
     <Compile Include="Filters\LogActionFilter.cs" />
     <Compile Include="Filters\MarkConfirmed.cs" />
+    <Compile Include="Filters\RefereeHandleError.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -1,12 +1,14 @@
 ﻿@model System.Web.Mvc.HandleErrorInfo
 
-@{
-    ViewBag.Title = "Ooops, coś jednak poszło nie po naszej myśli";     
-}
-<div class="wrapper">
-    <div class="widget fluid">
-        <div class="body" style="text-align: center">
-                <h2>Ooops, coś jednak poszło nie po naszej myśli!</h2>               
+<!-- Main content wrapper begins -->
+<div class="errorWrapper">
+    <span class="errorNum">:(</span>
+	<div class="errorContent">
+        <span class="errorDesc"><span class="icon-warning"></span>W aplikacji wystąpił błąd. Zgłoszenie zostało wysłane do administratorów. Postaramy się naprawić ten błąd jak najszybciej.</span>
+        <div class="fluid">
+            <a href="/Home" title="" class="buttonM bLightBlue grid6">Wróć na pulpit</a>
+            <a href="/" title="" class="buttonM bRed grid6">Wróć do aplikacji</a>
         </div>
-    </div>    
-</div>
+    </div>
+</div>    
+<!-- Main content wrapper ends -->

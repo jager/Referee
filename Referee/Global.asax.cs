@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Data.Entity;
 using Referee.DAL;
+using Referee.Filters;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -18,7 +19,7 @@ namespace Referee
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new RefereeHandleError());
         }
 
         public static void RegisterRoutes(RouteCollection routes)
