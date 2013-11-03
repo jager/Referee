@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using log4net;
-using log4net.Config;
 
 namespace Referee.Helpers
 {
@@ -16,7 +15,6 @@ namespace Referee.Helpers
         public InformationLogger()
         {
             this.log = LogManager.GetLogger(typeof(InformationLogger));
-            XmlConfigurator.Configure();
         }
 
         public static InformationLogger GetInstance()

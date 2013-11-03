@@ -7,6 +7,8 @@ using System.Web.Routing;
 using System.Data.Entity;
 using Referee.DAL;
 
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+
 namespace Referee
 {
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 

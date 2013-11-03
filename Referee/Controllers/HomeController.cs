@@ -9,6 +9,8 @@ using Referee.Models;
 using Referee.Helpers;
 using Referee.ViewModels;
 
+
+
 namespace Referee.Controllers
 {
     public class HomeController : BaseController
@@ -22,9 +24,11 @@ namespace Referee.Controllers
             {
                 new BreadcrumbHelper { Href = "/", Text = "Pulpit" }
             };
+        
         }
+
         public ActionResult Index()
-        {            
+        {
             ViewData["PageTitle"] = "System Obsad MWZPS";
 
             //Pobieram Turnieje nieligowe
